@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://Highjet.github.io/F1K-Hub/sitemap.xml
