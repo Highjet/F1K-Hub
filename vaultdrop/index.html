@@ -11,7 +11,7 @@ button,input{font:inherit}.wrap{max-width:1240px;margin:auto;padding:0 22px 80px
 header{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #242631;position:sticky;top:0;background:#090a0fe8;backdrop-filter:blur(16px);z-index:20;padding:0 24px}
 .brand{font-weight:950;letter-spacing:.12em}.nav{display:flex;gap:8px}.nav button,.ghost{background:none;border:0;color:#9ea2b3;padding:10px 13px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover,.ghost:hover{color:#fff;background:#171922}
 .badge{font-size:11px;border:1px solid #303341;border-radius:999px;padding:8px 10px;color:#aeb2c1}.page{display:none}.page.active{display:block}
-.hero{display:grid;grid-template-columns:1.08fr .92fr;min-height:500px;align-items:center;gap:38px}.eyebrow{font-size:12px;letter-spacing:.18em;color:#a7abbb;text-transform:uppercase}
+.homeTop{padding:26px 0 18px}.homeBanner{min-height:220px;border:1px solid #2a2d3a;border-radius:26px;padding:28px 30px;display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:center;background:radial-gradient(circle at 82% 40%,#684ff633,transparent 32%),linear-gradient(135deg,#151722,#0c0d13);overflow:hidden;position:relative}.homeBanner:after{content:"";position:absolute;inset:-40% -10% auto auto;width:420px;height:420px;border-radius:50%;border:1px solid #ffffff0c}.homeBanner h1{font-size:52px;margin:10px 0 12px}.homeBanner .lead{font-size:15px;max-width:650px}.homeActions{display:flex;gap:10px;margin-top:18px}.homeActions .btn{width:auto;margin:0}.miniStats{display:flex;gap:28px;margin-top:20px}.miniStats div{display:flex;flex-direction:column}.miniStats strong{font-size:21px}.miniStats span{font-size:10px;color:#8e92a2;text-transform:uppercase;letter-spacing:.12em;margin-top:3px}.heroDeck{height:180px;position:relative;display:grid;place-items:center}.heroDeck img{height:160px;position:absolute;filter:drop-shadow(0 18px 22px #000b);border-radius:7px}.heroDeck img:nth-child(1){transform:translateX(-64px) rotate(-10deg)}.heroDeck img:nth-child(2){transform:translateX(0) rotate(2deg);z-index:2}.heroDeck img:nth-child(3){transform:translateX(64px) rotate(10deg)}.storeHeader{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:24px 0 14px}.storeHeader h2{font-size:34px;margin:4px 0}.packFilters{display:flex;gap:8px;flex-wrap:wrap}.filterBtn{border:1px solid #303341;background:#11131a;color:#9da2b2;padding:8px 11px;border-radius:999px;cursor:pointer;font-size:12px}.filterBtn.active,.filterBtn:hover{background:#f3f3f7;color:#111;border-color:#f3f3f7}.eyebrow{font-size:12px;letter-spacing:.18em;color:#a7abbb;text-transform:uppercase}
 h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 em{font-style:normal;color:#9f8cff}.lead{max-width:650px;color:#b2b5c3;font-size:18px;line-height:1.6}
 .heroart{height:330px;border-radius:30px;background:radial-gradient(circle at 50% 45%,#594d9c55,transparent 55%),linear-gradient(145deg,#171925,#0c0d13);border:1px solid #2a2c39;display:grid;place-items:center;box-shadow:0 30px 90px #0008;overflow:hidden}
 .heroCard{height:270px;max-width:210px;filter:drop-shadow(0 26px 25px #0009);transform:rotate(5deg);transition:.25s}.heroCard:hover{transform:rotate(1deg) scale(1.03)}
@@ -28,9 +28,9 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
 .row{display:flex;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #252834}.row strong{display:block}.row small{color:#8f93a3}
 .modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:24px;z-index:50}.modal.open{display:flex}.modalBox{width:min(850px,100%);max-height:90vh;overflow:auto;background:#11131a;border:1px solid #303341;border-radius:24px;padding:22px;display:grid;grid-template-columns:320px 1fr;gap:25px}.modalBox img{width:100%;filter:drop-shadow(0 18px 20px #000a)}.modalClose{float:right}.detail h2{font-size:32px;margin:8px 0}.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.kv div{background:#171922;border:1px solid #292c39;border-radius:12px;padding:12px}.kv span{display:block;color:#8f93a3;font-size:11px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.09em}.kv strong{font-size:15px}
 .source{font-size:11px;color:#767b8d;margin-top:18px}.error{color:#ff9b9b}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #353848;border-radius:999px;padding:6px 9px;font-size:11px;color:#b7bbca}
-.tierGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.tierCard{border:1px solid #2b2e3b;border-radius:18px;padding:18px;background:linear-gradient(160deg,#171922,#0e1017);position:relative;overflow:hidden}.tierCard:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,var(--tierGlow),transparent 52%);opacity:.35;pointer-events:none}.tierCard>*{position:relative}.tierName{font-size:22px;font-weight:950;letter-spacing:-.02em}.tierPrice{font-size:34px;font-weight:950;margin-top:8px}.tierRange{font-size:12px;color:#a6aaba;margin-top:4px;line-height:1.45}.tierBtn{margin-top:16px}.tierBadge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #3b3f50;padding:5px 8px;border-radius:999px;color:#c8ccda}
-@media(max-width:950px){.cards,.vaultGrid{grid-template-columns:repeat(3,1fr)}.tierGrid{grid-template-columns:repeat(3,1fr)}.dropGrid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;min-height:auto;padding:55px 0}.heroart{height:300px}}
-@media(max-width:650px){.tierGrid{grid-template-columns:repeat(2,1fr)}header{padding:0 14px}.nav{display:none}.wrap{padding:0 14px 60px}h1{font-size:54px}.cards,.vaultGrid{grid-template-columns:repeat(2,1fr)}.artWrap{height:220px}.sectionhead{align-items:stretch;flex-direction:column}.search{max-width:none}.modalBox{grid-template-columns:1fr}.modalBox>img{max-width:270px;margin:auto}.stats{gap:18px;flex-wrap:wrap}}
+.tierGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.tierCard{border:1px solid #2b2e3b;border-radius:20px;background:#10121a;position:relative;overflow:hidden;cursor:pointer;transition:.2s;min-height:356px;display:flex;flex-direction:column}.tierCard:hover{transform:translateY(-4px);border-color:#4a4e60;box-shadow:0 18px 50px #0007}.packArt{height:205px;position:relative;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 35%,var(--tierGlow),transparent 58%),linear-gradient(155deg,#252838,#0c0d13)}.packArt:before{content:"VD";font-size:74px;font-weight:950;letter-spacing:-.08em;opacity:.13;position:absolute}.packArt:after{content:"";position:absolute;inset:12px;border:1px solid #ffffff12;border-radius:14px}.packCardImage{height:170px;max-width:126px;object-fit:contain;filter:drop-shadow(0 14px 18px #000c);transform:rotate(5deg);z-index:1}.packFace{width:112px;height:160px;border-radius:12px;border:1px solid #ffffff30;background:linear-gradient(145deg,var(--tierGlow),#1a1d2a 64%,#0b0c11);box-shadow:0 20px 30px #0009;display:flex;align-items:end;justify-content:center;padding:14px;font-weight:950;letter-spacing:.08em;z-index:1}.tierBody{padding:14px 15px 16px;display:flex;flex-direction:column;flex:1}.tierTop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.tierName{font-size:19px;font-weight:950;letter-spacing:-.02em}.tierPrice{font-size:19px;font-weight:950}.tierRange{font-size:11px;color:#9599a9;margin-top:5px;line-height:1.4}.tierMeta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;color:#a6aaba}.tierBtn{margin-top:auto}.tierBadge{display:inline-block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #3b3f50;padding:5px 7px;border-radius:999px;color:#c8ccda}.chaseStrip{display:flex;gap:12px;overflow-x:auto;padding:3px 1px 10px;scrollbar-width:thin}.chaseMini{min-width:150px;background:#11131a;border:1px solid #262936;border-radius:14px;padding:10px;cursor:pointer}.chaseMini img{width:100%;height:165px;object-fit:contain;filter:drop-shadow(0 10px 12px #000a)}.chaseMini strong{display:block;font-size:12px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chaseMini span{font-size:11px;color:#9da2b2}
+@media(max-width:950px){.cards,.vaultGrid{grid-template-columns:repeat(3,1fr)}.tierGrid{grid-template-columns:repeat(3,1fr)}.dropGrid{grid-template-columns:1fr}.homeBanner{grid-template-columns:1fr}.heroDeck{display:none}}
+@media(max-width:650px){.tierGrid{grid-template-columns:repeat(2,1fr)}.homeBanner{padding:22px 18px;min-height:0}.homeBanner h1{font-size:39px}.storeHeader{align-items:stretch;flex-direction:column}.packArt{height:170px}.tierCard{min-height:320px}header{padding:0 14px}.nav{display:none}.wrap{padding:0 14px 60px}h1{font-size:54px}.cards,.vaultGrid{grid-template-columns:repeat(2,1fr)}.artWrap{height:220px}.sectionhead{align-items:stretch;flex-direction:column}.search{max-width:none}.modalBox{grid-template-columns:1fr}.modalBox>img{max-width:270px;margin:auto}.stats{gap:18px;flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -48,39 +48,62 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
 
 <main class="wrap">
 <section id="home" class="page active">
-  <div class="hero">
-    <div>
-      <div class="eyebrow">Real Pokémon cards · live market data</div>
-      <h1>Open it.<br><em>Keep it.</em></h1>
-      <p class="lead">VaultDrop now uses real Pokémon card artwork and current marketplace data from TCGdex instead of placeholder cards.</p>
-      <div class="stats">
-        <div><strong id="value">$0.00</strong><span>Vault market</span></div>
-        <div><strong id="count">0</strong><span>Cards owned</span></div>
-        <div><strong id="catalogCount">—</strong><span>Loaded cards</span></div>
+  <div class="homeTop">
+    <div class="homeBanner">
+      <div>
+        <div class="eyebrow">Real cards · real market data</div>
+        <h1>Pick a pack.<br><em>Chase the hit.</em></h1>
+        <p class="lead">Choose from every VaultDrop tier from Bronze to Singularity. Open instantly, reveal a real Pokémon card, then keep it in your vault.</p>
+        <div class="homeActions">
+          <button class="btn secondary" onclick="document.querySelector('#packStore').scrollIntoView({behavior:'smooth'})">BROWSE PACKS</button>
+          <button class="ghost" id="odds">View pack details</button>
+        </div>
+        <div class="miniStats">
+          <div><strong id="value">$0.00</strong><span>Vault market</span></div>
+          <div><strong id="count">0</strong><span>Cards owned</span></div>
+          <div><strong id="catalogCount">—</strong><span>Live cards</span></div>
+        </div>
       </div>
-      <div class="notice">Prices shown are marketplace reference prices from TCGdex. Checkout and physical fulfillment remain disabled in this public preview.</div>
+      <div class="heroDeck">
+        <img id="heroCardA" alt="">
+        <img id="heroCard" alt="Featured Pokémon card">
+        <img id="heroCardB" alt="">
+      </div>
     </div>
-    <div class="heroart"><img id="heroCard" class="heroCard" alt="Featured Pokémon card"></div>
   </div>
 
-  <div class="section">
-    <div class="sectionhead">
-      <div><div class="eyebrow">Pack ladder</div><h2>Choose your tier</h2></div>
-      <button class="ghost" id="odds">View tier model</button>
-    </div>
-    <div class="panel" style="margin-bottom:16px">
-      <div class="eyebrow">Free daily</div>
-      <div class="row" style="align-items:center">
-        <div><strong>Daily Drop</strong><small>One free real-card pull every 24 hours.</small></div>
-        <div style="min-width:220px"><button class="btn" id="daily">CLAIM DAILY DROP</button><div class="small" id="cooldown">Loading card pool…</div></div>
+  <div id="packStore">
+    <div class="storeHeader">
+      <div><div class="eyebrow">Pack shop</div><h2>Open a pack</h2><div class="muted">Every tier, right on the home screen.</div></div>
+      <div class="packFilters">
+        <button class="filterBtn active" data-pack-filter="all">All</button>
+        <button class="filterBtn" data-pack-filter="core">Core</button>
+        <button class="filterBtn" data-pack-filter="premium">Premium</button>
+        <button class="filterBtn" data-pack-filter="high">High Roller</button>
       </div>
     </div>
     <div id="tierGrid" class="tierGrid"></div>
-    <div style="margin-top:22px">
-      <div id="featuredStatus" class="loading">Loading real Pokémon cards and current prices from TCGdex…</div>
-      <div id="featured" class="cards" style="display:none"></div>
-    </div>
   </div>
+
+  <div class="section">
+    <div class="storeHeader">
+      <div><div class="eyebrow">Free every day</div><h2>Daily Drop</h2></div>
+      <div style="min-width:220px"><button class="btn" id="daily">CLAIM FREE DROP</button><div class="small" id="cooldown">Loading card pool…</div></div>
+    </div>
+    <div class="panel"><div class="small">One free real-card preview pull every 24 hours. No purchase required.</div></div>
+  </div>
+
+  <div class="section">
+    <div class="storeHeader">
+      <div><div class="eyebrow">Featured chases</div><h2>Cards you could chase</h2></div>
+      <button class="ghost" data-p="browse" id="browseFromHome">Browse cards</button>
+    </div>
+    <div id="featuredStatus" class="loading">Loading real Pokémon cards and current prices from TCGdex…</div>
+    <div id="chaseStrip" class="chaseStrip" style="display:none"></div>
+    <div id="featured" class="cards" style="display:none"></div>
+  </div>
+
+  <div class="notice">Public preview: paid randomized physical-card checkout is not enabled. Pack pricing and openings are currently product/economics previews.</div>
 </section>
 
 <section id="browse" class="page">
@@ -168,19 +191,20 @@ let modalCard=null;
 const FEATURE_NAMES=['Pikachu','Charizard','Mewtwo','Gengar','Eevee','Umbreon','Rayquaza','Lugia','Mew','Greninja','Sylveon','Dragonite'];
 const PRICE_PRIORITY=['holofoil','normal','reverse-holofoil','reverse','1st-edition-holofoil','1st-edition','unlimited-holofoil','unlimited'];
 const PACK_TIERS=[
-  {name:'Bronze',price:1,min:.25,max:2,glow:'#a86f3c'},
-  {name:'Silver',price:5,min:1,max:10,glow:'#bfc6d1'},
-  {name:'Gold',price:10,min:3,max:25,glow:'#d7ad37'},
-  {name:'Platinum',price:25,min:8,max:60,glow:'#a8e0e5'},
-  {name:'Diamond',price:50,min:15,max:125,glow:'#73d9ff'},
-  {name:'Elite',price:100,min:30,max:250,glow:'#ff6c95'},
-  {name:'Astral',price:250,min:75,max:700,glow:'#9f7cff'},
-  {name:'Mythic',price:500,min:150,max:1400,glow:'#ff7ee8'},
-  {name:'Celestial',price:1000,min:300,max:3000,glow:'#7ff0ff'},
-  {name:'Eclipse',price:2500,min:750,max:6500,glow:'#8f73ff'},
-  {name:'Omega',price:5000,min:1500,max:12000,glow:'#ff5c5c'},
-  {name:'Singularity',price:10000,min:3000,max:25000,glow:'#ffffff'}
+  {name:'Bronze',price:1,min:.25,max:2,glow:'#a86f3c',group:'core'},
+  {name:'Silver',price:5,min:1,max:10,glow:'#bfc6d1',group:'core'},
+  {name:'Gold',price:10,min:3,max:25,glow:'#d7ad37',group:'core'},
+  {name:'Platinum',price:25,min:8,max:60,glow:'#a8e0e5',group:'core'},
+  {name:'Diamond',price:50,min:15,max:125,glow:'#73d9ff',group:'premium'},
+  {name:'Elite',price:100,min:30,max:250,glow:'#ff6c95',group:'premium'},
+  {name:'Astral',price:250,min:75,max:700,glow:'#9f7cff',group:'premium'},
+  {name:'Mythic',price:500,min:150,max:1400,glow:'#ff7ee8',group:'high'},
+  {name:'Celestial',price:1000,min:300,max:3000,glow:'#7ff0ff',group:'high'},
+  {name:'Eclipse',price:2500,min:750,max:6500,glow:'#8f73ff',group:'high'},
+  {name:'Omega',price:5000,min:1500,max:12000,glow:'#ff5c5c',group:'high'},
+  {name:'Singularity',price:10000,min:3000,max:25000,glow:'#ffffff',group:'high'}
 ];
+let activePackFilter='all';
 
 let data;
 try{data=JSON.parse(localStorage.vaultdropReal||'{"vault":[],"activity":[],"nextDailyAt":0}')}catch{data={vault:[],activity:[],nextDailyAt:0}}
@@ -276,9 +300,20 @@ async function loadFeatured(){
   if(featuredCards.length){
     const best=[...featuredCards].sort((a,b)=>(b.market||0)-(a.market||0))[0]||featuredCards[0];
     $('#heroCard').src=imageUrl(best,'high');
-    status.style.display='none';grid.style.display='grid';
+    const others=featuredCards.filter(x=>x.id!==best.id);
+    if($('#heroCardA')&&others[0]) $('#heroCardA').src=imageUrl(others[0],'low');
+    if($('#heroCardB')&&others[1]) $('#heroCardB').src=imageUrl(others[1],'low');
+    status.style.display='none';
+    const chase=$('#chaseStrip');
+    if(chase){
+      chase.style.display='flex';
+      chase.innerHTML=featuredCards.slice(0,10).map((c,i)=>'<div class="chaseMini" data-ci="'+i+'"><img src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"><strong>'+esc(c.name)+'</strong><span>'+(c.market?money(c.market):'Market unavailable')+'</span></div>').join('');
+      chase.querySelectorAll('[data-ci]').forEach(el=>el.onclick=()=>openCard(featuredCards[Number(el.dataset.ci)]));
+    }
+    grid.style.display='none';
     grid.innerHTML=featuredCards.slice(0,8).map(cardHTML).join('');
     bindCards(grid,featuredCards.slice(0,8));
+    renderTiers();
     $('#cooldown').textContent=Date.now()>=data.nextDailyAt?'Ready now':'';
   }else{
     status.innerHTML='<span class="error">Could not load TCGdex right now. Refresh in a moment.</span>';
@@ -290,16 +325,25 @@ async function loadFeatured(){
 function renderTiers(){
   const g=$('#tierGrid');
   if(!g)return;
-  g.innerHTML=PACK_TIERS.map((t,i)=>`
-    <div class="tierCard" style="--tierGlow:${t.glow}">
-      <span class="tierBadge">${i<7?'Core Tier':'High Roller'}</span>
-      <div class="tierName">${t.name}</div>
-      <div class="tierPrice">${money(t.price)}</div>
-      <div class="tierRange">Preview target card pool: ${money(t.min)}–${money(t.max)} market value.</div>
-      <button class="btn tierBtn" data-tier="${i}">OPEN PREVIEW PACK</button>
-      <div class="small">No charge occurs in preview mode.</div>
-    </div>`).join('');
-  g.querySelectorAll('[data-tier]').forEach(b=>b.onclick=()=>openTierPreview(Number(b.dataset.tier)));
+  const shown=PACK_TIERS.map((t,i)=>({...t,i})).filter(t=>activePackFilter==='all'||t.group===activePackFilter);
+  g.innerHTML=shown.map(t=>{
+    const chase=featuredCards.length?featuredCards[t.i%featuredCards.length]:null;
+    const label=t.group==='core'?'Standard':t.group==='premium'?'Premium':'High Roller';
+    return `
+    <div class="tierCard" style="--tierGlow:${t.glow}" data-tier-card="${t.i}">
+      <div class="packArt">
+        ${chase?'<img class="packCardImage" src="'+imageUrl(chase,'low')+'" alt="">':'<div class="packFace">'+t.name.toUpperCase()+'</div>'}
+      </div>
+      <div class="tierBody">
+        <div class="tierTop"><div><span class="tierBadge">${label}</span><div class="tierName">${t.name}</div></div><div class="tierPrice">${money(t.price)}</div></div>
+        <div class="tierRange">Chase pool up to <b>${money(t.max)}</b> market value</div>
+        <div class="tierMeta"><span>${t.min<1?'Entry':'Real-card'} pool</span><span>1 card</span></div>
+        <button class="btn secondary tierBtn" data-tier="${t.i}">OPEN PACK</button>
+      </div>
+    </div>`;
+  }).join('');
+  g.querySelectorAll('[data-tier]').forEach(b=>b.onclick=e=>{e.stopPropagation();openTierPreview(Number(b.dataset.tier))});
+  g.querySelectorAll('[data-tier-card]').forEach(c=>c.onclick=()=>openTierPreview(Number(c.dataset.tierCard)));
 }
 
 function poolForTier(t){
@@ -422,6 +466,11 @@ async function searchCards(){
 $('#searchBtn').onclick=searchCards;
 $('#searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchCards()});
 
+document.querySelectorAll('[data-pack-filter]').forEach(b=>b.onclick=()=>{
+  activePackFilter=b.dataset.packFilter;
+  document.querySelectorAll('[data-pack-filter]').forEach(x=>x.classList.toggle('active',x===b));
+  renderTiers();
+});
 document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{
   const p=b.dataset.p;
   document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));
