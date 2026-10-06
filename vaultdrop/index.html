@@ -74,10 +74,8 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
 
   <div id="packStore" class="packStore">
     <div class="storeHeader">
-      <div><div class="eyebrow">Pack shop</div><h2>Open a pack</h2><div class="muted">Swipe forever. The centered pack is your active pack.</div></div>
-      <div class="packMetaBar">
-        <div class="pill">Infinite carousel</div><div class="pill">Live TCGdex</div><div class="pill">Preview mode</div>
-      </div>
+      <div><div class="eyebrow">VaultDrop collection</div><h2>Choose your pack</h2><div class="muted">Use the arrows to move through each tier.</div></div>
+      <div class="packCounter" id="packCounter">01 / 12</div>
     </div>
     <div class="packCarouselShell singlePackShell">
       <button class="carouselArrow" id="packPrev" aria-label="Previous pack">‹</button>
@@ -90,7 +88,7 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
     </div>
     <div class="packSpotlight" id="packSpotlight">
       <div class="spotlightSummary">
-        <div class="eyebrow">Selected pack</div>
+        <div class="eyebrow">Current tier</div>
         <h3 id="spotlightName">Bronze</h3>
         <div class="spotlightPrice" id="spotlightPrice">$1.00</div>
         <div class="spotlightRange" id="spotlightRange">Up to $2.00 market value</div>
@@ -98,7 +96,7 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
         <button class="btn secondary" id="spotlightOpenBtn">OPEN THIS PACK</button>
       </div>
       <div class="spotlightGrailsWrap">
-        <div class="eyebrow">Top grails in this pack</div>
+        <div class="eyebrow">Featured grails</div>
         <div class="spotlightGrails" id="spotlightGrails"></div>
       </div>
     </div>
@@ -358,26 +356,29 @@ function renderSinglePack(){
   if(!card)return;
   card.style.setProperty('--packGlow',t.glow);
   card.innerHTML=
-    '<div>'+
-      '<div class="singlePackBrand">VAULTDROP · ONE CARD</div>'+
+    '<div class="foilCrimp foilTop"></div>'+
+    '<div class="singlePackInner">'+
+      '<div class="singlePackBrand">VAULTDROP</div>'+
+      '<div class="singlePackSeries">COLLECTOR SERIES · '+String(activePackIndex+1).padStart(2,'0')+'</div>'+
+      '<div class="singlePackSeal"><span>VD</span></div>'+
       '<div class="singlePackName">'+esc(t.name)+'</div>'+
-    '</div>'+
-    '<div class="singlePackSeal">VD</div>'+
-    '<div>'+
+      '<div class="singlePackTag">ONE CARD · DIGITAL VAULT</div>'+
+      '<div class="singlePackRule"></div>'+
       '<div class="singlePackBottom">'+
         '<div><div class="eyebrow">Pack price</div><div class="singlePackPrice">'+money(t.price)+'</div></div>'+
-        '<div class="singlePackCeiling">Verified grail band<br><b>'+money(grailBand(t).min)+'–'+money(grailBand(t).max)+'</b></div>'+
+        '<div class="singlePackCeiling"><span>GRAIL RANGE</span><b>'+money(grailBand(t).min)+' – '+money(grailBand(t).max)+'</b></div>'+
       '</div>'+
-      '<button class="btn secondary" id="singlePackOpen">OPEN '+esc(t.name.toUpperCase())+' PACK</button>'+
+      '<button class="btn secondary luxuryOpen" id="singlePackOpen">OPEN '+esc(t.name.toUpperCase())+'</button>'+
       '<div class="packDots">'+PACK_TIERS.map((_,i)=>'<span class="packDot '+(i===activePackIndex?'active':'')+'"></span>').join('')+'</div>'+
-    '</div>';
+    '</div>'+
+    '<div class="foilCrimp foilBottom"></div>';
   $('#singlePackOpen').onclick=()=>openTierPreview(activePackIndex);
   const p=(activePackIndex-1+PACK_TIERS.length)%PACK_TIERS.length;
   const n=(activePackIndex+1)%PACK_TIERS.length;
-  $('#prevPackLabel').textContent='← '+PACK_TIERS[p].name;
-  $('#nextPackLabel').textContent=PACK_TIERS[n].name+' →';
+  $('#prevPackLabel').textContent=PACK_TIERS[p].name;
+  $('#nextPackLabel').textContent=PACK_TIERS[n].name;
+  if($('#packCounter')) $('#packCounter').textContent=String(activePackIndex+1).padStart(2,'0')+' / '+String(PACK_TIERS.length).padStart(2,'0');
 }
-
 function grailBand(t){
   // A grail must be meaningfully above the pack floor, while never exceeding the pack's declared ceiling.
   const floor=Math.max(t.min, t.price<=5 ? t.price : t.price*1.15);
@@ -461,7 +462,7 @@ async function renderPackSpotlight(index){
     return;
   }
   const top=grails.slice(0,4);
-  g.innerHTML=top.map((c,i)=>'<div class="grailCard" data-grail="'+i+'"><div class="grailArt"><img src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"></div><div class="grailMeta"><strong>'+esc(c.name)+'</strong><span>'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span><b>'+money(c.market)+'</b></div></div>').join('');
+  g.innerHTML=top.map((c,i)=>'<div class="grailCard" data-grail="'+i+'"><div class="grailArt"><div class="grailPrice">'+money(c.market)+'</div><img src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"></div><div class="grailMeta"><strong>'+esc(c.name)+'</strong><span>'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span></div></div>').join('');
   g.querySelectorAll('[data-grail]').forEach(el=>el.onclick=()=>openCard(top[Number(el.dataset.grail)]));
 }
 
@@ -677,6 +678,104 @@ renderTiers();
 loadFeatured();
 loadQueue();
 </script>
+
+<style id="premium-polish">
+:root{--bg:#050506;--panel:#0d0e12;--line:#1d2029;--purple:#6d61ff}
+body{background:
+ radial-gradient(circle at 50% -20%,#25203f55,transparent 34%),
+ linear-gradient(180deg,#07080b 0%,#050506 65%);
+ color:#f6f6f8}
+.wrap{max-width:1180px;padding-bottom:100px}
+header{height:68px;background:#07080bd9;border-bottom:1px solid #ffffff0b;box-shadow:0 8px 30px #0006}
+.brand{font-size:15px;letter-spacing:.18em}
+.nav button{font-size:13px}
+.badge{background:#ffffff06;border-color:#ffffff12}
+.homeTop{padding:18px 0 10px}
+.homeBanner{min-height:180px;padding:24px 28px;border-radius:22px;border-color:#ffffff0d;background:
+ radial-gradient(circle at 85% 30%,#6a5cff22,transparent 28%),
+ linear-gradient(135deg,#0d0f15,#090a0d)}
+.homeBanner h1{font-size:44px;max-width:560px}
+.homeBanner .lead{color:#8f94a3}
+.heroDeck img{height:138px}
+.storeHeader{margin:28px 0 12px;align-items:center}
+.storeHeader h2{font-size:30px;letter-spacing:-.035em}
+.packCounter{font-size:12px;letter-spacing:.18em;color:#888e9f;border:1px solid #ffffff10;padding:9px 12px;border-radius:999px;background:#ffffff05}
+.packStore{margin-top:18px}
+.packCarouselShell{margin-top:6px}
+.singlePackStage{min-height:500px;grid-template-columns:1fr minmax(320px,390px) 1fr;gap:34px}
+.neighborPackLabel{font-size:13px;letter-spacing:.16em;color:#5f6473;opacity:.7}
+.carouselArrow{width:52px;height:52px;border-radius:50%;background:#0c0d12;border-color:#ffffff12;font-size:26px;box-shadow:none;transition:.2s}
+.carouselArrow:hover{background:#141620;border-color:#ffffff22;transform:scale(1.04)}
+.singlePackCard{max-width:390px;min-height:470px;border-radius:24px;padding:0;border-color:#ffffff18;background:
+ radial-gradient(circle at 50% 14%,var(--packGlow),transparent 36%),
+ linear-gradient(145deg,#181a21 0%,#0a0b0f 75%);
+ box-shadow:0 42px 100px #000d,0 0 65px color-mix(in srgb,var(--packGlow) 22%,transparent);
+ transform:perspective(900px) rotateX(1deg);
+ transition:.25s}
+.singlePackCard:hover{transform:perspective(900px) rotateX(0deg) translateY(-3px)}
+.singlePackCard:before{inset:18px;border-radius:18px;border-color:#ffffff12}
+.singlePackInner{padding:30px 30px 24px;display:flex;flex-direction:column;min-height:430px}
+.foilCrimp{height:20px;background:
+ repeating-linear-gradient(90deg,#ffffff12 0 3px,#0000 3px 7px),
+ linear-gradient(180deg,#ffffff10,#0000);
+ opacity:.75}
+.foilTop{border-bottom:1px solid #ffffff0d}.foilBottom{border-top:1px solid #ffffff0d;transform:rotate(180deg)}
+.singlePackBrand{font-size:13px;letter-spacing:.28em;font-weight:900;color:#fff}
+.singlePackSeries{font-size:9px;letter-spacing:.18em;color:#a3a7b3;margin-top:7px}
+.singlePackSeal{width:104px;height:104px;margin:38px auto 24px;border-color:#ffffff22;background:
+ radial-gradient(circle,#ffffff12,#0000 62%),#0c0d11;
+ box-shadow:0 18px 45px #0009,0 0 38px color-mix(in srgb,var(--packGlow) 32%,transparent)}
+.singlePackSeal span{font-size:31px;letter-spacing:-.08em}
+.singlePackName{text-align:center;font-size:49px;letter-spacing:-.06em;text-shadow:0 8px 28px #000}
+.singlePackTag{text-align:center;font-size:9px;letter-spacing:.18em;color:#b1b4be;margin-top:9px}
+.singlePackRule{height:1px;background:linear-gradient(90deg,transparent,#ffffff24,transparent);margin:24px 0 18px}
+.singlePackBottom{align-items:flex-end}
+.singlePackPrice{font-size:34px}
+.singlePackCeiling{text-align:right}
+.singlePackCeiling span{display:block;font-size:9px;letter-spacing:.16em;color:#7f8492;margin-bottom:5px}
+.singlePackCeiling b{font-size:12px;color:#d6d8df}
+.luxuryOpen{height:48px;border-radius:14px;background:linear-gradient(180deg,#f7f7fa,#d9dbe4)!important;color:#0a0b0e!important;box-shadow:0 12px 30px #0008;margin-top:20px}
+.packDots{margin-top:16px}
+.packDot{height:5px;width:5px}.packDot.active{width:18px;background:#f2f2f4}
+.packSpotlight{grid-template-columns:240px 1fr;margin-top:8px;padding:0;border:0;background:none;box-shadow:none;gap:22px}
+.spotlightSummary,.spotlightGrailsWrap{background:#0b0c10;border:1px solid #ffffff0d;border-radius:18px;padding:18px}
+.spotlightSummary h3{font-size:28px}
+.spotlightPrice{font-size:36px}
+.spotlightRange{font-size:13px}
+.spotlightSub{font-size:11px;color:#777c8b}
+#spotlightOpenBtn{display:none}
+.spotlightGrails{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.grailCard{border-radius:16px;border-color:#ffffff0c;background:#0d0f14;box-shadow:0 14px 30px #0006}
+.grailCard:hover{transform:translateY(-4px);border-color:#ffffff26}
+.grailArt{height:220px;position:relative;background:radial-gradient(circle at 50% 42%,#292d3d,#0b0d12 72%);padding:14px}
+.grailArt img{max-width:92%;max-height:92%}
+.grailPrice{position:absolute;top:10px;right:10px;z-index:2;padding:7px 9px;border-radius:999px;background:#08090dcc;border:1px solid #ffffff16;font-weight:900;font-size:12px;backdrop-filter:blur(8px)}
+.grailMeta{padding:12px 13px 14px}.grailMeta strong{font-size:13px}.grailMeta span{font-size:10px;color:#777d8d}
+.section{margin-top:36px}
+#home>.section:last-of-type{display:none}
+.notice{margin-top:28px;background:#ffffff03;border-color:#ffffff0c;color:#858a98;font-size:11px}
+@media(max-width:950px){
+ .singlePackStage{grid-template-columns:90px minmax(280px,360px) 90px}
+ .packSpotlight{grid-template-columns:1fr}
+ .spotlightSummary{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;align-items:end}
+ .spotlightSummary .eyebrow,.spotlightSummary h3{grid-column:1}
+ .spotlightPrice,.spotlightRange,.spotlightSub{grid-column:2}
+}
+@media(max-width:650px){
+ .homeBanner{display:none}
+ .storeHeader{margin-top:18px}
+ .singlePackStage{min-height:410px}
+ .singlePackCard{max-width:300px;min-height:390px}
+ .singlePackInner{min-height:350px;padding:22px}
+ .singlePackSeal{width:80px;height:80px;margin:26px auto 18px}
+ .singlePackName{font-size:38px}
+ .singlePackPrice{font-size:28px}
+ .spotlightGrails{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .grailArt{height:190px}
+ .packSpotlight{gap:12px}
+ .spotlightSummary{display:block}
+}
+</style>
 </body>
 </html>
 <style>
