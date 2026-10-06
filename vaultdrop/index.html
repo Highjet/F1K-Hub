@@ -1,19 +1,362 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VaultDrop</title><style>
-*{box-sizing:border-box}body{margin:0;background:#090a0f;color:#f7f7fb;font-family:Inter,Arial,sans-serif}button{font:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px 70px}header{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #242631;position:sticky;top:0;background:#090a0fe8;backdrop-filter:blur(14px);z-index:5;padding:0 24px}.brand{font-weight:900;letter-spacing:.12em}.nav{display:flex;gap:8px}.nav button,.ghost{background:none;border:0;color:#9ea2b3;padding:10px 13px;border-radius:10px}.nav button.active,.nav button:hover{color:#fff;background:#171922}.badge{font-size:11px;border:1px solid #303341;border-radius:99px;padding:8px 10px;color:#aeb2c1}.hero{display:grid;grid-template-columns:1.1fr .9fr;min-height:560px;align-items:center;gap:30px}.eyebrow{font-size:12px;letter-spacing:.18em;color:#a7abbb}h1{font-size:76px;line-height:.92;margin:16px 0 20px;letter-spacing:-.05em}h1 em{font-style:normal;color:#9f8cff}.lead{max-width:620px;color:#b2b5c3;font-size:18px;line-height:1.6}.heroart{height:360px;border-radius:30px;background:radial-gradient(circle at 50% 45%,#594d9c55,transparent 55%),linear-gradient(145deg,#171925,#0c0d13);border:1px solid #2a2c39;display:grid;place-items:center;box-shadow:0 30px 90px #0008}.cardbig{width:220px;height:310px;border-radius:22px;background:linear-gradient(145deg,#7d68ff,#242738 55%,#0c0d13);border:1px solid #ffffff33;display:grid;place-items:center;font-size:72px;font-weight:900;transform:rotate(7deg);box-shadow:0 30px 60px #0008}.section{margin-top:48px}.sectionhead{display:flex;align-items:end;justify-content:space-between;margin-bottom:18px}.sectionhead h2{font-size:34px;margin:5px 0}.muted{color:#989cac}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.panel{background:#12141c;border:1px solid #252834;border-radius:18px;padding:18px}.drop{padding:24px;background:linear-gradient(160deg,#181a25,#0e1017)}.pack{height:260px;border-radius:18px;background:radial-gradient(circle at 50% 30%,#7568ff,#272a3b 46%,#11131a 80%);display:grid;place-items:center;font-size:38px;font-weight:900;letter-spacing:.08em;text-align:center;position:relative;overflow:hidden}.pack:after{content:"V";font-size:120px;position:absolute;opacity:.08}.btn{width:100%;border:0;border-radius:12px;padding:14px 16px;font-weight:800;cursor:pointer;background:#f5f5f8;color:#11131a;margin-top:14px}.btn.secondary{background:#6d5df5;color:white}.btn:disabled{opacity:.45;cursor:not-allowed}.small{font-size:12px;color:#8f93a3;margin-top:10px}.card{background:#12141c;border:1px solid #252834;border-radius:16px;overflow:hidden}.art{height:180px;display:grid;place-items:center;font-size:42px;font-weight:900;background:linear-gradient(145deg,var(--a),#191b25 62%)}.meta{padding:13px}.meta h3{margin:0 0 5px;font-size:15px}.meta p{margin:0;color:#969aa9;font-size:12px}.price{font-weight:800;margin-top:10px}.stats{display:flex;gap:35px;margin-top:30px}.stats div{display:flex;flex-direction:column}.stats strong{font-size:24px}.stats span{font-size:11px;color:#8e92a2;margin-top:4px;text-transform:uppercase;letter-spacing:.12em}.page{display:none}.page.active{display:block}.pageTitle{padding:55px 0 24px}.pageTitle h2{font-size:48px;margin:5px 0}.vaultGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.empty{border:1px dashed #343744;border-radius:18px;padding:45px;text-align:center;color:#9ca0af}.row{display:flex;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #252834}.row strong{display:block}.row small{color:#8f93a3}.notice{padding:14px 16px;border:1px solid #493f79;background:#171526;border-radius:14px;color:#cfc9ff;margin-top:16px}@media(max-width:800px){.hero{grid-template-columns:1fr;min-height:auto;padding:60px 0}.heroart{height:280px}h1{font-size:58px}.grid{grid-template-columns:1fr}.vaultGrid{grid-template-columns:repeat(2,1fr)}.nav{display:none}}
-</style></head><body><header><div class="brand">VAULTDROP</div><div class="nav"><button data-p="home" class="active">Drops</button><button data-p="vault">Vault</button><button data-p="activity">Activity</button></div><div class="badge">LIVE PREVIEW</div></header><main class="wrap">
-<section id="home" class="page active"><div class="hero"><div><div class="eyebrow">DAILY CARD VAULT</div><h1>Open it.<br><em>Keep it.</em></h1><p class="lead">Claim a daily card, build your vault, and see the full product experience before live checkout is enabled.</p><div class="stats"><div><strong id="value">$0.00</strong><span>Vault value</span></div><div><strong id="count">0</strong><span>Cards owned</span></div><div><strong>24H</strong><span>Daily drop</span></div></div><div class="notice">Public preview is live. Payments and fulfillment are intentionally disabled in this build.</div></div><div class="heroart"><div class="cardbig">VD</div></div></div>
-<div class="section"><div class="sectionhead"><div><div class="eyebrow">TODAY</div><h2>Claim a drop</h2></div><button class="ghost" id="odds">View odds</button></div><div class="grid">
-<div class="panel drop"><div class="pack">DAILY<br>DROP</div><h3>Daily Drop</h3><p class="muted">One randomized demo card every 24 hours.</p><button class="btn" id="daily">CLAIM DAILY DROP</button><div class="small" id="cooldown">Ready now</div></div>
-<div class="panel drop"><div class="pack" style="background:radial-gradient(circle at 50% 30%,#d866ff,#30304a 48%,#11131a 80%)">VAULTDROP<br>PLUS</div><h3>VaultDrop Plus</h3><p class="muted">Membership UI preview.</p><button class="btn secondary" onclick="alert('Checkout is disabled in the public preview.')">COMING SOON — $9.99/MO</button><div class="small">No charge will occur</div></div>
-<div class="panel"><h3>Marketplace preview</h3><p class="muted">Specific-card purchase UI only.</p><div id="market"></div></div></div></div></section>
-<section id="vault" class="page"><div class="pageTitle"><div class="eyebrow">YOUR COLLECTION</div><h2>The Vault</h2><p class="muted">Saved in this browser for the live preview.</p></div><div id="vaultGrid" class="vaultGrid"></div><div id="empty" class="empty">Your vault is waiting. Claim your daily drop.</div></section>
-<section id="activity" class="page"><div class="pageTitle"><div class="eyebrow">LEDGER</div><h2>Activity</h2><p class="muted">Your preview activity.</p></div><div class="panel" id="activityList"></div></section></main><script>
-const cards=[{name:"Moonlit Dragon",rarity:"Common",value:.35,accent:"#79a7ff"},{name:"Ember Fox",rarity:"Common",value:.55,accent:"#ff9b76"},{name:"Verdant Titan",rarity:"Common",value:.72,accent:"#7edba4"},{name:"Prism Knight",rarity:"Uncommon",value:2.4,accent:"#b59cff"},{name:"Solar Seraph",rarity:"Uncommon",value:3.8,accent:"#ffca71"},{name:"Neon Leviathan",rarity:"Rare",value:11.5,accent:"#65e5e0"},{name:"Crown of Ash",rarity:"Rare",value:18,accent:"#ff7272"},{name:"Aurora Phoenix",rarity:"Ultra",value:62,accent:"#f48cff"},{name:"Black Star Sovereign",rarity:"Grail",value:450,accent:"#ffe88a"}],odds=[["Common",.78],["Uncommon",.17],["Rare",.045],["Ultra",.0045],["Grail",.0005]];
-let data=JSON.parse(localStorage.vaultdropPreview||'{"vault":[],"activity":[],"nextDailyAt":0}');const save=()=>localStorage.vaultdropPreview=JSON.stringify(data),money=n=>"$"+Number(n).toFixed(2);
-function rarity(){let r=Math.random(),a=0;for(const o of odds){a+=o[1];if(r<a)return o[0]}return"Grail"}function pick(r){const a=cards.filter(c=>c.rarity===r);return a[Math.floor(Math.random()*a.length)]}
-function go(p){document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===p));document.querySelectorAll("[data-p]").forEach(x=>x.classList.toggle("active",x.dataset.p===p))}document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>go(b.dataset.p));
-function render(){document.querySelector("#value").textContent=money(data.vault.reduce((a,c)=>a+c.value,0));document.querySelector("#count").textContent=data.vault.length;document.querySelector("#vaultGrid").innerHTML=data.vault.map(c=>'<div class="card"><div class="art" style="--a:'+c.accent+'">VD</div><div class="meta"><h3>'+c.name+'</h3><p>'+c.rarity+'</p><div class="price">'+money(c.value)+'</div></div></div>').join("");document.querySelector("#empty").style.display=data.vault.length?"none":"block";document.querySelector("#activityList").innerHTML=data.activity.slice().reverse().map(a=>'<div class="row"><div><strong>'+a.title+'</strong><small>'+a.detail+'</small></div><small>'+new Date(a.at).toLocaleString()+'</small></div>').join("")||'<div class="muted">No activity yet.</div>';document.querySelector("#market").innerHTML=cards.slice(5).map(c=>'<div class="row"><div><strong>'+c.name+'</strong><small>'+c.rarity+'</small></div><button class="ghost" onclick="alert(\'Checkout is disabled in the public preview.\')">'+money(c.value*1.25)+'</button></div>').join("");tick()}
-function tick(){const b=document.querySelector("#daily"),c=document.querySelector("#cooldown"),d=data.nextDailyAt-Date.now();if(d<=0){b.disabled=false;c.textContent="Ready now"}else{b.disabled=true;c.textContent="Next drop in "+Math.floor(d/36e5)+"h "+Math.floor(d%36e5/6e4)+"m"}}setInterval(tick,30000);
-document.querySelector("#daily").onclick=()=>{if(Date.now()<data.nextDailyAt)return;const c={...pick(rarity()),at:Date.now()};data.vault.push(c);data.nextDailyAt=Date.now()+86400000;data.activity.push({title:"Opened "+c.name,detail:c.rarity+" · Daily Drop",at:Date.now()});save();alert("You pulled "+c.name+" — "+c.rarity+"!");render()};
-document.querySelector("#odds").onclick=()=>alert("Daily Drop odds\nCommon 78%\nUncommon 17%\nRare 4.5%\nUltra 0.45%\nGrail 0.05%");render();
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VaultDrop — Real Pokémon Cards</title>
+<style>
+:root{--bg:#090a0f;--panel:#12141c;--line:#252834;--muted:#969aa9;--purple:#7568ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f7fb;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}.wrap{max-width:1240px;margin:auto;padding:0 22px 80px}
+header{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #242631;position:sticky;top:0;background:#090a0fe8;backdrop-filter:blur(16px);z-index:20;padding:0 24px}
+.brand{font-weight:950;letter-spacing:.12em}.nav{display:flex;gap:8px}.nav button,.ghost{background:none;border:0;color:#9ea2b3;padding:10px 13px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover,.ghost:hover{color:#fff;background:#171922}
+.badge{font-size:11px;border:1px solid #303341;border-radius:999px;padding:8px 10px;color:#aeb2c1}.page{display:none}.page.active{display:block}
+.hero{display:grid;grid-template-columns:1.08fr .92fr;min-height:500px;align-items:center;gap:38px}.eyebrow{font-size:12px;letter-spacing:.18em;color:#a7abbb;text-transform:uppercase}
+h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 em{font-style:normal;color:#9f8cff}.lead{max-width:650px;color:#b2b5c3;font-size:18px;line-height:1.6}
+.heroart{height:330px;border-radius:30px;background:radial-gradient(circle at 50% 45%,#594d9c55,transparent 55%),linear-gradient(145deg,#171925,#0c0d13);border:1px solid #2a2c39;display:grid;place-items:center;box-shadow:0 30px 90px #0008;overflow:hidden}
+.heroCard{height:270px;max-width:210px;filter:drop-shadow(0 26px 25px #0009);transform:rotate(5deg);transition:.25s}.heroCard:hover{transform:rotate(1deg) scale(1.03)}
+.stats{display:flex;gap:34px;margin-top:30px}.stats div{display:flex;flex-direction:column}.stats strong{font-size:24px}.stats span{font-size:11px;color:#8e92a2;margin-top:4px;text-transform:uppercase;letter-spacing:.12em}
+.notice{padding:13px 15px;border:1px solid #493f79;background:#171526;border-radius:14px;color:#cfc9ff;margin-top:18px;font-size:13px}
+.section{margin-top:45px}.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}.sectionhead h2,.pageTitle h2{font-size:38px;margin:5px 0}
+.search{display:flex;gap:10px;max-width:530px;width:100%}.search input{flex:1;background:#11131a;border:1px solid #2b2e3b;border-radius:12px;color:#fff;padding:12px 14px;outline:none}.search input:focus{border-color:#6658dd}.search button,.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:850;cursor:pointer;background:#f5f5f8;color:#11131a}.btn{width:100%;margin-top:12px}.btn.secondary{background:var(--purple);color:white}.btn:disabled{opacity:.45;cursor:not-allowed}
+.dropGrid{display:grid;grid-template-columns:340px 1fr;gap:16px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}.drop{padding:22px;background:linear-gradient(160deg,#181a25,#0e1017)}
+.pack{height:235px;border-radius:18px;background:radial-gradient(circle at 50% 30%,#7568ff,#272a3b 46%,#11131a 80%);display:grid;place-items:center;font-size:34px;font-weight:950;letter-spacing:.08em;text-align:center;position:relative;overflow:hidden}.pack:after{content:"V";font-size:120px;position:absolute;opacity:.07}
+.small{font-size:12px;color:#8f93a3;margin-top:8px;line-height:1.45}.muted{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:#12141c;border:1px solid #252834;border-radius:16px;overflow:hidden;transition:.18s;cursor:pointer;min-width:0}.card:hover{transform:translateY(-3px);border-color:#414555}.artWrap{height:270px;background:radial-gradient(circle at 50% 32%,#2b2e41,#11131a 72%);display:grid;place-items:center;padding:12px;position:relative}.artWrap img{max-width:100%;max-height:100%;filter:drop-shadow(0 16px 17px #0009)}.pricePill{position:absolute;right:10px;bottom:10px;background:#0a0b10e8;border:1px solid #3a3d4c;border-radius:999px;padding:7px 9px;font-size:12px;font-weight:900}
+.meta{padding:13px}.meta h3{margin:0 0 5px;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta p{margin:0;color:#969aa9;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metaRow{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:10px}.rarity{font-size:11px;color:#bbbfd0}.market{font-weight:900;font-size:14px}
+.loading{padding:35px;border:1px dashed #343744;border-radius:18px;text-align:center;color:#9ca0af}.pageTitle{padding:52px 0 22px}.vaultGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.empty{border:1px dashed #343744;border-radius:18px;padding:45px;text-align:center;color:#9ca0af}
+.row{display:flex;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #252834}.row strong{display:block}.row small{color:#8f93a3}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:24px;z-index:50}.modal.open{display:flex}.modalBox{width:min(850px,100%);max-height:90vh;overflow:auto;background:#11131a;border:1px solid #303341;border-radius:24px;padding:22px;display:grid;grid-template-columns:320px 1fr;gap:25px}.modalBox img{width:100%;filter:drop-shadow(0 18px 20px #000a)}.modalClose{float:right}.detail h2{font-size:32px;margin:8px 0}.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.kv div{background:#171922;border:1px solid #292c39;border-radius:12px;padding:12px}.kv span{display:block;color:#8f93a3;font-size:11px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.09em}.kv strong{font-size:15px}
+.source{font-size:11px;color:#767b8d;margin-top:18px}.error{color:#ff9b9b}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #353848;border-radius:999px;padding:6px 9px;font-size:11px;color:#b7bbca}
+@media(max-width:950px){.cards,.vaultGrid{grid-template-columns:repeat(3,1fr)}.dropGrid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;min-height:auto;padding:55px 0}.heroart{height:300px}}
+@media(max-width:650px){header{padding:0 14px}.nav{display:none}.wrap{padding:0 14px 60px}h1{font-size:54px}.cards,.vaultGrid{grid-template-columns:repeat(2,1fr)}.artWrap{height:220px}.sectionhead{align-items:stretch;flex-direction:column}.search{max-width:none}.modalBox{grid-template-columns:1fr}.modalBox>img{max-width:270px;margin:auto}.stats{gap:18px;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">VAULTDROP</div>
+  <div class="nav">
+    <button data-p="home" class="active">Drops</button>
+    <button data-p="browse">Browse</button>
+    <button data-p="vault">Vault</button>
+    <button data-p="activity">Activity</button>
+  </div>
+  <div class="badge">TCGDEX LIVE DATA</div>
+</header>
+
+<main class="wrap">
+<section id="home" class="page active">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Real Pokémon cards · live market data</div>
+      <h1>Open it.<br><em>Keep it.</em></h1>
+      <p class="lead">VaultDrop now uses real Pokémon card artwork and current marketplace data from TCGdex instead of placeholder cards.</p>
+      <div class="stats">
+        <div><strong id="value">$0.00</strong><span>Vault market</span></div>
+        <div><strong id="count">0</strong><span>Cards owned</span></div>
+        <div><strong id="catalogCount">—</strong><span>Loaded cards</span></div>
+      </div>
+      <div class="notice">Prices shown are marketplace reference prices from TCGdex. Checkout and physical fulfillment remain disabled in this public preview.</div>
+    </div>
+    <div class="heroart"><img id="heroCard" class="heroCard" alt="Featured Pokémon card"></div>
+  </div>
+
+  <div class="section">
+    <div class="sectionhead">
+      <div><div class="eyebrow">Today</div><h2>Daily real-card drop</h2></div>
+      <button class="ghost" id="odds">View pull tiers</button>
+    </div>
+    <div class="dropGrid">
+      <div class="panel drop">
+        <div class="pack">DAILY<br>DROP</div>
+        <h3>Daily Drop</h3>
+        <p class="muted">A real Pokémon card from the currently loaded TCGdex pool.</p>
+        <button class="btn" id="daily">CLAIM DAILY DROP</button>
+        <div class="small" id="cooldown">Loading card pool…</div>
+      </div>
+      <div>
+        <div id="featuredStatus" class="loading">Loading real Pokémon cards and current prices from TCGdex…</div>
+        <div id="featured" class="cards" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="browse" class="page">
+  <div class="pageTitle">
+    <div class="eyebrow">TCGdex catalog</div>
+    <h2>Browse Pokémon cards</h2>
+    <p class="muted">Search real English Pokémon cards by name. Pricing is loaded card-by-card from TCGdex.</p>
+  </div>
+  <div class="sectionhead">
+    <div class="search">
+      <input id="searchInput" placeholder="Search Pikachu, Mewtwo, Charizard…" autocomplete="off">
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="pill" id="searchMeta">Ready</div>
+  </div>
+  <div id="searchStatus" class="loading">Try searching for a Pokémon.</div>
+  <div id="searchResults" class="cards" style="display:none"></div>
+</section>
+
+<section id="vault" class="page">
+  <div class="pageTitle">
+    <div class="eyebrow">Your collection</div>
+    <h2>The Vault</h2>
+    <p class="muted">Real cards you pulled in this preview, saved locally in your browser.</p>
+  </div>
+  <div id="vaultGrid" class="vaultGrid"></div>
+  <div id="empty" class="empty">Your vault is waiting. Claim your first real-card daily drop.</div>
+</section>
+
+<section id="activity" class="page">
+  <div class="pageTitle">
+    <div class="eyebrow">Ledger</div>
+    <h2>Activity</h2>
+  </div>
+  <div class="panel" id="activityList"></div>
+</section>
+</main>
+
+<div class="modal" id="modal">
+  <div class="modalBox">
+    <img id="modalImg" alt="">
+    <div class="detail">
+      <button class="ghost modalClose" id="modalClose">Close ×</button>
+      <div class="eyebrow" id="modalSet"></div>
+      <h2 id="modalName"></h2>
+      <div id="modalRarity" class="pill"></div>
+      <div class="kv">
+        <div><span>Market price</span><strong id="modalMarket">—</strong></div>
+        <div><span>Low price</span><strong id="modalLow">—</strong></div>
+        <div><span>Variant</span><strong id="modalVariant">—</strong></div>
+        <div><span>Card number</span><strong id="modalNumber">—</strong></div>
+      </div>
+      <div class="source" id="modalUpdated"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API='https://api.tcgdex.net/v2/en';
+const FEATURE_NAMES=['Pikachu','Charizard','Mewtwo','Gengar','Eevee','Umbreon','Rayquaza','Lugia','Mew','Greninja','Sylveon','Dragonite'];
+const PRICE_PRIORITY=['holofoil','normal','reverse-holofoil','reverse','1st-edition-holofoil','1st-edition','unlimited-holofoil','unlimited'];
+
+let data;
+try{data=JSON.parse(localStorage.vaultdropReal||'{"vault":[],"activity":[],"nextDailyAt":0}')}catch{data={vault:[],activity:[],nextDailyAt:0}}
+let featuredCards=[];
+
+const $=q=>document.querySelector(q);
+const money=n=>Number.isFinite(Number(n))?'$'+Number(n).toFixed(2):'—';
+const save=()=>localStorage.vaultdropReal=JSON.stringify(data);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+function imageUrl(card,quality='low'){
+  if(!card?.image)return '';
+  return card.image+'/'+quality+'.webp';
+}
+
+function priceInfo(card){
+  const p=card?.pricing?.tcgplayer;
+  if(!p)return {market:null,low:null,variant:null,updated:null};
+  const keys=[...PRICE_PRIORITY,...Object.keys(p).filter(k=>!['updated','unit'].includes(k)&&!PRICE_PRIORITY.includes(k))];
+  for(const k of keys){
+    const v=p[k];
+    if(v && typeof v==='object'){
+      const market=Number(v.marketPrice ?? v.midPrice ?? v.lowPrice);
+      if(Number.isFinite(market) && market>0){
+        return {
+          market,
+          low:Number.isFinite(Number(v.lowPrice))?Number(v.lowPrice):null,
+          variant:k.replaceAll('-',' '),
+          updated:p.updated||null
+        };
+      }
+    }
+  }
+  const cm=card?.pricing?.cardmarket;
+  const market=Number(cm?.trend ?? cm?.avg ?? cm?.low);
+  return {market:Number.isFinite(market)&&market>0?market:null,low:Number.isFinite(Number(cm?.low))?Number(cm.low):null,variant:market?'Cardmarket':'—',updated:cm?.updated||null};
+}
+
+function normalizeCard(card){
+  const p=priceInfo(card);
+  return {
+    id:card.id,
+    localId:card.localId,
+    name:card.name,
+    image:card.image,
+    rarity:card.rarity||'Unknown rarity',
+    setName:card.set?.name||card.serie?.name||'Pokémon TCG',
+    category:card.category,
+    market:p.market,
+    low:p.low,
+    variant:p.variant,
+    updated:p.updated
+  };
+}
+
+async function api(path){
+  const r=await fetch(API+path,{headers:{Accept:'application/json'}});
+  if(!r.ok)throw new Error('TCGdex returned '+r.status);
+  return r.json();
+}
+
+async function fullCard(id){
+  const raw=await api('/cards/'+encodeURIComponent(id));
+  return normalizeCard(raw);
+}
+
+async function findPricedCard(name){
+  const list=await api('/cards?name='+encodeURIComponent(name)+'&pagination:page=1&pagination:itemsPerPage=20');
+  const candidates=(Array.isArray(list)?list:[]).filter(c=>c.image).slice(-8).reverse();
+  for(const c of candidates.slice(0,5)){
+    try{
+      const full=await fullCard(c.id);
+      if(full.market)return full;
+    }catch{}
+  }
+  if(candidates[0])return fullCard(candidates[0].id);
+  return null;
+}
+
+async function loadFeatured(){
+  const status=$('#featuredStatus'),grid=$('#featured');
+  const loaded=[];
+  for(let i=0;i<FEATURE_NAMES.length;i++){
+    status.textContent='Loading '+FEATURE_NAMES[i]+'… '+(i+1)+'/'+FEATURE_NAMES.length;
+    try{
+      const c=await findPricedCard(FEATURE_NAMES[i]);
+      if(c)loaded.push(c);
+    }catch(e){}
+    if(i%3===2) await sleep(80);
+  }
+  featuredCards=loaded.filter(Boolean);
+  $('#catalogCount').textContent=featuredCards.length;
+  if(featuredCards.length){
+    const best=[...featuredCards].sort((a,b)=>(b.market||0)-(a.market||0))[0]||featuredCards[0];
+    $('#heroCard').src=imageUrl(best,'high');
+    status.style.display='none';grid.style.display='grid';
+    grid.innerHTML=featuredCards.slice(0,8).map(cardHTML).join('');
+    bindCards(grid,featuredCards.slice(0,8));
+    $('#cooldown').textContent=Date.now()>=data.nextDailyAt?'Ready now':'';
+  }else{
+    status.innerHTML='<span class="error">Could not load TCGdex right now. Refresh in a moment.</span>';
+  }
+  tick();render();
+}
+
+function cardHTML(c,i){
+  return '<article class="card" data-i="'+i+'"><div class="artWrap"><img loading="lazy" src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"><div class="pricePill">'+(c.market?money(c.market):'No price')+'</div></div><div class="meta"><h3>'+esc(c.name)+'</h3><p>'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</p><div class="metaRow"><span class="rarity">'+esc(c.rarity)+'</span><span class="market">'+(c.market?money(c.market):'—')+'</span></div></div></article>';
+}
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+function bindCards(root,cards){
+  root.querySelectorAll('.card').forEach(el=>el.onclick=()=>openCard(cards[Number(el.dataset.i)]));
+}
+
+function openCard(c){
+  if(!c)return;
+  $('#modalImg').src=imageUrl(c,'high');
+  $('#modalImg').alt=c.name;
+  $('#modalSet').textContent=c.setName;
+  $('#modalName').textContent=c.name;
+  $('#modalRarity').textContent=c.rarity;
+  $('#modalMarket').textContent=money(c.market);
+  $('#modalLow').textContent=money(c.low);
+  $('#modalVariant').textContent=c.variant||'—';
+  $('#modalNumber').textContent=c.localId||'—';
+  $('#modalUpdated').textContent=c.updated?'Pricing updated: '+new Date(c.updated).toLocaleString()+' · via TCGdex':'Marketplace price unavailable · via TCGdex';
+  $('#modal').classList.add('open');
+}
+
+function render(){
+  const total=data.vault.reduce((s,c)=>s+(Number(c.market)||0),0);
+  $('#value').textContent=money(total);
+  $('#count').textContent=data.vault.length;
+  const vg=$('#vaultGrid');
+  vg.innerHTML=data.vault.map(cardHTML).join('');
+  bindCards(vg,data.vault);
+  $('#empty').style.display=data.vault.length?'none':'block';
+  $('#activityList').innerHTML=data.activity.slice().reverse().map(a=>'<div class="row"><div><strong>'+esc(a.title)+'</strong><small>'+esc(a.detail||'')+'</small></div><small>'+new Date(a.at).toLocaleString()+'</small></div>').join('')||'<div class="muted">No activity yet.</div>';
+  tick();
+}
+
+function tick(){
+  const b=$('#daily'),c=$('#cooldown');
+  if(!featuredCards.length){b.disabled=true;c.textContent='Loading card pool…';return}
+  const d=data.nextDailyAt-Date.now();
+  if(d<=0){b.disabled=false;c.textContent='Ready now'}
+  else{b.disabled=true;c.textContent='Next drop in '+Math.floor(d/36e5)+'h '+Math.floor((d%36e5)/6e4)+'m'}
+}
+
+function pullTier(){
+  const r=Math.random();
+  if(r<0.78)return 'common';
+  if(r<0.95)return 'uncommon';
+  if(r<0.995)return 'rare';
+  if(r<0.9995)return 'ultra';
+  return 'grail';
+}
+
+function bucketForTier(tier){
+  const priced=featuredCards.filter(c=>c.market);
+  const bands={
+    common:priced.filter(c=>c.market<3),
+    uncommon:priced.filter(c=>c.market>=3&&c.market<12),
+    rare:priced.filter(c=>c.market>=12&&c.market<40),
+    ultra:priced.filter(c=>c.market>=40&&c.market<150),
+    grail:priced.filter(c=>c.market>=150)
+  };
+  return bands[tier].length?bands[tier]:priced.length?priced:featuredCards;
+}
+
+$('#daily').onclick=()=>{
+  if(Date.now()<data.nextDailyAt||!featuredCards.length)return;
+  const tier=pullTier(),pool=bucketForTier(tier),c={...pool[Math.floor(Math.random()*pool.length)],pulledAt:Date.now(),pullTier:tier};
+  data.vault.push(c);data.nextDailyAt=Date.now()+86400000;
+  data.activity.push({title:'Pulled '+c.name,detail:(c.market?money(c.market)+' market · ':'')+c.rarity+' · TCGdex',at:Date.now()});
+  save();render();openCard(c);
+};
+
+$('#odds').onclick=()=>alert('Daily tier model\nCommon-value pool: 78%\nUncommon-value pool: 17%\nRare-value pool: 4.5%\nUltra-value pool: 0.45%\nGrail-value pool: 0.05%\n\nIf a value tier is empty in the currently loaded preview pool, VaultDrop falls back to the available real-card pool.');
+
+async function searchCards(){
+  const q=$('#searchInput').value.trim();
+  if(!q)return;
+  const status=$('#searchStatus'),grid=$('#searchResults'),meta=$('#searchMeta');
+  status.style.display='block';grid.style.display='none';status.textContent='Searching TCGdex for “'+q+'”…';meta.textContent='Searching';
+  try{
+    const list=await api('/cards?name='+encodeURIComponent(q)+'&pagination:page=1&pagination:itemsPerPage=24');
+    const briefs=(Array.isArray(list)?list:[]).filter(c=>c.image).slice(0,12);
+    if(!briefs.length){status.textContent='No cards found for “'+q+'”.';meta.textContent='0 results';return}
+    const cards=[];
+    for(let i=0;i<briefs.length;i+=4){
+      const batch=briefs.slice(i,i+4);
+      const got=await Promise.all(batch.map(c=>fullCard(c.id).catch(()=>null)));
+      cards.push(...got.filter(Boolean));
+      status.textContent='Loading pricing… '+Math.min(i+4,briefs.length)+'/'+briefs.length;
+    }
+    status.style.display='none';grid.style.display='grid';grid.innerHTML=cards.map(cardHTML).join('');bindCards(grid,cards);
+    meta.textContent=cards.length+' cards';
+  }catch(e){
+    status.innerHTML='<span class="error">'+esc(e.message)+'</span>';meta.textContent='Error';
+  }
+}
+$('#searchBtn').onclick=searchCards;
+$('#searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchCards()});
+
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{
+  const p=b.dataset.p;
+  document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));
+  document.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('active',x.dataset.p===p));
+});
+$('#modalClose').onclick=()=>$('#modal').classList.remove('open');
+$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('open')};
+setInterval(tick,30000);
+render();
+loadFeatured();
+</script>
+</body>
+</html>
