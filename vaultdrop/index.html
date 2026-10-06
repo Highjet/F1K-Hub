@@ -1,93 +1,406 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VaultDrop Power Packs</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VaultDrop — Power Packs</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap');
-:root{--bg:#06070b;--panel:#0c0f14;--line:rgba(255,255,255,.1);--muted:#99a0af;--txt:#f6f7fb}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif}body{min-height:100vh;overflow-x:hidden}
-.stroke{-webkit-text-stroke:.45px rgba(255,255,255,.18);text-shadow:0 1px 0 rgba(0,0,0,.35),0 0 14px rgba(0,0,0,.2)}
-.static-bg{position:fixed;inset:0;z-index:-4;background:
-radial-gradient(circle at 50% -10%,rgba(112,91,255,.16),transparent 32%),
-radial-gradient(circle at 15% 15%,rgba(27,116,156,.10),transparent 24%),
-linear-gradient(180deg,#080a10 0%,#050608 54%,#050608 100%);pointer-events:none}
-.veil{position:fixed;inset:0;z-index:-3;background:linear-gradient(180deg,rgba(5,6,10,.04),rgba(5,6,10,.28));pointer-events:none}
-header{height:68px;position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--line);background:rgba(6,7,11,.74);backdrop-filter:blur(18px)}
-.brand{font-weight:900;letter-spacing:.18em}.nav{display:flex;gap:8px}.nav button{border:1px solid transparent;background:none;color:#b7bdca;padding:9px 12px;border-radius:11px;cursor:pointer}.nav button.active,.nav button:hover{color:#fff;background:rgba(255,255,255,.05);border-color:var(--line)}
-main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.active{display:block}.ey{font-size:10px;letter-spacing:.22em;color:#b2b7c4;text-transform:uppercase}
-.hero{padding:34px 0 24px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}.hero h1{font:800 56px/.92 'Space Grotesk',sans-serif;letter-spacing:-.06em;margin:8px 0 12px}.hero p{color:#b4bac8;max-width:620px;line-height:1.55;margin:0}.stats{display:flex;gap:9px;flex-wrap:wrap}.stat{min-width:116px;padding:12px 13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.04)}.stat span{font-size:9px;letter-spacing:.15em;color:#8f95a3;display:block}.stat strong{font-size:18px;display:block;margin-top:5px}
-.frame{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(11,14,20,.93),rgba(8,10,14,.88));backdrop-filter:blur(8px);box-shadow:0 28px 80px rgba(0,0,0,.28)}
-.shop{padding:24px}.head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}.head h2{font:800 34px/1 'Space Grotesk',sans-serif;margin:7px 0 4px;letter-spacing:-.05em}.head p{margin:0;color:var(--muted)}.counter{padding:9px 12px;border-radius:999px;border:1px solid var(--line);font-size:11px;letter-spacing:.18em;background:rgba(255,255,255,.04)}
-.stage{display:grid;grid-template-columns:54px 1fr 54px;gap:14px;align-items:center;margin-top:16px}.arrow{width:54px;height:54px;border-radius:50%;border:1px solid var(--line);background:#11151d;color:#fff;font-size:28px;cursor:pointer}.arrow:hover{background:#1a2030}.stage-main{display:grid;grid-template-columns:115px minmax(300px,390px) 115px;gap:18px;align-items:center;justify-content:center}.neighbor{text-align:center;color:#8790a2;font-weight:800}
-.pack{min-height:480px;border-radius:26px;border:1px solid rgba(255,255,255,.16);position:relative;overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.42)}
-.pack:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 10%,rgba(255,255,255,.09) 34%,transparent 49%);transform:translateX(-75%);animation:s 7s ease-in-out infinite}@keyframes s{0%,52%{transform:translateX(-80%)}82%,100%{transform:translateX(90%)}}
-.bronze{background:radial-gradient(circle at 50% 13%,rgba(212,136,83,.4),transparent 34%),linear-gradient(135deg,#261610,#60351d 40%,#160e0b 70%,#0b0c10)}
-.silver{background:radial-gradient(circle at 50% 13%,rgba(245,247,255,.38),transparent 31%),linear-gradient(135deg,#242932,#9da5b3 38%,#252a31 58%,#0d0f13)}
-.gold{background:radial-gradient(circle at 50% 13%,rgba(255,216,90,.42),transparent 34%),linear-gradient(135deg,#362708,#b78b21 40%,#261a07 64%,#0b0c10)}
-.platinum{background:radial-gradient(circle at 50% 13%,rgba(188,247,255,.38),transparent 34%),linear-gradient(135deg,#1d2d34,#92b7c1 38%,#1d272e 62%,#0a0d11)}
-.diamond{background:radial-gradient(circle at 50% 13%,rgba(126,231,255,.4),transparent 33%),linear-gradient(135deg,#0c2a39,#2d7fa1 38%,#11202a 64%,#090b11)}
-.elite{background:radial-gradient(circle at 50% 13%,rgba(255,106,146,.36),transparent 33%),linear-gradient(135deg,#2a0f1b,#8b2548 39%,#1e1017 63%,#09090f)}
-.astral{background:radial-gradient(circle at 50% 13%,rgba(160,128,255,.42),transparent 34%),radial-gradient(circle at 24% 75%,rgba(86,64,205,.25),transparent 28%),linear-gradient(135deg,#1d1234,#4c347e 41%,#130f1f 70%,#09090f)}
-.mythic{background:radial-gradient(circle at 50% 13%,rgba(255,127,233,.39),transparent 34%),linear-gradient(135deg,#2b1128,#65215f 41%,#180f18 68%,#09090f)}
-.celestial{background:radial-gradient(circle at 50% 13%,rgba(125,244,255,.4),transparent 34%),linear-gradient(135deg,#103039,#186271 41%,#102129 68%,#090b10)}
-.eclipse{background:radial-gradient(circle at 50% 13%,rgba(124,104,255,.4),transparent 34%),linear-gradient(135deg,#0f0f19,#3e3174 41%,#14121f 68%,#09090f)}
-.omega{background:radial-gradient(circle at 50% 13%,rgba(255,102,102,.4),transparent 34%),linear-gradient(135deg,#390d13,#902328 40%,#1b0d11 67%,#09090f)}
-.singularity{background:radial-gradient(circle at 50% 13%,rgba(255,255,255,.55),transparent 30%),linear-gradient(135deg,#30333c,#d3d5df 35%,#31333c 56%,#0a0b0f)}
-.crimp{height:21px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.12) 0 3px,transparent 3px 8px),linear-gradient(180deg,rgba(255,255,255,.09),transparent)}.inside{min-height:438px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:1}.pbrand{font-size:13px;letter-spacing:.28em;font-weight:900}.series{font-size:9px;letter-spacing:.18em;color:#d5d8e2bb;margin-top:7px}.seal{width:104px;height:104px;border-radius:50%;margin:18px auto 14px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,9,13,.55);font:800 31px/1 'Space Grotesk',sans-serif}.pname{text-align:center;font:800 47px/.95 'Space Grotesk',sans-serif;letter-spacing:-.06em}.ptag{text-align:center;margin-top:9px;font-size:10px;letter-spacing:.19em;color:#eef0f5c4}.rule{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);margin:20px 0 17px}.bottom{display:flex;justify-content:space-between;align-items:flex-end}.bottom span{display:block;font-size:9px;letter-spacing:.17em;color:#d5d9e3bf}.bottom strong{display:block;margin-top:6px;font-size:27px}.bottom .right{text-align:right}
-.summary{display:grid;grid-template-columns:1fr 450px;gap:18px;margin-top:20px}.summary>div{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.03)}.sleft{padding:20px}.sleft h3{font:800 34px/1 'Space Grotesk',sans-serif;letter-spacing:-.05em;margin:7px 0 8px}.sleft p{margin:0;color:var(--muted)}.sright{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:11px}.fact{padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.fact span{display:block;font-size:9px;letter-spacing:.17em;color:#aab0bf}.fact strong{display:block;margin-top:7px;font-size:21px}.rip{grid-column:1/-1;height:52px;border:0;border-radius:15px;background:linear-gradient(180deg,#f7f8fb,#d9dde6);color:#090a0d;font-weight:900;letter-spacing:.05em;cursor:pointer}
-.ghead{display:flex;justify-content:space-between;align-items:flex-end;margin:24px 0 13px}.ghead h3{font:800 26px/1 'Space Grotesk',sans-serif;margin:7px 0 0;letter-spacing:-.04em}.gnote{font-size:11px;color:#8c93a1}.grails{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}.gcard{border:1px solid var(--line);border-radius:20px;background:#0d1016;overflow:hidden;cursor:pointer;transition:.18s;display:flex;flex-direction:column}.gcard:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)}.gart{height:280px;padding:14px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 28%,rgba(104,115,160,.24),rgba(10,12,18,.8) 78%);position:relative;overflow:hidden;flex:0 0 280px}.gart img{max-width:100%;max-height:242px;object-fit:contain;display:block;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}.gprice{position:absolute;top:10px;right:10px;z-index:2;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(7,8,12,.86);font-weight:900}.ginfo{position:relative;z-index:3;padding:18px 15px 20px;min-height:112px;background:#0a0c12;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;justify-content:flex-start}.gtitle{display:block;font:800 18px/1.15 'Space Grotesk',sans-serif;margin:0;white-space:normal;overflow:visible}.gsub{display:block;margin-top:8px;color:#9aa0af;font-size:11px;line-height:1.45;white-space:normal;overflow:visible}.empty{grid-column:1/-1;padding:28px;border:1px dashed var(--line);border-radius:18px;color:#a6adba}
-.daily{margin-top:18px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}.daily h3{font:800 22px/1 'Space Grotesk',sans-serif;margin:7px 0}.daily p{margin:0;color:var(--muted)}.daily button{height:46px;padding:0 18px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font-weight:900}.cool{margin-top:6px;color:#9ca2af;font-size:11px;text-align:right}
-.title{padding:50px 0 24px;display:flex;justify-content:space-between;align-items:flex-end}.title h1{font:800 50px/1 'Space Grotesk',sans-serif;margin:7px 0}.title p{margin:0;color:var(--muted)}.vval{text-align:right}.vval strong{display:block;font-size:29px;margin-top:7px}.vval small{color:var(--muted)}.vault{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.vcard{border:1px solid var(--line);border-radius:18px;background:#0d1016;overflow:hidden}.vart{height:270px;padding:14px;display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(120,105,255,.17),rgba(10,12,18,.8) 78%)}.vart img{max-width:100%;max-height:100%;object-fit:contain}.vinfo{padding:14px}.vinfo h3{font:800 18px/1.08 'Space Grotesk',sans-serif;margin:0}.vinfo p{font-size:11px;color:var(--muted)}.vbot{display:flex;justify-content:space-between;align-items:center}.pill{font-size:9px;letter-spacing:.14em;padding:6px 8px;border:1px solid var(--line);border-radius:999px}.activity{display:flex;flex-direction:column;gap:10px}.aitem{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.aicon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center}.aitem p{margin:4px 0 0;color:var(--muted);font-size:12px}.aitem time{font-size:11px;color:var(--muted)}
-.overlay{position:fixed;inset:0;z-index:70;display:none;align-items:flex-start;justify-content:center;padding:88px 20px 28px;background:rgba(5,6,10,.78);backdrop-filter:blur(18px);overflow:auto}.overlay.open{display:flex}.reveal{position:relative;width:min(900px,100%);padding:26px;border:1px solid var(--line);border-radius:28px;background:#0d1017;display:grid;grid-template-columns:300px 1fr;gap:22px;margin:0 auto}.x{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#11151d;color:#fff;font-size:22px;cursor:pointer}.rpack{min-height:460px;border-radius:24px;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:24px;background:radial-gradient(circle at 50% 14%,rgba(117,101,255,.35),transparent 34%),linear-gradient(135deg,#1a1d26,#0b0d13);cursor:pointer}.rseal{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);font-size:30px;font-weight:900}.rname{font:800 42px/.92 'Space Grotesk',sans-serif}.rresult{display:none;align-items:center;grid-template-columns:250px 1fr;gap:20px}.overlay.result .rpack{display:none}.overlay.result .rresult{display:grid;grid-column:1/-1}.rresult img{width:100%;max-height:390px;object-fit:contain}.rcopy h2{font:800 36px/1 'Space Grotesk',sans-serif;margin:7px 0}.market{font-size:24px;margin:10px 0 16px}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}.actions .primary{background:#f5f6f9;color:#090a0d;border:0}.fine{font-size:10px;color:#858b98;margin-top:10px}
-.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:rgba(5,6,10,.75);backdrop-filter:blur(14px);padding:20px}.modal.show{display:flex}.detail{width:min(760px,100%);padding:20px;border:1px solid var(--line);border-radius:24px;background:#0d1017;display:grid;grid-template-columns:270px 1fr;gap:20px}.detail img{width:100%;max-height:390px;object-fit:contain}.detail h2{font:800 32px/1 'Space Grotesk',sans-serif}.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dstat{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}.dstat span{font-size:9px;letter-spacing:.15em;color:#9ca2af;display:block}.dstat strong{display:block;margin-top:7px}
+:root{
+  --bg:#07080b;--panel:#0d1016;--panel2:#121722;--line:rgba(255,255,255,.10);
+  --muted:#9aa2b2;--text:#f7f8fb;--soft:#c9ced8;--accent:#7d6fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  min-height:100vh;overflow-x:hidden;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(112,91,255,.14),transparent 28%),
+    radial-gradient(circle at 12% 16%,rgba(46,131,168,.07),transparent 22%),
+    linear-gradient(180deg,#090a0f 0%,#06070a 44%,#050609 100%);
+}
+button,input{font:inherit}
+.stroke{-webkit-text-stroke:.35px rgba(255,255,255,.12);text-shadow:0 1px 0 rgba(0,0,0,.45)}
+.topbar{
+  height:68px;position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:1px solid var(--line);background:rgba(7,8,11,.84);backdrop-filter:blur(18px)
+}
+.brand{font-weight:900;letter-spacing:.18em;font-size:14px}
+.nav{display:flex;gap:6px}
+.nav button{border:1px solid transparent;background:none;color:#aeb5c4;padding:9px 12px;border-radius:10px;cursor:pointer}
+.nav button:hover,.nav button.active{color:#fff;border-color:var(--line);background:rgba(255,255,255,.05)}
+.power-chip{font-size:10px;letter-spacing:.18em;color:#aab1c0;border:1px solid var(--line);border-radius:999px;padding:9px 11px;background:rgba(255,255,255,.03)}
+.shell{max-width:1240px;margin:0 auto;padding:0 24px 90px}
+.page{display:none}.page.active{display:block}
+.eyebrow{font-size:10px;letter-spacing:.22em;color:#aeb4c4;text-transform:uppercase}
+.hero{padding:34px 0 24px;display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
+.hero h1{font-size:58px;line-height:.92;letter-spacing:-.06em;margin:8px 0 12px}
+.hero p{max-width:650px;margin:0;color:#b1b8c7;line-height:1.6;font-size:15px}
+.heroStats{display:flex;gap:10px;flex-wrap:wrap}
+.heroStat{min-width:118px;padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035)}
+.heroStat span{display:block;font-size:9px;letter-spacing:.14em;color:#8f96a6}.heroStat strong{display:block;margin-top:5px;font-size:19px}
+.frame{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(13,16,23,.95),rgba(9,11,16,.92));box-shadow:0 28px 76px rgba(0,0,0,.30)}
+.shop{padding:24px;overflow:hidden}
+.shopHead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.shopHead h2{font-size:34px;letter-spacing:-.045em;margin:6px 0 4px}.shopHead p{margin:0;color:var(--muted)}
+.counter{font-size:11px;letter-spacing:.18em;border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:rgba(255,255,255,.04)}
+.stage{margin-top:18px;display:grid;grid-template-columns:54px 1fr 54px;gap:14px;align-items:center}
+.arrow{width:54px;height:54px;border-radius:50%;border:1px solid var(--line);background:#121721;color:#fff;font-size:28px;cursor:pointer;transition:.18s}
+.arrow:hover{background:#1a2230;transform:scale(1.04)}
+.stageCore{display:grid;grid-template-columns:120px minmax(300px,390px) 120px;gap:18px;align-items:center;justify-content:center}
+.neighbor{color:#7f8798;text-align:center;font-weight:800;font-size:15px}
+.pack{
+  min-height:485px;border-radius:28px;border:1px solid rgba(255,255,255,.16);position:relative;overflow:hidden;
+  box-shadow:0 40px 92px rgba(0,0,0,.42)
+}
+.pack:after{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 10%,rgba(255,255,255,.10) 33%,transparent 49%);transform:translateX(-70%);animation:foil 7s ease-in-out infinite;pointer-events:none}
+@keyframes foil{0%,52%{transform:translateX(-80%)}82%,100%{transform:translateX(88%)}}
+.pack.bronze{background:radial-gradient(circle at 50% 13%,rgba(213,139,86,.42),transparent 34%),linear-gradient(135deg,#25160f,#60351d 40%,#170f0b 70%,#0c0d10)}
+.pack.silver{background:radial-gradient(circle at 50% 13%,rgba(241,245,255,.40),transparent 31%),linear-gradient(135deg,#252a32,#a2aab8 38%,#262b33 58%,#0d0f13)}
+.pack.gold{background:radial-gradient(circle at 50% 13%,rgba(255,216,91,.44),transparent 34%),linear-gradient(135deg,#372908,#b98d20 40%,#251907 64%,#0b0c10)}
+.pack.platinum{background:radial-gradient(circle at 50% 13%,rgba(194,247,255,.42),transparent 34%),linear-gradient(135deg,#1c2e34,#95bac4 38%,#1d272e 62%,#0a0d11)}
+.pack.diamond{background:radial-gradient(circle at 50% 13%,rgba(126,232,255,.42),transparent 33%),linear-gradient(135deg,#0b2b3a,#2e80a3 38%,#11212b 64%,#090b11)}
+.pack.elite{background:radial-gradient(circle at 50% 13%,rgba(255,109,150,.39),transparent 33%),linear-gradient(135deg,#2b0f1c,#8c2649 39%,#1f1018 63%,#09090f)}
+.pack.astral{background:radial-gradient(circle at 50% 13%,rgba(161,130,255,.44),transparent 34%),radial-gradient(circle at 23% 76%,rgba(88,65,205,.25),transparent 28%),linear-gradient(135deg,#1d1235,#4d357f 41%,#130f1f 70%,#09090f)}
+.pack.mythic{background:radial-gradient(circle at 50% 13%,rgba(255,128,234,.42),transparent 34%),linear-gradient(135deg,#2b1128,#662160 41%,#180f18 68%,#09090f)}
+.pack.celestial{background:radial-gradient(circle at 50% 13%,rgba(126,245,255,.42),transparent 34%),linear-gradient(135deg,#103139,#196372 41%,#102129 68%,#090b10)}
+.pack.eclipse{background:radial-gradient(circle at 50% 13%,rgba(125,105,255,.44),transparent 34%),linear-gradient(135deg,#0f0f19,#3f3275 41%,#14121f 68%,#09090f)}
+.pack.omega{background:radial-gradient(circle at 50% 13%,rgba(255,103,103,.42),transparent 34%),linear-gradient(135deg,#390d13,#912428 40%,#1b0d11 67%,#09090f)}
+.pack.singularity{background:radial-gradient(circle at 50% 13%,rgba(255,255,255,.58),transparent 30%),linear-gradient(135deg,#30333c,#d5d7e0 35%,#31333d 56%,#0a0b0f)}
+.crimp{height:21px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.13) 0 3px,transparent 3px 8px),linear-gradient(180deg,rgba(255,255,255,.1),transparent)}
+.packInner{min-height:443px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:1}
+.packBrand{font-size:13px;letter-spacing:.28em;font-weight:900}.packSeries{font-size:9px;letter-spacing:.18em;color:#d7dae3c5;margin-top:7px}
+.packSeal{width:104px;height:104px;border-radius:50%;margin:18px auto 14px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,9,13,.55);font-size:31px;font-weight:900}
+.packName{text-align:center;font-size:47px;line-height:.95;letter-spacing:-.06em;font-weight:900}.packTag{text-align:center;margin-top:9px;font-size:10px;letter-spacing:.18em;color:#eef0f5c4}
+.packRule{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);margin:20px 0 17px}
+.packBottom{display:flex;justify-content:space-between;align-items:flex-end}.packBottom span{display:block;font-size:9px;letter-spacing:.17em;color:#d5d9e3bf}.packBottom strong{display:block;margin-top:6px;font-size:27px}.packBottom .right{text-align:right}
+.summary{display:grid;grid-template-columns:1fr 450px;gap:18px;margin-top:20px}
+.summary>div{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.03)}
+.summaryLeft{padding:20px}.summaryLeft h3{font-size:34px;letter-spacing:-.05em;margin:7px 0 8px}.summaryLeft p{margin:0;color:var(--muted)}
+.summaryRight{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:11px}.fact{padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.fact span{display:block;font-size:9px;letter-spacing:.17em;color:#aab0bf}.fact strong{display:block;margin-top:7px;font-size:21px}
+.rip{grid-column:1/-1;height:52px;border:0;border-radius:15px;background:linear-gradient(180deg,#f7f8fb,#d9dde6);color:#090a0d;font-weight:900;letter-spacing:.05em;cursor:pointer}
+.grailHeader{display:flex;justify-content:space-between;align-items:flex-end;margin:24px 0 13px}.grailHeader h3{font-size:26px;margin:7px 0 0;letter-spacing:-.04em}.poolNote{font-size:11px;color:#8f96a5}
+.grails{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}
+.grailCard{border:1px solid var(--line);border-radius:20px;background:#0d1016;overflow:hidden;cursor:pointer;transition:.18s;display:flex;flex-direction:column}
+.grailCard:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)}
+.grailArt{height:280px;padding:14px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 28%,rgba(104,115,160,.24),rgba(10,12,18,.8) 78%);position:relative;overflow:hidden;flex:0 0 280px}
+.grailArt img{max-width:100%;max-height:242px;object-fit:contain;display:block;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}
+.grailPrice{position:absolute;top:10px;right:10px;z-index:2;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(7,8,12,.86);font-weight:900}
+.grailInfo{position:relative;z-index:3;padding:18px 15px 20px;min-height:112px;background:#0a0c12;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;justify-content:flex-start}
+.grailTitle{display:block;font-size:18px;line-height:1.15;font-weight:900;margin:0;white-space:normal;overflow:visible}.grailSub{display:block;margin-top:8px;color:#9aa0af;font-size:11px;line-height:1.45;white-space:normal}
+.empty{grid-column:1/-1;padding:28px;border:1px dashed var(--line);border-radius:18px;color:#a6adba;background:rgba(255,255,255,.02)}
+.daily{margin-top:18px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}.daily h3{font-size:22px;margin:7px 0}.daily p{margin:0;color:var(--muted)}.daily button{height:46px;padding:0 18px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font-weight:900;cursor:pointer}.cooldown{margin-top:6px;color:#9ca2af;font-size:11px;text-align:right}
+.pageTitle{padding:50px 0 24px;display:flex;justify-content:space-between;align-items:flex-end}.pageTitle h1{font-size:50px;margin:7px 0}.pageTitle p{margin:0;color:var(--muted)}.vaultValue{text-align:right}.vaultValue strong{display:block;font-size:29px;margin-top:7px}.vaultValue small{color:var(--muted)}
+.vaultGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.vaultCard{border:1px solid var(--line);border-radius:18px;background:#0d1016;overflow:hidden}.vaultArt{height:270px;padding:14px;display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(120,105,255,.17),rgba(10,12,18,.8) 78%)}.vaultArt img{max-width:100%;max-height:100%;object-fit:contain}.vaultInfo{padding:14px}.vaultInfo h3{font-size:18px;margin:0}.vaultInfo p{font-size:11px;color:var(--muted)}.vaultBottom{display:flex;justify-content:space-between;align-items:center}.pill{font-size:9px;letter-spacing:.14em;padding:6px 8px;border:1px solid var(--line);border-radius:999px}
+.activity{display:flex;flex-direction:column;gap:10px}.activityItem{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.activityIcon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center}.activityItem p{margin:4px 0 0;color:var(--muted);font-size:12px}.activityItem time{font-size:11px;color:var(--muted)}
+.overlay{position:fixed;inset:0;z-index:80;display:none;align-items:flex-start;justify-content:center;padding:80px 20px 30px;background:rgba(5,6,10,.80);backdrop-filter:blur(18px);overflow:auto}
+.overlay.open{display:flex}.reveal{position:relative;width:min(900px,100%);padding:26px;border:1px solid var(--line);border-radius:28px;background:#0d1017;box-shadow:0 34px 90px rgba(0,0,0,.44)}
+.close{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#11151d;color:#fff;font-size:22px;cursor:pointer}
+.revealPack{width:300px;min-height:460px;margin:0 auto;border-radius:24px;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:24px;background:radial-gradient(circle at 50% 14%,rgba(117,101,255,.35),transparent 34%),linear-gradient(135deg,#1a1d26,#0b0d13);cursor:pointer}
+.revealSeal{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);font-size:30px;font-weight:900}.revealName{font-size:42px;line-height:.92;font-weight:900}
+.result{display:none;grid-template-columns:280px 1fr;gap:24px;align-items:center}.overlay.resultMode .revealPack{display:none}.overlay.resultMode .result{display:grid}
+.result img{width:100%;max-height:430px;object-fit:contain}.resultCopy h2{font-size:36px;margin:7px 0}.market{font-size:24px;margin:10px 0 16px}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}.actions .primary{background:#f5f6f9;color:#090a0d;border:0}.fine{font-size:10px;color:#858b98;margin-top:10px}
+.modal{position:fixed;inset:0;z-index:90;display:none;align-items:flex-start;justify-content:center;padding:80px 20px;background:rgba(5,6,10,.76);backdrop-filter:blur(14px);overflow:auto}.modal.show{display:flex}.detail{width:min(760px,100%);padding:20px;border:1px solid var(--line);border-radius:24px;background:#0d1017;display:grid;grid-template-columns:270px 1fr;gap:20px}.detail img{width:100%;max-height:390px;object-fit:contain}.detail h2{font-size:32px}.detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detailStat{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}.detailStat span{font-size:9px;letter-spacing:.15em;color:#9ca2af;display:block}.detailStat strong{display:block;margin-top:7px}
 .toast{position:fixed;left:50%;bottom:24px;z-index:100;transform:translate(-50%,20px);opacity:0;padding:11px 14px;border-radius:11px;background:#f5f6f9;color:#11151d;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:1000px){.summary{grid-template-columns:1fr}.grails,.vault{grid-template-columns:repeat(2,1fr)}.stage-main{grid-template-columns:1fr}.neighbor{display:none}.hero{align-items:flex-start}.stats{display:none}.reveal{grid-template-columns:1fr}.detail{grid-template-columns:1fr}}
-@media(max-width:650px){.overlay{padding-top:72px}main{padding:0 14px 70px}.hero h1{font-size:42px}.shop{padding:16px}.stage{grid-template-columns:42px 1fr 42px}.arrow{width:42px;height:42px;font-size:23px}.pack{max-width:285px;margin:auto;min-height:390px}.inside{min-height:348px;padding:22px}.seal{width:82px;height:82px}.pname{font-size:35px}.sright{grid-template-columns:1fr}.grails,.vault{grid-template-columns:1fr 1fr;gap:10px}.gart{height:225px}.gart img{max-height:170px}.gtitle{font-size:15px}.ginfo{min-height:82px;padding:11px 12px 14px}.daily,.head,.title,.ghead{align-items:flex-start;flex-direction:column}.nav button{font-size:11px;padding:8px}.brand{font-size:12px}}
+@media(max-width:1000px){.summary{grid-template-columns:1fr}.grails,.vaultGrid{grid-template-columns:repeat(2,1fr)}.stageCore{grid-template-columns:1fr}.neighbor{display:none}.heroStats{display:none}.result,.detail{grid-template-columns:1fr}}
+@media(max-width:650px){.shell{padding:0 14px 70px}.hero{padding-top:26px}.hero h1{font-size:42px}.shop{padding:16px}.stage{grid-template-columns:42px 1fr 42px}.arrow{width:42px;height:42px;font-size:23px}.pack{max-width:285px;margin:auto;min-height:390px}.packInner{min-height:348px;padding:22px}.packSeal{width:82px;height:82px}.packName{font-size:35px}.summaryRight{grid-template-columns:1fr}.grails,.vaultGrid{grid-template-columns:1fr 1fr;gap:10px}.grailArt{height:225px;flex-basis:225px}.grailArt img{max-height:170px}.grailTitle{font-size:15px}.grailInfo{min-height:92px;padding:12px 12px 15px}.daily,.shopHead,.pageTitle,.grailHeader{align-items:flex-start;flex-direction:column}.overlay{padding-top:64px}.nav button{font-size:11px;padding:8px}.brand{font-size:12px}}
 </style>
 </head>
 <body>
-<div class="static-bg" aria-hidden="true"></div><div class="veil"></div>
-<header><div class="brand stroke">VAULTDROP</div><div class="nav"><button class="active" data-page="home">Pack Shop</button><button data-page="vault">Vault</button><button data-page="activity">Activity</button></div><div class="ey stroke">POWER PACKS</div></header>
-<main>
+<header class="topbar">
+  <div class="brand stroke">VAULTDROP</div>
+  <div class="nav">
+    <button class="active" data-page="home">Pack Shop</button>
+    <button data-page="vault">Vault</button>
+    <button data-page="activity">Activity</button>
+  </div>
+  <div class="power-chip stroke">POWER PACKS</div>
+</header>
+
+<main class="shell">
 <section id="home" class="page active">
-<div class="hero"><div><div class="ey">POWER PACK COLLECTION</div><h1 class="stroke">Pick a pack.<br>Chase a grail.</h1><p>Move through every tier, view live grails around roughly 20× the pack cost, then rip the pack.</p></div><div class="stats"><div class="stat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div><div class="stat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div><div class="stat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div></div></div>
-<div class="frame shop">
-<div class="head"><div><div class="ey">PACK SHOP</div><h2 class="stroke">Open a pack</h2><p>Use the arrows. Grails target about 20× each pack cost.</p></div><div class="counter stroke" id="counter">01 / 12</div></div>
-<div class="stage"><button class="arrow" id="prev">‹</button><div class="stage-main"><div class="neighbor stroke" id="prevLabel"></div><div class="pack bronze" id="pack"></div><div class="neighbor stroke" id="nextLabel"></div></div><button class="arrow" id="next">›</button></div>
-<div class="summary"><div class="sleft"><div class="ey">CURRENT TIER</div><h3 class="stroke" id="tierName"></h3><p id="tierCopy"></p></div><div class="sright"><div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div><div class="fact"><span>GRAIL RANGE</span><strong id="tierRange"></strong></div><button class="rip stroke" id="openPack">RIP THIS PACK</button></div></div>
-<div class="ghead"><div><div class="ey">FEATURED GRAILS</div><h3 class="stroke">Top cards for this pack</h3></div><div class="gnote" id="poolNote">Full loaded pool · live TCGdex market references</div></div><div class="grails" id="grails"></div>
-</div>
-<div class="frame daily"><div><div class="ey">FREE DAILY</div><h3 class="stroke">Daily Drop</h3><p>One free preview pull every 24 hours.</p></div><div><button id="dailyBtn" class="stroke">CLAIM FREE DROP</button><div class="cool" id="cooldown">Ready now</div></div></div>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">POWER PACK COLLECTION</div>
+      <h1 class="stroke">Pick a pack.<br>Chase a grail.</h1>
+      <p>Use the arrows to move through every VaultDrop tier. Each pack loads a full card pool with live market references and a grail target around 20× the pack price.</p>
+    </div>
+    <div class="heroStats">
+      <div class="heroStat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div>
+      <div class="heroStat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div>
+      <div class="heroStat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div>
+    </div>
+  </div>
+
+  <section class="frame shop">
+    <div class="shopHead">
+      <div>
+        <div class="eyebrow">PACK SHOP</div>
+        <h2 class="stroke">Open a pack</h2>
+        <p>One pack at a time. Full loaded grail pool underneath.</p>
+      </div>
+      <div class="counter stroke" id="counter">01 / 12</div>
+    </div>
+
+    <div class="stage">
+      <button class="arrow" id="prev" aria-label="Previous pack">‹</button>
+      <div class="stageCore">
+        <div class="neighbor stroke" id="prevLabel"></div>
+        <div class="pack bronze" id="pack"></div>
+        <div class="neighbor stroke" id="nextLabel"></div>
+      </div>
+      <button class="arrow" id="next" aria-label="Next pack">›</button>
+    </div>
+
+    <div class="summary">
+      <div class="summaryLeft">
+        <div class="eyebrow">CURRENT TIER</div>
+        <h3 class="stroke" id="tierName"></h3>
+        <p id="tierCopy"></p>
+      </div>
+      <div class="summaryRight">
+        <div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div>
+        <div class="fact"><span>GRAIL RANGE</span><strong id="tierRange"></strong></div>
+        <button class="rip stroke" id="openPack">RIP THIS PACK</button>
+      </div>
+    </div>
+
+    <div class="grailHeader">
+      <div>
+        <div class="eyebrow">FULL LOADED POOL</div>
+        <h3 class="stroke">Cards in this pack</h3>
+      </div>
+      <div class="poolNote" id="poolNote">Loading live TCGdex cards…</div>
+    </div>
+    <div class="grails" id="grails"></div>
+  </section>
+
+  <section class="frame daily">
+    <div>
+      <div class="eyebrow">FREE DAILY</div>
+      <h3 class="stroke">Daily Drop</h3>
+      <p>One free preview pull every 24 hours.</p>
+    </div>
+    <div>
+      <button id="dailyBtn" class="stroke">CLAIM FREE DROP</button>
+      <div class="cooldown" id="cooldown">Ready now</div>
+    </div>
+  </section>
 </section>
-<section id="vault" class="page"><div class="title"><div><div class="ey">YOUR COLLECTION</div><h1 class="stroke">The Vault</h1><p>Cards you kept from your pack openings.</p></div><div class="vval"><span class="ey">EST. VALUE</span><strong id="vaultValue">$0.00</strong><small id="vaultCount">0 cards</small></div></div><div class="vault" id="vaultGrid"></div></section>
-<section id="activity" class="page"><div class="title"><div><div class="ey">TIMELINE</div><h1 class="stroke">Activity</h1><p>Everything you opened, kept, fulfilled, or sold back in preview.</p></div></div><div class="activity" id="activityList"></div></section>
+
+<section id="vault" class="page">
+  <div class="pageTitle">
+    <div><div class="eyebrow">YOUR COLLECTION</div><h1 class="stroke">The Vault</h1><p>Cards you kept from pack openings.</p></div>
+    <div class="vaultValue"><span class="eyebrow">EST. VALUE</span><strong id="vaultValue">$0.00</strong><small id="vaultCount">0 cards</small></div>
+  </div>
+  <div class="vaultGrid" id="vaultGrid"></div>
+</section>
+
+<section id="activity" class="page">
+  <div class="pageTitle"><div><div class="eyebrow">TIMELINE</div><h1 class="stroke">Activity</h1><p>Everything you opened, kept, fulfilled, or sold back in preview.</p></div></div>
+  <div class="activity" id="activityList"></div>
+</section>
 </main>
-<div class="overlay" id="overlay"><div class="reveal"><button class="x" id="close">×</button><div class="rpack" id="rpack"><div class="pbrand stroke">VAULTDROP</div><div class="rseal stroke">VD</div><div class="rname stroke" id="rname"></div><div class="ey stroke">TAP TO REVEAL</div></div><div class="rresult"><img id="rimg"><div class="rcopy"><div class="ey" id="rset"></div><h2 class="stroke" id="rcard"></h2><div class="market stroke" id="rmarket"></div><div class="actions"><button class="primary stroke" id="keep">KEEP IN VAULT</button><button class="stroke" id="fulfill">FULFILL</button><button class="stroke" id="sell">SELL BACK <span id="sellVal"></span></button></div><div class="fine">Sell Back is a preview valuation only and does not transfer real money.</div></div></div></div></div>
-<div class="modal" id="modal"><div class="detail" id="detail"></div></div><div class="toast" id="toast"></div>
+
+<div class="overlay" id="overlay">
+  <div class="reveal">
+    <button class="close" id="close">×</button>
+    <div class="revealPack" id="revealPack">
+      <div class="packBrand stroke">VAULTDROP</div>
+      <div class="revealSeal stroke">VD</div>
+      <div class="revealName stroke" id="revealPackName"></div>
+      <div class="eyebrow stroke">TAP TO REVEAL</div>
+    </div>
+    <div class="result" id="result">
+      <img id="resultImg" alt="">
+      <div class="resultCopy">
+        <div class="eyebrow" id="resultSet"></div>
+        <h2 class="stroke" id="resultName"></h2>
+        <div class="market stroke" id="resultMarket"></div>
+        <div class="actions">
+          <button class="primary stroke" id="keep">KEEP IN VAULT</button>
+          <button class="stroke" id="fulfill">FULFILL</button>
+          <button class="stroke" id="sell">SELL BACK <span id="sellVal"></span></button>
+        </div>
+        <div class="fine">Sell Back is preview-only and does not transfer money.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal"><div class="detail" id="detail"></div></div>
+<div class="toast" id="toast"></div>
+
 <script>
-const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)],money=n=>'$'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}),esc=s=>String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
-const P=[['Bronze',1,'bronze'],['Silver',5,'silver'],['Gold',10,'gold'],['Platinum',25,'platinum'],['Diamond',50,'diamond'],['Elite',100,'elite'],['Astral',250,'astral'],['Mythic',500,'mythic'],['Celestial',1000,'celestial'],['Eclipse',2500,'eclipse'],['Omega',5000,'omega'],['Singularity',10000,'singularity']].map(([name,price,skin])=>({name,price,skin}));
-const names=['Charizard','Umbreon','Rayquaza','Pikachu','Gengar','Mewtwo','Mew','Lugia','Giratina','Espeon','Blastoise','Venusaur','Sylveon','Dragonite','Gyarados','Ho-Oh','Snorlax','Latias','Latios','Leafeon','Glaceon','Vaporeon','Jolteon','Flareon','Eevee','Greninja','Lucario','Arceus','Dialga','Palkia','Darkrai','Machamp','Alakazam','Gardevoir','Magikarp','Tyranitar','Aerodactyl','Zapdos','Moltres','Articuno','Raichu','Charmander','Squirtle','Bulbasaur','Scizor','Metagross','Salamence','Groudon','Kyogre','Deoxys','Celebi','Jirachi','Suicune','Entei','Raikou','Reshiram','Zekrom','N','Cynthia','Lillie'];
-let i=0,pending=null,cache=new Map(),state=(()=>{try{return JSON.parse(localStorage.vdpp||'{"vault":[],"activity":[],"opened":0,"next":0}')}catch{return{vault:[],activity:[],opened:0,next:0}}})(); const save=()=>localStorage.vdpp=JSON.stringify(state);
-const band=p=>({target:p.price*20,min:p.price*16,max:p.price*24}),img=(c,s='high')=>c.image?c.image+'/'+s+'.webp':'';
-function market(c){const t=c.pricing?.tcgplayer||c.tcgplayer?.prices||{};for(const k of Object.keys(t)){const v=t[k];if(v&&typeof v==='object'){const n=Number(v.marketPrice??v.market??v.midPrice??v.mid??v.highPrice??v.high??v.lowPrice??v.low);if(n)return n}}const cm=c.pricing?.cardmarket||c.cardmarket?.prices||{};return Number(cm.trend??cm.trendPrice??cm.averageSellPrice??cm.avg??cm.lowPrice??cm.low||0)}
-async function api(path){const r=await fetch('https://api.tcgdex.net/v2/en'+path);if(!r.ok)throw 0;return r.json()}
-async function full(id){const c=await api('/cards/'+id),m=market(c);return m?{id:c.id,name:c.name,image:c.image,market:m,setName:c.set?.name||'Pokémon TCG',localId:c.localId||'',rarity:c.rarity||'—',hp:c.hp||'—',types:c.types||[]}:null}
-async function grails(idx){if(cache.has(idx))return cache.get(idx);const b=band(P[idx]),hits=[],seen=new Set();for(const n of names){if(hits.length>=80)break;try{const list=await api('/cards?name='+encodeURIComponent(n)+'&pagination:page=1&pagination:itemsPerPage=80'),a=(Array.isArray(list)?list:[]).filter(x=>x.image),sample=[];for(let k=0;k<Math.min(24,a.length);k++){const q=a[Math.floor(k*(a.length-1)/Math.max(1,Math.min(24,a.length)-1))];if(q&&!sample.some(x=>x.id===q.id))sample.push(q)}for(let k=0;k<sample.length;k+=4){const fs=await Promise.all(sample.slice(k,k+4).map(x=>full(x.id).catch(()=>null)));for(const c of fs){if(!c||seen.has(c.id))continue;seen.add(c.id);if(c.market>=b.min&&c.market<=b.max)hits.push(c)}}}catch{}}
-if(hits.length<20){const near=[];for(const n of names){try{const list=await api('/cards?name='+encodeURIComponent(n)+'&pagination:page=1&pagination:itemsPerPage=30'),a=(Array.isArray(list)?list:[]).filter(x=>x.image).slice(-6);const fs=await Promise.all(a.map(x=>full(x.id).catch(()=>null)));near.push(...fs.filter(Boolean))}catch{}}near.sort((a,c)=>Math.abs(a.market-b.target)-Math.abs(c.market-b.target));for(const c of near){if(!hits.some(x=>x.id===c.id))hits.push(c);if(hits.length>=80)break}}
-hits.sort((a,c)=>Math.abs(a.market-b.target)-Math.abs(c.market-b.target));cache.set(idx,hits);return hits}
-function stats(){const v=state.vault.reduce((s,c)=>s+Number(c.market||0),0);$('#vaultStat').textContent=money(v);$('#cardsStat').textContent=state.vault.length;$('#openedStat').textContent=state.opened;$('#vaultValue').textContent=money(v);$('#vaultCount').textContent=state.vault.length+' cards'}
-function render(){const p=P[i],b=band(p),pr=P[(i-1+P.length)%P.length],nx=P[(i+1)%P.length];$('#counter').textContent=String(i+1).padStart(2,'0')+' / 12';$('#prevLabel').textContent='← '+pr.name;$('#nextLabel').textContent=nx.name+' →';$('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);$('#tierCopy').textContent='Verified grails currently around '+money(b.target)+' target value.';$('#pack').className='pack '+p.skin;$('#pack').innerHTML='<div class="crimp"></div><div class="inside"><div><div class="pbrand stroke">VAULTDROP</div><div class="series">POWER PACKS · '+String(i+1).padStart(2,'0')+'</div></div><div><div class="seal stroke">VD</div><div class="pname stroke">'+p.name+'</div><div class="ptag stroke">ONE GUARANTEED CARD</div></div><div><div class="rule"></div><div class="bottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL RANGE</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div></div><div class="crimp"></div>';showGrails(i);stats();showVault();showActivity()}
-async function showGrails(idx){const g=$('#grails'),p=P[idx],b=band(p);g.innerHTML='<div class="empty">Loading '+p.name+' grails around '+money(b.target)+'…</div>';const a=await grails(idx);if(idx!==i)return;if(!a.length){g.innerHTML='<div class="empty">No live cards found near this tier right now.</div>';$('#poolNote').textContent='0 cards loaded';return}$('#poolNote').textContent=a.length+' cards loaded · live TCGdex market references';g.innerHTML=a.map((c,k)=>'<article class="gcard" data-k="'+k+'"><div class="gart"><div class="gprice stroke">'+money(c.market)+'</div><img src="'+img(c)+'" loading="lazy"></div><div class="ginfo"><span class="gtitle stroke">'+esc(c.name)+'</span><span class="gsub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span></div></article>').join('');$('.gcard').forEach((e,k)=>e.onclick=()=>detail(a[k]))}
-function detail(c){$('#detail').innerHTML='<img src="'+img(c)+'"><div><div class="ey">'+esc(c.setName)+' · '+esc(c.rarity)+'</div><h2 class="stroke">'+esc(c.name)+'</h2><p style="color:#99a0af">Live TCGdex market reference.</p><div class="dgrid"><div class="dstat"><span>MARKET</span><strong>'+money(c.market)+'</strong></div><div class="dstat"><span>CARD NO.</span><strong>#'+esc(c.localId||'—')+'</strong></div><div class="dstat"><span>TYPE</span><strong>'+esc((c.types||[]).join(', ')||'—')+'</strong></div><div class="dstat"><span>HP</span><strong>'+esc(c.hp||'—')+'</strong></div></div></div>';$('#modal').classList.add('show')}
-async function openPack(idx){const a=await grails(idx);if(!a.length)return note('No card available for this tier right now.');const p=P[idx],c=a[Math.floor(Math.random()*Math.min(5,a.length))];pending={p,c};$('#overlay').classList.add('open');$('#overlay').classList.remove('result');$('#rname').textContent=p.name.toUpperCase();$('#rimg').src=img(c);$('#rset').textContent=c.setName+' · '+c.rarity;$('#rcard').textContent=c.name;$('#rmarket').textContent='Market '+money(c.market);$('#sellVal').textContent=money(c.market*.72);state.opened++;state.activity.push({type:'open',title:'Opened '+p.name+' pack',detail:money(c.market)+' market card',at:Date.now()});save();stats();showActivity()}
-function settle(a){if(!pending)return;const {p,c}=pending;if(a!=='sell'){state.vault.push({...c,action:a,pack:p.name});state.activity.push({type:a,title:(a==='keep'?'Kept ':'Fulfillment requested: ')+c.name,detail:p.name+' · '+money(c.market),at:Date.now()})}else state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market*.72)+' preview offer',at:Date.now()});save();render();close();note(a==='sell'?'Sell-back preview recorded.':'Card added to vault.')}
-function showVault(){const g=$('#vaultGrid');g.innerHTML=state.vault.slice().reverse().map(c=>'<article class="vcard"><div class="vart"><img src="'+img(c)+'"></div><div class="vinfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.setName)+' · '+esc(c.rarity)+'</p><div class="vbot"><strong>'+money(c.market)+'</strong><span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span></div></div></article>').join('')||'<div class="empty">Your vault is empty. Rip a pack and keep a card.</div>'}
-function showActivity(){const g=$('#activityList');g.innerHTML=state.activity.slice().reverse().map(x=>'<div class="aitem"><div class="aicon">'+({open:'✦',keep:'✓',fulfill:'↗',sell:'$'}[x.type]||'•')+'</div><div><strong class="stroke">'+esc(x.title)+'</strong><p>'+esc(x.detail)+'</p></div><time>'+new Date(x.at).toLocaleString()+'</time></div>').join('')||'<div class="empty">No activity yet.</div>'}
-function cool(){const d=state.next-Date.now(),b=$('#dailyBtn'),c=$('#cooldown');if(d<=0){b.disabled=false;b.textContent='CLAIM FREE DROP';c.textContent='Ready now'}else{b.disabled=true;b.textContent='DAILY CLAIMED';c.textContent='Next drop in '+Math.floor(d/36e5)+'h '+Math.floor(d%36e5/6e4)+'m'}}
-async function daily(){if(Date.now()<state.next)return;state.next=Date.now()+86400000;save();cool();openPack(0)}setInterval(cool,30000);cool();
-function close(){$('#overlay').classList.remove('open','result');pending=null}function note(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
-$('#prev').onclick=()=>{i=(i-1+P.length)%P.length;render()};$('#next').onclick=()=>{i=(i+1)%P.length;render()};$('#openPack').onclick=()=>openPack(i);$('#dailyBtn').onclick=daily;$('#rpack').onclick=()=>$('#overlay').classList.add('result');$('#close').onclick=close;$('#keep').onclick=()=>settle('keep');$('#fulfill').onclick=()=>settle('fulfill');$('#sell').onclick=()=>settle('sell');$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$$('[data-page]').forEach(b=>b.onclick=()=>{$$('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));$$('[data-page]').forEach(x=>x.classList.toggle('active',x===b))});render();
+const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
+const money=n=>'$'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const PACKS=[
+  {name:'Bronze',price:1,skin:'bronze'},{name:'Silver',price:5,skin:'silver'},{name:'Gold',price:10,skin:'gold'},
+  {name:'Platinum',price:25,skin:'platinum'},{name:'Diamond',price:50,skin:'diamond'},{name:'Elite',price:100,skin:'elite'},
+  {name:'Astral',price:250,skin:'astral'},{name:'Mythic',price:500,skin:'mythic'},{name:'Celestial',price:1000,skin:'celestial'},
+  {name:'Eclipse',price:2500,skin:'eclipse'},{name:'Omega',price:5000,skin:'omega'},{name:'Singularity',price:10000,skin:'singularity'}
+];
+const NAMES=['Charizard','Umbreon','Rayquaza','Pikachu','Gengar','Mewtwo','Mew','Lugia','Giratina','Espeon','Blastoise','Venusaur','Sylveon','Dragonite','Gyarados','Ho-Oh','Snorlax','Latias','Latios','Leafeon','Glaceon','Vaporeon','Jolteon','Flareon','Eevee','Greninja','Lucario','Arceus','Dialga','Palkia','Darkrai','Machamp','Alakazam','Gardevoir','Magikarp','Tyranitar','Aerodactyl','Zapdos','Moltres','Articuno','Raichu','Charmander','Squirtle','Bulbasaur','Scizor','Metagross','Salamence','Groudon','Kyogre','Deoxys','Celebi','Jirachi','Suicune','Entei','Raikou','Reshiram','Zekrom'];
+let index=0,pending=null,cache=new Map();
+let state=(()=>{try{return JSON.parse(localStorage.vd_rebuild||'{"vault":[],"activity":[],"opened":0,"next":0}')}catch{return{vault:[],activity:[],opened:0,next:0}}})();
+const save=()=>localStorage.vd_rebuild=JSON.stringify(state);
+const band=p=>({target:p.price*20,min:p.price*16,max:p.price*24});
+const img=(c,size='high')=>c.image?c.image+'/'+size+'.webp':'';
+
+function market(c){
+  const t=c.pricing?.tcgplayer||c.tcgplayer?.prices||{};
+  for(const k of Object.keys(t)){
+    const v=t[k];
+    if(v&&typeof v==='object'){
+      const n=Number(v.marketPrice??v.market??v.midPrice??v.mid??v.highPrice??v.high??v.lowPrice??v.low);
+      if(n)return n;
+    }
+  }
+  const cm=c.pricing?.cardmarket||c.cardmarket?.prices||{};
+  return Number(cm.trend??cm.trendPrice??cm.averageSellPrice??cm.avg??cm.lowPrice??cm.low||0);
+}
+async function api(path){const r=await fetch('https://api.tcgdex.net/v2/en'+path);if(!r.ok)throw new Error('TCGdex '+r.status);return r.json()}
+async function full(id){
+  const c=await api('/cards/'+encodeURIComponent(id)),m=market(c);
+  if(!m||!c.image)return null;
+  return {id:c.id,name:c.name,image:c.image,market:m,setName:c.set?.name||'Pokémon TCG',localId:c.localId||'',rarity:c.rarity||'—',hp:c.hp||'—',types:c.types||[]};
+}
+async function pool(idx){
+  if(cache.has(idx))return cache.get(idx);
+  const p=PACKS[idx],b=band(p),exact=[],near=[],seen=new Set();
+  for(const n of NAMES){
+    if(exact.length>=36)break;
+    try{
+      const list=await api('/cards?name='+encodeURIComponent(n)+'&pagination:page=1&pagination:itemsPerPage=60');
+      const a=(Array.isArray(list)?list:[]).filter(x=>x&&x.id&&x.image);
+      if(!a.length)continue;
+      const sample=[],take=Math.min(14,a.length);
+      for(let k=0;k<take;k++){
+        const q=a[Math.floor(k*(a.length-1)/Math.max(1,take-1))];
+        if(q&&!sample.some(x=>x.id===q.id))sample.push(q);
+      }
+      for(let k=0;k<sample.length;k+=4){
+        const fs=await Promise.all(sample.slice(k,k+4).map(x=>full(x.id).catch(()=>null)));
+        for(const c of fs){
+          if(!c||seen.has(c.id))continue;
+          seen.add(c.id);
+          const d=Math.abs(c.market-b.target);
+          near.push({...c,_d:d});
+          if(c.market>=b.min&&c.market<=b.max)exact.push(c);
+        }
+      }
+    }catch{}
+  }
+  near.sort((a,b)=>a._d-b._d);
+  const out=[...exact];
+  if(out.length<16){
+    for(const c of near){
+      if(!out.some(x=>x.id===c.id))out.push(c);
+      if(out.length>=24)break;
+    }
+  }
+  out.sort((a,b)=>Math.abs(a.market-b.target)-Math.abs(b.market-b.target));
+  cache.set(idx,out);
+  return out;
+}
+
+function stats(){
+  const v=state.vault.reduce((s,c)=>s+Number(c.market||0),0);
+  $('#vaultStat').textContent=money(v);$('#cardsStat').textContent=state.vault.length;$('#openedStat').textContent=state.opened;
+  $('#vaultValue').textContent=money(v);$('#vaultCount').textContent=state.vault.length+' card'+(state.vault.length===1?'':'s');
+}
+function renderPack(){
+  const p=PACKS[index],b=band(p),prev=PACKS[(index-1+PACKS.length)%PACKS.length],next=PACKS[(index+1)%PACKS.length];
+  $('#counter').textContent=String(index+1).padStart(2,'0')+' / '+PACKS.length;
+  $('#prevLabel').textContent='← '+prev.name;$('#nextLabel').textContent=next.name+' →';
+  $('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);
+  $('#tierCopy').textContent='Target market value around '+money(b.target)+'. Exact cards are preferred; nearest live matches fill sparse tiers.';
+  $('#pack').className='pack '+p.skin;
+  $('#pack').innerHTML=
+    '<div class="crimp"></div><div class="packInner">'+
+      '<div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(index+1).padStart(2,'0')+'</div></div>'+
+      '<div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div>'+
+      '<div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL RANGE</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div>'+
+    '</div><div class="crimp"></div>';
+  renderPool(index);
+}
+async function renderPool(idx){
+  const g=$('#grails'),p=PACKS[idx],b=band(p);
+  $('#poolNote').textContent='Loading live TCGdex cards…';
+  g.innerHTML='<div class="empty">Loading '+esc(p.name)+' pool around '+money(b.target)+'…</div>';
+  const a=await pool(idx);
+  if(idx!==index)return;
+  $('#poolNote').textContent=a.length+' cards loaded · live TCGdex references';
+  if(!a.length){g.innerHTML='<div class="empty">No live cards are available for this tier right now.</div>';return}
+  g.innerHTML=a.map((c,k)=>
+    '<article class="grailCard" data-k="'+k+'">'+
+      '<div class="grailArt"><div class="grailPrice stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" alt="'+esc(c.name)+'"></div>'+
+      '<div class="grailInfo"><span class="grailTitle stroke">'+esc(c.name)+'</span><span class="grailSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span></div>'+
+    '</article>'
+  ).join('');
+  $$('.grailCard').forEach((el,k)=>el.onclick=()=>detail(a[k]));
+}
+function detail(c){
+  $('#detail').innerHTML=
+    '<img src="'+img(c)+'" alt="'+esc(c.name)+'"><div>'+
+      '<div class="eyebrow">'+esc(c.setName)+' · '+esc(c.rarity)+'</div>'+
+      '<h2 class="stroke">'+esc(c.name)+'</h2><p style="color:#9aa2b2">Live TCGdex market reference.</p>'+
+      '<div class="detailGrid"><div class="detailStat"><span>MARKET</span><strong>'+money(c.market)+'</strong></div>'+
+      '<div class="detailStat"><span>CARD NO.</span><strong>#'+esc(c.localId||'—')+'</strong></div>'+
+      '<div class="detailStat"><span>TYPE</span><strong>'+esc((c.types||[]).join(', ')||'—')+'</strong></div>'+
+      '<div class="detailStat"><span>HP</span><strong>'+esc(c.hp||'—')+'</strong></div></div>'+
+    '</div>';
+  $('#modal').classList.add('show');
+}
+function renderVault(){
+  const g=$('#vaultGrid');
+  g.innerHTML=state.vault.slice().reverse().map(c=>
+    '<article class="vaultCard"><div class="vaultArt"><img src="'+img(c)+'" alt="'+esc(c.name)+'"></div>'+
+    '<div class="vaultInfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.setName)+' · '+esc(c.rarity)+'</p>'+
+    '<div class="vaultBottom"><strong>'+money(c.market)+'</strong><span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span></div></div></article>'
+  ).join('')||'<div class="empty">Your vault is empty. Rip a pack and keep a card.</div>';
+}
+function renderActivity(){
+  const g=$('#activityList'),icons={open:'✦',keep:'✓',fulfill:'↗',sell:'$'};
+  g.innerHTML=state.activity.slice().reverse().map(x=>
+    '<div class="activityItem"><div class="activityIcon">'+(icons[x.type]||'•')+'</div><div><strong class="stroke">'+esc(x.title)+'</strong><p>'+esc(x.detail)+'</p></div><time>'+new Date(x.at).toLocaleString()+'</time></div>'
+  ).join('')||'<div class="empty">No activity yet.</div>';
+}
+function renderAll(){renderPack();stats();renderVault();renderActivity();cooldown()}
+async function openPack(idx){
+  const a=await pool(idx);if(!a.length)return toast('No card available for this tier right now.');
+  const p=PACKS[idx],c=a[Math.floor(Math.random()*Math.min(8,a.length))];
+  pending={p,c};$('#overlay').classList.add('open');$('#overlay').classList.remove('resultMode');
+  $('#revealPackName').textContent=p.name.toUpperCase();$('#resultImg').src=img(c);$('#resultSet').textContent=c.setName+' · '+c.rarity;
+  $('#resultName').textContent=c.name;$('#resultMarket').textContent='Market '+money(c.market);$('#sellVal').textContent=money(c.market*.72);
+  state.opened++;state.activity.push({type:'open',title:'Opened '+p.name+' pack',detail:money(c.market)+' market card',at:Date.now()});save();stats();renderActivity();
+}
+function settle(a){
+  if(!pending)return;const {p,c}=pending;
+  if(a==='sell')state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market*.72)+' preview offer',at:Date.now()});
+  else{state.vault.push({...c,action:a,pack:p.name});state.activity.push({type:a,title:(a==='keep'?'Kept ':'Fulfillment requested: ')+c.name,detail:p.name+' · '+money(c.market),at:Date.now()})}
+  save();renderAll();closeReveal();toast(a==='sell'?'Sell-back preview recorded.':'Card added to vault.');
+}
+function closeReveal(){$('#overlay').classList.remove('open','resultMode');pending=null}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
+function cooldown(){
+  const d=state.next-Date.now(),b=$('#dailyBtn'),c=$('#cooldown');
+  if(d<=0){b.disabled=false;b.textContent='CLAIM FREE DROP';c.textContent='Ready now'}
+  else{b.disabled=true;b.textContent='DAILY CLAIMED';c.textContent='Next drop in '+Math.floor(d/36e5)+'h '+Math.floor(d%36e5/6e4)+'m'}
+}
+async function daily(){if(Date.now()<state.next)return;state.next=Date.now()+86400000;save();cooldown();openPack(0)}
+setInterval(cooldown,30000);
+
+$('#prev').onclick=()=>{index=(index-1+PACKS.length)%PACKS.length;renderPack()};
+$('#next').onclick=()=>{index=(index+1)%PACKS.length;renderPack()};
+$('#openPack').onclick=()=>openPack(index);$('#dailyBtn').onclick=daily;$('#revealPack').onclick=()=>$('#overlay').classList.add('resultMode');
+$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#fulfill').onclick=()=>settle('fulfill');$('#sell').onclick=()=>settle('sell');
+$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};
+$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
+$$('[data-page]').forEach(b=>b.onclick=()=>{$$('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));$$('[data-page]').forEach(x=>x.classList.toggle('active',x===b))});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
+
+renderAll();
 </script>
-</body></html>
+</body>
+</html>
