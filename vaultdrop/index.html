@@ -39,6 +39,7 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
     <button data-p="home" class="active">Drops</button>
     <button data-p="browse">Browse</button>
     <button data-p="vault">Vault</button>
+    <button data-p="economics">Economics</button>
     <button data-p="activity">Activity</button>
   </div>
   <div class="badge">TCGDEX LIVE DATA</div>
@@ -109,6 +110,27 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
   <div id="empty" class="empty">Your vault is waiting. Claim your first real-card daily drop.</div>
 </section>
 
+<section id="economics" class="page">
+  <div class="pageTitle">
+    <div class="eyebrow">Operations</div>
+    <h2>Economics & Fulfillment</h2>
+    <p class="muted">Market reference → sourcing ceiling → expected cost → resale/buyback margin → fulfillment status.</p>
+  </div>
+  <div class="stats" style="margin:0 0 24px">
+    <div><strong id="qReady">0</strong><span>Ready to source</span></div>
+    <div><strong id="qReview">0</strong><span>Margin review</span></div>
+    <div><strong id="qShip">0</strong><span>Ready to ship</span></div>
+  </div>
+  <div class="panel">
+    <div class="sectionhead" style="margin:0 0 10px">
+      <div><div class="eyebrow">Real backend queue</div><h2 style="font-size:28px">Fulfillment Queue</h2></div>
+      <button class="ghost" id="refreshQueue">Refresh</button>
+    </div>
+    <div id="queueStatus" class="loading">Loading fulfillment queue…</div>
+    <div id="queueList"></div>
+  </div>
+</section>
+
 <section id="activity" class="page">
   <div class="pageTitle">
     <div class="eyebrow">Ledger</div>
@@ -133,12 +155,16 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
         <div><span>Card number</span><strong id="modalNumber">—</strong></div>
       </div>
       <div class="source" id="modalUpdated"></div>
+      <button class="btn secondary" id="queueCardBtn">ADD TO FULFILLMENT QUEUE</button>
+      <div class="small">Creates a persistent Railway queue item with sourcing and margin calculations.</div>
     </div>
   </div>
 </div>
 
 <script>
 const API='https://api.tcgdex.net/v2/en';
+const FULFILLMENT_API='https://vaultdrop-fulfillment-api-production.up.railway.app';
+let modalCard=null;
 const FEATURE_NAMES=['Pikachu','Charizard','Mewtwo','Gengar','Eevee','Umbreon','Rayquaza','Lugia','Mew','Greninja','Sylveon','Dragonite'];
 const PRICE_PRIORITY=['holofoil','normal','reverse-holofoil','reverse','1st-edition-holofoil','1st-edition','unlimited-holofoil','unlimited'];
 
@@ -258,6 +284,7 @@ function bindCards(root,cards){
 
 function openCard(c){
   if(!c)return;
+  modalCard=c;
   $('#modalImg').src=imageUrl(c,'high');
   $('#modalImg').alt=c.name;
   $('#modalSet').textContent=c.setName;
@@ -352,11 +379,85 @@ document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));
   document.querySelectorAll('[data-p]').forEach(x=>x.classList.toggle('active',x.dataset.p===p));
 });
+
+function localEconomics(c){
+  const market=Number(c.market)||0, low=Number(c.low)||market||0;
+  const cardValue=market||low;
+  const sourceTarget=Math.round(Math.min(low||cardValue,cardValue*.82)*100)/100;
+  const estimatedShipping=cardValue>=20?4.75:1.25;
+  const estimatedFees=Math.round(Math.max(.35,cardValue*.035)*100)/100;
+  const expectedCost=Math.round((sourceTarget+estimatedShipping+estimatedFees)*100)/100;
+  const resaleTarget=Math.round(cardValue*1.08*100)/100;
+  const buybackOffer=Math.round(cardValue*.72*100)/100;
+  return {cardValue,sourceTarget,estimatedShipping,estimatedFees,expectedCost,resaleTarget,buybackOffer,
+    projectedResaleProfit:Math.round((resaleTarget-expectedCost)*100)/100,
+    projectedBuybackProfit:Math.round((cardValue-buybackOffer)*100)/100};
+}
+
+async function queueCard(c){
+  if(!c)return;
+  const btn=$('#queueCardBtn'); btn.disabled=true; btn.textContent='ADDING…';
+  try{
+    const r=await fetch(FULFILLMENT_API+'/api/queue',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(c)});
+    const j=await r.json();
+    if(!r.ok) throw new Error(j.error||'Queue failed');
+    btn.textContent='ADDED TO QUEUE';
+    await loadQueue();
+    setTimeout(()=>{btn.disabled=false;btn.textContent='ADD TO FULFILLMENT QUEUE'},1200);
+  }catch(e){
+    btn.disabled=false;btn.textContent='ADD TO FULFILLMENT QUEUE';
+    alert(e.message);
+  }
+}
+
+function statusLabel(s){
+  return String(s||'').replaceAll('_',' ').replace(/\b\w/g,m=>m.toUpperCase());
+}
+
+async function setQueueStatus(id,status){
+  const r=await fetch(FULFILLMENT_API+'/api/queue/'+encodeURIComponent(id)+'/status',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({status})});
+  const j=await r.json(); if(!r.ok) throw new Error(j.error||'Update failed'); await loadQueue();
+}
+
+async function loadQueue(){
+  const st=$('#queueStatus'), list=$('#queueList');
+  st.style.display='block'; st.textContent='Loading fulfillment queue…'; list.innerHTML='';
+  try{
+    const r=await fetch(FULFILLMENT_API+'/api/queue'); const j=await r.json();
+    if(!r.ok)throw new Error(j.error||'Queue unavailable');
+    const items=j.items||[], counts=j.counts||{};
+    $('#qReady').textContent=counts.ready_to_source||0;
+    $('#qReview').textContent=counts.margin_review||0;
+    $('#qShip').textContent=counts.ready_to_ship||0;
+    if(!items.length){st.textContent='Queue is empty. Open any card and add it to fulfillment.';return}
+    st.style.display='none';
+    list.innerHTML=items.map(x=>`
+      <div class="row" style="align-items:center">
+        <div style="display:flex;gap:12px;align-items:center;min-width:0">
+          <img src="${x.image?x.image+'/low.webp':''}" style="width:54px;max-height:76px;object-fit:contain;border-radius:6px;background:#0d0f15">
+          <div style="min-width:0">
+            <strong>${esc(x.cardName)}</strong>
+            <small>${esc(x.setName)} · #${esc(x.localId)} · ${statusLabel(x.status)}</small>
+            <div class="small">Market ${money(x.cardValue)} · source ≤ ${money(x.sourceTarget)} · expected cost ${money(x.expectedCost)}</div>
+            <div class="small">Resale target ${money(x.resaleTarget)} · projected margin <b style="color:${x.projectedResaleProfit>=0?'#81e2aa':'#ff9b9b'}">${money(x.projectedResaleProfit)}</b> · buyback ${money(x.buybackOffer)}</div>
+          </div>
+        </div>
+        <select data-qid="${x.id}" style="background:#11131a;color:#fff;border:1px solid #343744;border-radius:10px;padding:9px">
+          ${['margin_review','ready_to_source','source_found','purchased','received','quality_check','ready_to_ship','shipped','cancelled'].map(v=>'<option value="'+v+'" '+(x.status===v?'selected':'')+'>'+statusLabel(v)+'</option>').join('')}
+        </select>
+      </div>`).join('');
+    list.querySelectorAll('select[data-qid]').forEach(sel=>sel.onchange=()=>setQueueStatus(sel.dataset.qid,sel.value).catch(e=>alert(e.message)));
+  }catch(e){st.innerHTML='<span class="error">'+esc(e.message)+'</span>'}
+}
+
+$('#queueCardBtn').onclick=()=>queueCard(modalCard);
+$('#refreshQueue').onclick=loadQueue;
 $('#modalClose').onclick=()=>$('#modal').classList.remove('open');
 $('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('open')};
 setInterval(tick,30000);
 render();
 loadFeatured();
+loadQueue();
 </script>
 </body>
 </html>
