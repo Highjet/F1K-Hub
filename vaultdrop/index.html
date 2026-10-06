@@ -79,10 +79,14 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
         <div class="pill">Infinite carousel</div><div class="pill">Live TCGdex</div><div class="pill">Preview mode</div>
       </div>
     </div>
-    <div class="packCarouselShell">
-      <button class="carouselArrow" id="packPrev">‹</button>
-      <div class="packCarousel" id="packCarousel"><div class="packTrack" id="packTrack"></div></div>
-      <button class="carouselArrow" id="packNext">›</button>
+    <div class="packCarouselShell singlePackShell">
+      <button class="carouselArrow" id="packPrev" aria-label="Previous pack">‹</button>
+      <div class="singlePackStage">
+        <div class="neighborPackLabel" id="prevPackLabel"></div>
+        <div id="singlePackCard" class="singlePackCard"></div>
+        <div class="neighborPackLabel" id="nextPackLabel"></div>
+      </div>
+      <button class="carouselArrow" id="packNext" aria-label="Next pack">›</button>
     </div>
     <div class="packSpotlight" id="packSpotlight">
       <div class="spotlightSummary">
@@ -222,6 +226,9 @@ const PACK_TIERS=[
 let activePackFilter='all';
 let activePackIndex=0;
 let carouselInitDone=false;
+const GRAIL_NAMES=['Charizard','Pikachu','Umbreon','Rayquaza','Lugia','Gengar','Mewtwo','Mew','Giratina','Espeon','Blastoise','Venusaur','Sylveon','Dragonite','Latias','Latios'];
+const tierGrailCache=new Map();
+const tierGrailLoading=new Map();
 
 let data;
 try{data=JSON.parse(localStorage.vaultdropReal||'{"vault":[],"activity":[],"nextDailyAt":0}')}catch{data={vault:[],activity:[],nextDailyAt:0}}
@@ -341,94 +348,144 @@ async function loadFeatured(){
 
 
 function renderTiers(){
-  const track=$('#packTrack'), carousel=$('#packCarousel');
-  if(!track||!carousel)return;
-  const repeated=[...PACK_TIERS,...PACK_TIERS,...PACK_TIERS];
-  track.innerHTML=repeated.map((t,i)=>{
-    const realIndex=i%PACK_TIERS.length;
-    const pool=poolForTier(t);
-    const preview=pool&&pool.length?pool.slice().sort((a,b)=>(b.market||0)-(a.market||0))[0]:null;
-    const bandLabel=t.group==='core'?'Standard Pack':t.group==='premium'?'Premium Pack':'High Roller Pack';
-    return '<div class="packSlide" data-reali="'+realIndex+'" data-repi="'+i+'" style="--packGlow:'+t.glow+'">'+
-      '<div class="packVisual">'+(preview?'<img class="packPreviewCard" src="'+imageUrl(preview,'low')+'" alt="'+esc(preview.name)+'">':'<div class="packWord">'+t.name.toUpperCase()+'</div>')+'</div>'+
-      '<div class="packBody"><div class="packType">'+bandLabel+'</div><div class="packTop"><div class="packName">'+t.name+'</div><div class="packPrice">'+money(t.price)+'</div></div>'+
-      '<div class="packCeiling">Chase ceiling: up to <b>'+money(t.max)+'</b></div><div class="packMiniMeta"><span>1 card</span><span>Preview mode</span></div>'+
-      '<button class="btn secondary packOpen" data-open-tier="'+realIndex+'">OPEN PACK</button></div></div>';
-  }).join('');
-  track.querySelectorAll('[data-open-tier]').forEach(btn=>btn.onclick=e=>{e.stopPropagation();openTierPreview(Number(btn.dataset.openTier))});
-  track.querySelectorAll('.packSlide').forEach(el=>el.onclick=()=>{const idx=Number(el.dataset.reali);centerCarouselOnTier(idx,true);setActivePack(idx)});
-  if(!carouselInitDone){setupPackCarousel();carouselInitDone=true}
-  requestAnimationFrame(()=>{
-    const first=track.querySelector('.packSlide'); if(!first)return;
-    const step=first.getBoundingClientRect().width+18;
-    carousel.scrollLeft=step*PACK_TIERS.length;
-    centerCarouselOnTier(activePackIndex,false);setActivePack(activePackIndex);
-  });
+  renderSinglePack();
+  renderPackSpotlight(activePackIndex);
+}
+
+function renderSinglePack(){
+  const t=PACK_TIERS[activePackIndex];
+  const card=$('#singlePackCard');
+  if(!card)return;
+  card.style.setProperty('--packGlow',t.glow);
+  card.innerHTML=
+    '<div>'+
+      '<div class="singlePackBrand">VAULTDROP · ONE CARD</div>'+
+      '<div class="singlePackName">'+esc(t.name)+'</div>'+
+    '</div>'+
+    '<div class="singlePackSeal">VD</div>'+
+    '<div>'+
+      '<div class="singlePackBottom">'+
+        '<div><div class="eyebrow">Pack price</div><div class="singlePackPrice">'+money(t.price)+'</div></div>'+
+        '<div class="singlePackCeiling">Verified grail band<br><b>'+money(grailBand(t).min)+'–'+money(grailBand(t).max)+'</b></div>'+
+      '</div>'+
+      '<button class="btn secondary" id="singlePackOpen">OPEN '+esc(t.name.toUpperCase())+' PACK</button>'+
+      '<div class="packDots">'+PACK_TIERS.map((_,i)=>'<span class="packDot '+(i===activePackIndex?'active':'')+'"></span>').join('')+'</div>'+
+    '</div>';
+  $('#singlePackOpen').onclick=()=>openTierPreview(activePackIndex);
+  const p=(activePackIndex-1+PACK_TIERS.length)%PACK_TIERS.length;
+  const n=(activePackIndex+1)%PACK_TIERS.length;
+  $('#prevPackLabel').textContent='← '+PACK_TIERS[p].name;
+  $('#nextPackLabel').textContent=PACK_TIERS[n].name+' →';
+}
+
+function grailBand(t){
+  // A grail must be meaningfully above the pack floor, while never exceeding the pack's declared ceiling.
+  const floor=Math.max(t.min, t.price<=5 ? t.price : t.price*1.15);
+  return {min:+floor.toFixed(2),max:t.max};
 }
 
 function setupPackCarousel(){
-  const carousel=$('#packCarousel'),prev=$('#packPrev'),next=$('#packNext');
-  let timer=null;
-  prev.onclick=()=>stepCarousel(-1); next.onclick=()=>stepCarousel(1);
-  carousel.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();carousel.scrollLeft+=e.deltaY}},{passive:false});
-  carousel.addEventListener('scroll',()=>{maintainInfiniteLoop();clearTimeout(timer);timer=setTimeout(()=>{const idx=detectCenteredTier();setActivePack(idx);centerCarouselOnTier(idx,true)},90)});
+  $('#packPrev').onclick=()=>stepCarousel(-1);
+  $('#packNext').onclick=()=>stepCarousel(1);
+  document.addEventListener('keydown',e=>{
+    if(!$('#home').classList.contains('active'))return;
+    if(e.key==='ArrowLeft')stepCarousel(-1);
+    if(e.key==='ArrowRight')stepCarousel(1);
+  });
 }
 function stepCarousel(dir){
-  const carousel=$('#packCarousel'),slide=document.querySelector('.packSlide'); if(!carousel||!slide)return;
-  carousel.scrollBy({left:dir*(slide.getBoundingClientRect().width+18),behavior:'smooth'});
-}
-function detectCenteredTier(){
-  const carousel=$('#packCarousel'),slides=[...document.querySelectorAll('.packSlide')]; if(!slides.length)return 0;
-  const cr=carousel.getBoundingClientRect(),center=cr.left+cr.width/2; let winner=slides[0],dist=Infinity;
-  slides.forEach(slide=>{const r=slide.getBoundingClientRect(),d=Math.abs(center-(r.left+r.width/2));if(d<dist){dist=d;winner=slide}});
-  return Number(winner.dataset.reali);
-}
-function centerCarouselOnTier(realIndex,smooth=true){
-  const carousel=$('#packCarousel'); if(!carousel)return;
-  const target=[...document.querySelectorAll('.packSlide')].find(el=>{const rep=Number(el.dataset.repi);return rep>=PACK_TIERS.length&&rep<PACK_TIERS.length*2&&Number(el.dataset.reali)===realIndex});
-  if(!target)return; const cr=carousel.getBoundingClientRect(),tr=target.getBoundingClientRect();
-  carousel.scrollBy({left:(tr.left+tr.width/2)-(cr.left+cr.width/2),behavior:smooth?'smooth':'auto'});
-}
-function maintainInfiniteLoop(){
-  const carousel=$('#packCarousel'),slide=document.querySelector('.packSlide'); if(!carousel||!slide)return;
-  const setWidth=(slide.getBoundingClientRect().width+18)*PACK_TIERS.length;
-  if(carousel.scrollLeft<setWidth*.35)carousel.scrollLeft+=setWidth;
-  else if(carousel.scrollLeft>setWidth*2.15)carousel.scrollLeft-=setWidth;
+  activePackIndex=(activePackIndex+dir+PACK_TIERS.length)%PACK_TIERS.length;
+  renderSinglePack();
+  renderPackSpotlight(activePackIndex);
 }
 function setActivePack(index){
-  activePackIndex=index;
-  document.querySelectorAll('.packSlide').forEach(slide=>slide.classList.toggle('active',Number(slide.dataset.reali)===index));
-  renderPackSpotlight(index);
+  activePackIndex=(index+PACK_TIERS.length)%PACK_TIERS.length;
+  renderSinglePack();
+  renderPackSpotlight(activePackIndex);
 }
-function renderPackSpotlight(index){
-  const tier=PACK_TIERS[index],pool=poolForTier(tier).filter(c=>Number(c.market)>0).sort((a,b)=>(b.market||0)-(a.market||0));
-  const grails=pool.slice(0,4);
-  $('#spotlightName').textContent=tier.name;$('#spotlightPrice').textContent=money(tier.price);
-  $('#spotlightRange').textContent='Up to '+money(tier.max)+' market value';
-  $('#spotlightSub').textContent='Target pool: '+money(tier.min)+'–'+money(tier.max)+' market value · Preview mode';
+
+async function loadTierGrails(index){
+  if(tierGrailCache.has(index))return tierGrailCache.get(index);
+  if(tierGrailLoading.has(index))return tierGrailLoading.get(index);
+  const task=(async()=>{
+    const t=PACK_TIERS[index],band=grailBand(t),matches=[],seen=new Set();
+    // Pull multiple printings of known chase Pokémon. We only keep cards whose actual live market price is inside this pack's grail band.
+    for(const name of GRAIL_NAMES){
+      if(matches.length>=8)break;
+      try{
+        const list=await api('/cards?name='+encodeURIComponent(name)+'&pagination:page=1&pagination:itemsPerPage=120');
+        const briefs=(Array.isArray(list)?list:[]).filter(c=>c.image);
+        if(!briefs.length)continue;
+        // Sample across the whole result set so older/vintage and newer printings both get checked.
+        const sample=[];
+        const targetCount=Math.min(12,briefs.length);
+        for(let k=0;k<targetCount;k++){
+          const idx=Math.floor(k*(briefs.length-1)/Math.max(1,targetCount-1));
+          if(briefs[idx]&&!sample.some(x=>x.id===briefs[idx].id))sample.push(briefs[idx]);
+        }
+        for(let j=0;j<sample.length;j+=4){
+          const batch=sample.slice(j,j+4);
+          const fulls=await Promise.all(batch.map(c=>fullCard(c.id).catch(()=>null)));
+          for(const c of fulls){
+            if(!c||!c.market||seen.has(c.id))continue;
+            if(c.market>=band.min&&c.market<=band.max){
+              seen.add(c.id);matches.push(c);
+            }
+          }
+          if(matches.length>=8)break;
+        }
+      }catch{}
+    }
+    matches.sort((a,b)=>(b.market||0)-(a.market||0));
+    tierGrailCache.set(index,matches);
+    tierGrailLoading.delete(index);
+    return matches;
+  })();
+  tierGrailLoading.set(index,task);
+  return task;
+}
+
+async function renderPackSpotlight(index){
+  const t=PACK_TIERS[index],band=grailBand(t);
+  $('#spotlightName').textContent=t.name;
+  $('#spotlightPrice').textContent=money(t.price);
+  $('#spotlightRange').textContent='Verified grails '+money(band.min)+'–'+money(band.max);
+  $('#spotlightSub').textContent='Only cards whose current TCGdex market price falls inside this pack band are shown below.';
   $('#spotlightOpenBtn').onclick=()=>openTierPreview(index);
   const g=$('#spotlightGrails');
-  if(!grails.length){g.innerHTML='<div class="muted">Loading grails for this pack…</div>';return}
-  g.innerHTML=grails.map((c,i)=>'<div class="grailCard" data-grail="'+i+'"><div class="grailArt"><img src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"></div><div class="grailMeta"><strong>'+esc(c.name)+'</strong><span>'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span><b>'+(c.market?money(c.market):'—')+'</b></div></div>').join('');
-  g.querySelectorAll('[data-grail]').forEach(el=>el.onclick=()=>openCard(grails[Number(el.dataset.grail)]));
+  g.innerHTML='<div class="muted">Finding verified '+esc(t.name)+' grails from TCGdex…</div>';
+  const grails=await loadTierGrails(index);
+  if(index!==activePackIndex)return;
+  if(!grails.length){
+    g.innerHTML='<div class="muted">No verified grails in this exact price band are currently loaded. VaultDrop will not fake a grail outside the tier range.</div>';
+    return;
+  }
+  const top=grails.slice(0,4);
+  g.innerHTML=top.map((c,i)=>'<div class="grailCard" data-grail="'+i+'"><div class="grailArt"><img src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"></div><div class="grailMeta"><strong>'+esc(c.name)+'</strong><span>'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span><b>'+money(c.market)+'</b></div></div>').join('');
+  g.querySelectorAll('[data-grail]').forEach(el=>el.onclick=()=>openCard(top[Number(el.dataset.grail)]));
 }
 
 function poolForTier(t){
+  const band=grailBand(t);
   const priced=featuredCards.filter(c=>Number(c.market)>0);
-  let pool=priced.filter(c=>c.market>=t.min&&c.market<=t.max);
-  if(!pool.length){
-    pool=[...priced].sort((a,b)=>Math.abs((a.market||0)-t.price)-Math.abs((b.market||0)-t.price)).slice(0,Math.min(6,priced.length));
-  }
-  return pool.length?pool:featuredCards;
+  return priced.filter(c=>c.market>=t.min&&c.market<=t.max);
 }
 
-function openTierPreview(i){
-  const t=PACK_TIERS[i], pool=poolForTier(t);
-  if(!pool.length){alert('Card pool is still loading.');return}
+async function openTierPreview(i){
+  const t=PACK_TIERS[i];
+  let pool=await loadTierGrails(i);
+  if(!pool.length){
+    const band=grailBand(t);
+    pool=featuredCards.filter(c=>c.market&&c.market>=band.min&&c.market<=band.max);
+  }
+  if(!pool.length){
+    alert('No verified '+t.name+' card is currently loaded inside '+money(grailBand(t).min)+'–'+money(grailBand(t).max)+'. We are not substituting an inaccurate card.');
+    return;
+  }
   const c={...pool[Math.floor(Math.random()*pool.length)],pulledAt:Date.now(),packTier:t.name,packPrice:t.price,preview:true};
   data.vault.push(c);
-  data.activity.push({title:t.name+' preview → '+c.name,detail:(c.market?money(c.market)+' market · ':'')+'No charge · preview pack',at:Date.now()});
-  save(); render(); openCard(c);
+  data.activity.push({title:t.name+' preview → '+c.name,detail:money(c.market)+' market · verified '+t.name+' band · no charge',at:Date.now()});
+  save();render();openCard(c);
 }
 
 function cardHTML(c,i){
@@ -615,9 +672,15 @@ $('#modalClose').onclick=()=>$('#modal').classList.remove('open');
 $('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('open')};
 setInterval(tick,30000);
 render();
+setupPackCarousel();
 renderTiers();
 loadFeatured();
 loadQueue();
 </script>
 </body>
 </html>
+<style>
+.packCarousel{display:none!important}.packTrack{display:none!important}
+@media(max-width:950px){.singlePackStage{grid-template-columns:110px minmax(250px,330px) 110px}.singlePackCard{min-height:380px}}
+@media(max-width:650px){.singlePackShell{grid-template-columns:44px 1fr 44px}.singlePackStage{grid-template-columns:1fr;min-height:390px}.neighborPackLabel{display:none}.singlePackCard{max-width:300px;min-height:360px;padding:22px}.singlePackName{font-size:40px}.singlePackSeal{width:78px;height:78px}}
+</style>
