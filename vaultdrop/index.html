@@ -28,8 +28,9 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
 .row{display:flex;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #252834}.row strong{display:block}.row small{color:#8f93a3}
 .modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:24px;z-index:50}.modal.open{display:flex}.modalBox{width:min(850px,100%);max-height:90vh;overflow:auto;background:#11131a;border:1px solid #303341;border-radius:24px;padding:22px;display:grid;grid-template-columns:320px 1fr;gap:25px}.modalBox img{width:100%;filter:drop-shadow(0 18px 20px #000a)}.modalClose{float:right}.detail h2{font-size:32px;margin:8px 0}.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.kv div{background:#171922;border:1px solid #292c39;border-radius:12px;padding:12px}.kv span{display:block;color:#8f93a3;font-size:11px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.09em}.kv strong{font-size:15px}
 .source{font-size:11px;color:#767b8d;margin-top:18px}.error{color:#ff9b9b}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #353848;border-radius:999px;padding:6px 9px;font-size:11px;color:#b7bbca}
-@media(max-width:950px){.cards,.vaultGrid{grid-template-columns:repeat(3,1fr)}.dropGrid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;min-height:auto;padding:55px 0}.heroart{height:300px}}
-@media(max-width:650px){header{padding:0 14px}.nav{display:none}.wrap{padding:0 14px 60px}h1{font-size:54px}.cards,.vaultGrid{grid-template-columns:repeat(2,1fr)}.artWrap{height:220px}.sectionhead{align-items:stretch;flex-direction:column}.search{max-width:none}.modalBox{grid-template-columns:1fr}.modalBox>img{max-width:270px;margin:auto}.stats{gap:18px;flex-wrap:wrap}}
+.tierGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.tierCard{border:1px solid #2b2e3b;border-radius:18px;padding:18px;background:linear-gradient(160deg,#171922,#0e1017);position:relative;overflow:hidden}.tierCard:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,var(--tierGlow),transparent 52%);opacity:.35;pointer-events:none}.tierCard>*{position:relative}.tierName{font-size:22px;font-weight:950;letter-spacing:-.02em}.tierPrice{font-size:34px;font-weight:950;margin-top:8px}.tierRange{font-size:12px;color:#a6aaba;margin-top:4px;line-height:1.45}.tierBtn{margin-top:16px}.tierBadge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #3b3f50;padding:5px 8px;border-radius:999px;color:#c8ccda}
+@media(max-width:950px){.cards,.vaultGrid{grid-template-columns:repeat(3,1fr)}.tierGrid{grid-template-columns:repeat(3,1fr)}.dropGrid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;min-height:auto;padding:55px 0}.heroart{height:300px}}
+@media(max-width:650px){.tierGrid{grid-template-columns:repeat(2,1fr)}header{padding:0 14px}.nav{display:none}.wrap{padding:0 14px 60px}h1{font-size:54px}.cards,.vaultGrid{grid-template-columns:repeat(2,1fr)}.artWrap{height:220px}.sectionhead{align-items:stretch;flex-direction:column}.search{max-width:none}.modalBox{grid-template-columns:1fr}.modalBox>img{max-width:270px;margin:auto}.stats{gap:18px;flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -64,21 +65,20 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
 
   <div class="section">
     <div class="sectionhead">
-      <div><div class="eyebrow">Today</div><h2>Daily real-card drop</h2></div>
-      <button class="ghost" id="odds">View pull tiers</button>
+      <div><div class="eyebrow">Pack ladder</div><h2>Choose your tier</h2></div>
+      <button class="ghost" id="odds">View tier model</button>
     </div>
-    <div class="dropGrid">
-      <div class="panel drop">
-        <div class="pack">DAILY<br>DROP</div>
-        <h3>Daily Drop</h3>
-        <p class="muted">A real Pokémon card from the currently loaded TCGdex pool.</p>
-        <button class="btn" id="daily">CLAIM DAILY DROP</button>
-        <div class="small" id="cooldown">Loading card pool…</div>
+    <div class="panel" style="margin-bottom:16px">
+      <div class="eyebrow">Free daily</div>
+      <div class="row" style="align-items:center">
+        <div><strong>Daily Drop</strong><small>One free real-card pull every 24 hours.</small></div>
+        <div style="min-width:220px"><button class="btn" id="daily">CLAIM DAILY DROP</button><div class="small" id="cooldown">Loading card pool…</div></div>
       </div>
-      <div>
-        <div id="featuredStatus" class="loading">Loading real Pokémon cards and current prices from TCGdex…</div>
-        <div id="featured" class="cards" style="display:none"></div>
-      </div>
+    </div>
+    <div id="tierGrid" class="tierGrid"></div>
+    <div style="margin-top:22px">
+      <div id="featuredStatus" class="loading">Loading real Pokémon cards and current prices from TCGdex…</div>
+      <div id="featured" class="cards" style="display:none"></div>
     </div>
   </div>
 </section>
@@ -167,6 +167,20 @@ const FULFILLMENT_API='https://vaultdrop-fulfillment-api-production.up.railway.a
 let modalCard=null;
 const FEATURE_NAMES=['Pikachu','Charizard','Mewtwo','Gengar','Eevee','Umbreon','Rayquaza','Lugia','Mew','Greninja','Sylveon','Dragonite'];
 const PRICE_PRIORITY=['holofoil','normal','reverse-holofoil','reverse','1st-edition-holofoil','1st-edition','unlimited-holofoil','unlimited'];
+const PACK_TIERS=[
+  {name:'Bronze',price:1,min:.25,max:2,glow:'#a86f3c'},
+  {name:'Silver',price:5,min:1,max:10,glow:'#bfc6d1'},
+  {name:'Gold',price:10,min:3,max:25,glow:'#d7ad37'},
+  {name:'Platinum',price:25,min:8,max:60,glow:'#a8e0e5'},
+  {name:'Diamond',price:50,min:15,max:125,glow:'#73d9ff'},
+  {name:'Elite',price:100,min:30,max:250,glow:'#ff6c95'},
+  {name:'Astral',price:250,min:75,max:700,glow:'#9f7cff'},
+  {name:'Mythic',price:500,min:150,max:1400,glow:'#ff7ee8'},
+  {name:'Celestial',price:1000,min:300,max:3000,glow:'#7ff0ff'},
+  {name:'Eclipse',price:2500,min:750,max:6500,glow:'#8f73ff'},
+  {name:'Omega',price:5000,min:1500,max:12000,glow:'#ff5c5c'},
+  {name:'Singularity',price:10000,min:3000,max:25000,glow:'#ffffff'}
+];
 
 let data;
 try{data=JSON.parse(localStorage.vaultdropReal||'{"vault":[],"activity":[],"nextDailyAt":0}')}catch{data={vault:[],activity:[],nextDailyAt:0}}
@@ -272,6 +286,40 @@ async function loadFeatured(){
   tick();render();
 }
 
+
+function renderTiers(){
+  const g=$('#tierGrid');
+  if(!g)return;
+  g.innerHTML=PACK_TIERS.map((t,i)=>`
+    <div class="tierCard" style="--tierGlow:${t.glow}">
+      <span class="tierBadge">${i<7?'Core Tier':'High Roller'}</span>
+      <div class="tierName">${t.name}</div>
+      <div class="tierPrice">${money(t.price)}</div>
+      <div class="tierRange">Preview target card pool: ${money(t.min)}–${money(t.max)} market value.</div>
+      <button class="btn tierBtn" data-tier="${i}">OPEN PREVIEW PACK</button>
+      <div class="small">No charge occurs in preview mode.</div>
+    </div>`).join('');
+  g.querySelectorAll('[data-tier]').forEach(b=>b.onclick=()=>openTierPreview(Number(b.dataset.tier)));
+}
+
+function poolForTier(t){
+  const priced=featuredCards.filter(c=>Number(c.market)>0);
+  let pool=priced.filter(c=>c.market>=t.min&&c.market<=t.max);
+  if(!pool.length){
+    pool=[...priced].sort((a,b)=>Math.abs((a.market||0)-t.price)-Math.abs((b.market||0)-t.price)).slice(0,Math.min(6,priced.length));
+  }
+  return pool.length?pool:featuredCards;
+}
+
+function openTierPreview(i){
+  const t=PACK_TIERS[i], pool=poolForTier(t);
+  if(!pool.length){alert('Card pool is still loading.');return}
+  const c={...pool[Math.floor(Math.random()*pool.length)],pulledAt:Date.now(),packTier:t.name,packPrice:t.price,preview:true};
+  data.vault.push(c);
+  data.activity.push({title:t.name+' preview → '+c.name,detail:(c.market?money(c.market)+' market · ':'')+'No charge · preview pack',at:Date.now()});
+  save(); render(); openCard(c);
+}
+
 function cardHTML(c,i){
   return '<article class="card" data-i="'+i+'"><div class="artWrap"><img loading="lazy" src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"><div class="pricePill">'+(c.market?money(c.market):'No price')+'</div></div><div class="meta"><h3>'+esc(c.name)+'</h3><p>'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</p><div class="metaRow"><span class="rarity">'+esc(c.rarity)+'</span><span class="market">'+(c.market?money(c.market):'—')+'</span></div></div></article>';
 }
@@ -347,7 +395,7 @@ $('#daily').onclick=()=>{
   save();render();openCard(c);
 };
 
-$('#odds').onclick=()=>alert('Daily tier model\nCommon-value pool: 78%\nUncommon-value pool: 17%\nRare-value pool: 4.5%\nUltra-value pool: 0.45%\nGrail-value pool: 0.05%\n\nIf a value tier is empty in the currently loaded preview pool, VaultDrop falls back to the available real-card pool.');
+$('#odds').onclick=()=>alert('Pack tier preview model\nBronze $1\nSilver $5\nGold $10\nPlatinum $25\nDiamond $50\nElite $100\nAstral $250\nMythic $500\nCelestial $1,000\nEclipse $2,500\nOmega $5,000\nSingularity $10,000\n\nPaid randomized physical-card checkout is not enabled in this preview.\n\nDaily tier model\nCommon-value pool: 78%\nUncommon-value pool: 17%\nRare-value pool: 4.5%\nUltra-value pool: 0.45%\nGrail-value pool: 0.05%\n\nIf a value tier is empty in the currently loaded preview pool, VaultDrop falls back to the available real-card pool.');
 
 async function searchCards(){
   const q=$('#searchInput').value.trim();
@@ -456,6 +504,7 @@ $('#modalClose').onclick=()=>$('#modal').classList.remove('open');
 $('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('open')};
 setInterval(tick,30000);
 render();
+renderTiers();
 loadFeatured();
 loadQueue();
 </script>
