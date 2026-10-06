@@ -29,8 +29,8 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
 .modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:24px;z-index:50}.modal.open{display:flex}.modalBox{width:min(850px,100%);max-height:90vh;overflow:auto;background:#11131a;border:1px solid #303341;border-radius:24px;padding:22px;display:grid;grid-template-columns:320px 1fr;gap:25px}.modalBox img{width:100%;filter:drop-shadow(0 18px 20px #000a)}.modalClose{float:right}.detail h2{font-size:32px;margin:8px 0}.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.kv div{background:#171922;border:1px solid #292c39;border-radius:12px;padding:12px}.kv span{display:block;color:#8f93a3;font-size:11px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.09em}.kv strong{font-size:15px}
 .source{font-size:11px;color:#767b8d;margin-top:18px}.error{color:#ff9b9b}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #353848;border-radius:999px;padding:6px 9px;font-size:11px;color:#b7bbca}
 .tierGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.tierCard{border:1px solid #2b2e3b;border-radius:20px;background:#10121a;position:relative;overflow:hidden;cursor:pointer;transition:.2s;min-height:356px;display:flex;flex-direction:column}.tierCard:hover{transform:translateY(-4px);border-color:#4a4e60;box-shadow:0 18px 50px #0007}.packArt{height:205px;position:relative;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 35%,var(--tierGlow),transparent 58%),linear-gradient(155deg,#252838,#0c0d13)}.packArt:before{content:"VD";font-size:74px;font-weight:950;letter-spacing:-.08em;opacity:.13;position:absolute}.packArt:after{content:"";position:absolute;inset:12px;border:1px solid #ffffff12;border-radius:14px}.packCardImage{height:170px;max-width:126px;object-fit:contain;filter:drop-shadow(0 14px 18px #000c);transform:rotate(5deg);z-index:1}.packFace{width:112px;height:160px;border-radius:12px;border:1px solid #ffffff30;background:linear-gradient(145deg,var(--tierGlow),#1a1d2a 64%,#0b0c11);box-shadow:0 20px 30px #0009;display:flex;align-items:end;justify-content:center;padding:14px;font-weight:950;letter-spacing:.08em;z-index:1}.tierBody{padding:14px 15px 16px;display:flex;flex-direction:column;flex:1}.tierTop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.tierName{font-size:19px;font-weight:950;letter-spacing:-.02em}.tierPrice{font-size:19px;font-weight:950}.tierRange{font-size:11px;color:#9599a9;margin-top:5px;line-height:1.4}.tierMeta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;color:#a6aaba}.tierBtn{margin-top:auto}.tierBadge{display:inline-block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1px solid #3b3f50;padding:5px 7px;border-radius:999px;color:#c8ccda}.chaseStrip{display:flex;gap:12px;overflow-x:auto;padding:3px 1px 10px;scrollbar-width:thin}.chaseMini{min-width:150px;background:#11131a;border:1px solid #262936;border-radius:14px;padding:10px;cursor:pointer}.chaseMini img{width:100%;height:165px;object-fit:contain;filter:drop-shadow(0 10px 12px #000a)}.chaseMini strong{display:block;font-size:12px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chaseMini span{font-size:11px;color:#9da2b2}
-@media(max-width:950px){.cards,.vaultGrid{grid-template-columns:repeat(3,1fr)}.tierGrid{grid-template-columns:repeat(3,1fr)}.dropGrid{grid-template-columns:1fr}.homeBanner{grid-template-columns:1fr}.heroDeck{display:none}}
-@media(max-width:650px){.tierGrid{grid-template-columns:repeat(2,1fr)}.homeBanner{padding:22px 18px;min-height:0}.homeBanner h1{font-size:39px}.storeHeader{align-items:stretch;flex-direction:column}.packArt{height:170px}.tierCard{min-height:320px}header{padding:0 14px}.nav{display:none}.wrap{padding:0 14px 60px}h1{font-size:54px}.cards,.vaultGrid{grid-template-columns:repeat(2,1fr)}.artWrap{height:220px}.sectionhead{align-items:stretch;flex-direction:column}.search{max-width:none}.modalBox{grid-template-columns:1fr}.modalBox>img{max-width:270px;margin:auto}.stats{gap:18px;flex-wrap:wrap}}
+@media(max-width:950px){.cards,.vaultGrid{grid-template-columns:repeat(3,1fr)}.dropGrid{grid-template-columns:1fr}.homeBanner{grid-template-columns:1fr}.heroDeck{display:none}.packSpotlight{grid-template-columns:1fr}.spotlightGrails{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.homeBanner{padding:22px 18px;min-height:0}.homeBanner h1{font-size:39px}.storeHeader{align-items:stretch;flex-direction:column}.packCarouselShell{grid-template-columns:44px 1fr 44px}.carouselArrow{width:44px;height:44px;font-size:26px}.packSlide{min-width:240px;max-width:240px}.packVisual{height:180px}.spotlightGrails{grid-template-columns:1fr 1fr}header{padding:0 14px}.nav{display:none}.wrap{padding:0 14px 60px}h1{font-size:54px}.cards,.vaultGrid{grid-template-columns:repeat(2,1fr)}.artWrap{height:220px}.sectionhead{align-items:stretch;flex-direction:column}.search{max-width:none}.modalBox{grid-template-columns:1fr}.modalBox>img{max-width:270px;margin:auto}.stats{gap:18px;flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -72,17 +72,32 @@ h1{font-size:72px;line-height:.94;margin:16px 0 20px;letter-spacing:-.055em}h1 e
     </div>
   </div>
 
-  <div id="packStore">
+  <div id="packStore" class="packStore">
     <div class="storeHeader">
-      <div><div class="eyebrow">Pack shop</div><h2>Open a pack</h2><div class="muted">Every tier, right on the home screen.</div></div>
-      <div class="packFilters">
-        <button class="filterBtn active" data-pack-filter="all">All</button>
-        <button class="filterBtn" data-pack-filter="core">Core</button>
-        <button class="filterBtn" data-pack-filter="premium">Premium</button>
-        <button class="filterBtn" data-pack-filter="high">High Roller</button>
+      <div><div class="eyebrow">Pack shop</div><h2>Open a pack</h2><div class="muted">Swipe forever. The centered pack is your active pack.</div></div>
+      <div class="packMetaBar">
+        <div class="pill">Infinite carousel</div><div class="pill">Live TCGdex</div><div class="pill">Preview mode</div>
       </div>
     </div>
-    <div id="tierGrid" class="tierGrid"></div>
+    <div class="packCarouselShell">
+      <button class="carouselArrow" id="packPrev">‹</button>
+      <div class="packCarousel" id="packCarousel"><div class="packTrack" id="packTrack"></div></div>
+      <button class="carouselArrow" id="packNext">›</button>
+    </div>
+    <div class="packSpotlight" id="packSpotlight">
+      <div class="spotlightSummary">
+        <div class="eyebrow">Selected pack</div>
+        <h3 id="spotlightName">Bronze</h3>
+        <div class="spotlightPrice" id="spotlightPrice">$1.00</div>
+        <div class="spotlightRange" id="spotlightRange">Up to $2.00 market value</div>
+        <div class="spotlightSub" id="spotlightSub">Preview pack — no charge occurs.</div>
+        <button class="btn secondary" id="spotlightOpenBtn">OPEN THIS PACK</button>
+      </div>
+      <div class="spotlightGrailsWrap">
+        <div class="eyebrow">Top grails in this pack</div>
+        <div class="spotlightGrails" id="spotlightGrails"></div>
+      </div>
+    </div>
   </div>
 
   <div class="section">
@@ -205,6 +220,8 @@ const PACK_TIERS=[
   {name:'Singularity',price:10000,min:3000,max:25000,glow:'#ffffff',group:'high'}
 ];
 let activePackFilter='all';
+let activePackIndex=0;
+let carouselInitDone=false;
 
 let data;
 try{data=JSON.parse(localStorage.vaultdropReal||'{"vault":[],"activity":[],"nextDailyAt":0}')}catch{data={vault:[],activity:[],nextDailyAt:0}}
@@ -314,6 +331,7 @@ async function loadFeatured(){
     grid.innerHTML=featuredCards.slice(0,8).map(cardHTML).join('');
     bindCards(grid,featuredCards.slice(0,8));
     renderTiers();
+    setActivePack(activePackIndex);
     $('#cooldown').textContent=Date.now()>=data.nextDailyAt?'Ready now':'';
   }else{
     status.innerHTML='<span class="error">Could not load TCGdex right now. Refresh in a moment.</span>';
@@ -323,27 +341,76 @@ async function loadFeatured(){
 
 
 function renderTiers(){
-  const g=$('#tierGrid');
-  if(!g)return;
-  const shown=PACK_TIERS.map((t,i)=>({...t,i})).filter(t=>activePackFilter==='all'||t.group===activePackFilter);
-  g.innerHTML=shown.map(t=>{
-    const chase=featuredCards.length?featuredCards[t.i%featuredCards.length]:null;
-    const label=t.group==='core'?'Standard':t.group==='premium'?'Premium':'High Roller';
-    return `
-    <div class="tierCard" style="--tierGlow:${t.glow}" data-tier-card="${t.i}">
-      <div class="packArt">
-        ${chase?'<img class="packCardImage" src="'+imageUrl(chase,'low')+'" alt="">':'<div class="packFace">'+t.name.toUpperCase()+'</div>'}
-      </div>
-      <div class="tierBody">
-        <div class="tierTop"><div><span class="tierBadge">${label}</span><div class="tierName">${t.name}</div></div><div class="tierPrice">${money(t.price)}</div></div>
-        <div class="tierRange">Chase pool up to <b>${money(t.max)}</b> market value</div>
-        <div class="tierMeta"><span>${t.min<1?'Entry':'Real-card'} pool</span><span>1 card</span></div>
-        <button class="btn secondary tierBtn" data-tier="${t.i}">OPEN PACK</button>
-      </div>
-    </div>`;
+  const track=$('#packTrack'), carousel=$('#packCarousel');
+  if(!track||!carousel)return;
+  const repeated=[...PACK_TIERS,...PACK_TIERS,...PACK_TIERS];
+  track.innerHTML=repeated.map((t,i)=>{
+    const realIndex=i%PACK_TIERS.length;
+    const pool=poolForTier(t);
+    const preview=pool&&pool.length?pool.slice().sort((a,b)=>(b.market||0)-(a.market||0))[0]:null;
+    const bandLabel=t.group==='core'?'Standard Pack':t.group==='premium'?'Premium Pack':'High Roller Pack';
+    return '<div class="packSlide" data-reali="'+realIndex+'" data-repi="'+i+'" style="--packGlow:'+t.glow+'">'+
+      '<div class="packVisual">'+(preview?'<img class="packPreviewCard" src="'+imageUrl(preview,'low')+'" alt="'+esc(preview.name)+'">':'<div class="packWord">'+t.name.toUpperCase()+'</div>')+'</div>'+
+      '<div class="packBody"><div class="packType">'+bandLabel+'</div><div class="packTop"><div class="packName">'+t.name+'</div><div class="packPrice">'+money(t.price)+'</div></div>'+
+      '<div class="packCeiling">Chase ceiling: up to <b>'+money(t.max)+'</b></div><div class="packMiniMeta"><span>1 card</span><span>Preview mode</span></div>'+
+      '<button class="btn secondary packOpen" data-open-tier="'+realIndex+'">OPEN PACK</button></div></div>';
   }).join('');
-  g.querySelectorAll('[data-tier]').forEach(b=>b.onclick=e=>{e.stopPropagation();openTierPreview(Number(b.dataset.tier))});
-  g.querySelectorAll('[data-tier-card]').forEach(c=>c.onclick=()=>openTierPreview(Number(c.dataset.tierCard)));
+  track.querySelectorAll('[data-open-tier]').forEach(btn=>btn.onclick=e=>{e.stopPropagation();openTierPreview(Number(btn.dataset.openTier))});
+  track.querySelectorAll('.packSlide').forEach(el=>el.onclick=()=>{const idx=Number(el.dataset.reali);centerCarouselOnTier(idx,true);setActivePack(idx)});
+  if(!carouselInitDone){setupPackCarousel();carouselInitDone=true}
+  requestAnimationFrame(()=>{
+    const first=track.querySelector('.packSlide'); if(!first)return;
+    const step=first.getBoundingClientRect().width+18;
+    carousel.scrollLeft=step*PACK_TIERS.length;
+    centerCarouselOnTier(activePackIndex,false);setActivePack(activePackIndex);
+  });
+}
+
+function setupPackCarousel(){
+  const carousel=$('#packCarousel'),prev=$('#packPrev'),next=$('#packNext');
+  let timer=null;
+  prev.onclick=()=>stepCarousel(-1); next.onclick=()=>stepCarousel(1);
+  carousel.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){e.preventDefault();carousel.scrollLeft+=e.deltaY}},{passive:false});
+  carousel.addEventListener('scroll',()=>{maintainInfiniteLoop();clearTimeout(timer);timer=setTimeout(()=>{const idx=detectCenteredTier();setActivePack(idx);centerCarouselOnTier(idx,true)},90)});
+}
+function stepCarousel(dir){
+  const carousel=$('#packCarousel'),slide=document.querySelector('.packSlide'); if(!carousel||!slide)return;
+  carousel.scrollBy({left:dir*(slide.getBoundingClientRect().width+18),behavior:'smooth'});
+}
+function detectCenteredTier(){
+  const carousel=$('#packCarousel'),slides=[...document.querySelectorAll('.packSlide')]; if(!slides.length)return 0;
+  const cr=carousel.getBoundingClientRect(),center=cr.left+cr.width/2; let winner=slides[0],dist=Infinity;
+  slides.forEach(slide=>{const r=slide.getBoundingClientRect(),d=Math.abs(center-(r.left+r.width/2));if(d<dist){dist=d;winner=slide}});
+  return Number(winner.dataset.reali);
+}
+function centerCarouselOnTier(realIndex,smooth=true){
+  const carousel=$('#packCarousel'); if(!carousel)return;
+  const target=[...document.querySelectorAll('.packSlide')].find(el=>{const rep=Number(el.dataset.repi);return rep>=PACK_TIERS.length&&rep<PACK_TIERS.length*2&&Number(el.dataset.reali)===realIndex});
+  if(!target)return; const cr=carousel.getBoundingClientRect(),tr=target.getBoundingClientRect();
+  carousel.scrollBy({left:(tr.left+tr.width/2)-(cr.left+cr.width/2),behavior:smooth?'smooth':'auto'});
+}
+function maintainInfiniteLoop(){
+  const carousel=$('#packCarousel'),slide=document.querySelector('.packSlide'); if(!carousel||!slide)return;
+  const setWidth=(slide.getBoundingClientRect().width+18)*PACK_TIERS.length;
+  if(carousel.scrollLeft<setWidth*.35)carousel.scrollLeft+=setWidth;
+  else if(carousel.scrollLeft>setWidth*2.15)carousel.scrollLeft-=setWidth;
+}
+function setActivePack(index){
+  activePackIndex=index;
+  document.querySelectorAll('.packSlide').forEach(slide=>slide.classList.toggle('active',Number(slide.dataset.reali)===index));
+  renderPackSpotlight(index);
+}
+function renderPackSpotlight(index){
+  const tier=PACK_TIERS[index],pool=poolForTier(tier).filter(c=>Number(c.market)>0).sort((a,b)=>(b.market||0)-(a.market||0));
+  const grails=pool.slice(0,4);
+  $('#spotlightName').textContent=tier.name;$('#spotlightPrice').textContent=money(tier.price);
+  $('#spotlightRange').textContent='Up to '+money(tier.max)+' market value';
+  $('#spotlightSub').textContent='Target pool: '+money(tier.min)+'–'+money(tier.max)+' market value · Preview mode';
+  $('#spotlightOpenBtn').onclick=()=>openTierPreview(index);
+  const g=$('#spotlightGrails');
+  if(!grails.length){g.innerHTML='<div class="muted">Loading grails for this pack…</div>';return}
+  g.innerHTML=grails.map((c,i)=>'<div class="grailCard" data-grail="'+i+'"><div class="grailArt"><img src="'+imageUrl(c,'low')+'" alt="'+esc(c.name)+'"></div><div class="grailMeta"><strong>'+esc(c.name)+'</strong><span>'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span><b>'+(c.market?money(c.market):'—')+'</b></div></div>').join('');
+  g.querySelectorAll('[data-grail]').forEach(el=>el.onclick=()=>openCard(grails[Number(el.dataset.grail)]));
 }
 
 function poolForTier(t){
@@ -466,11 +533,6 @@ async function searchCards(){
 $('#searchBtn').onclick=searchCards;
 $('#searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchCards()});
 
-document.querySelectorAll('[data-pack-filter]').forEach(b=>b.onclick=()=>{
-  activePackFilter=b.dataset.packFilter;
-  document.querySelectorAll('[data-pack-filter]').forEach(x=>x.classList.toggle('active',x===b));
-  renderTiers();
-});
 document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{
   const p=b.dataset.p;
   document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));
