@@ -5,402 +5,151 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VaultDrop — Power Packs</title>
 <style>
-:root{
-  --bg:#07080b;--panel:#0d1016;--panel2:#121722;--line:rgba(255,255,255,.10);
-  --muted:#9aa2b2;--text:#f7f8fb;--soft:#c9ced8;--accent:#7d6fff;
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{
-  min-height:100vh;overflow-x:hidden;
-  background:
-    radial-gradient(circle at 50% -10%,rgba(112,91,255,.14),transparent 28%),
-    radial-gradient(circle at 12% 16%,rgba(46,131,168,.07),transparent 22%),
-    linear-gradient(180deg,#090a0f 0%,#06070a 44%,#050609 100%);
-}
-button,input{font:inherit}
-.stroke{-webkit-text-stroke:.35px rgba(255,255,255,.12);text-shadow:0 1px 0 rgba(0,0,0,.45)}
-.topbar{
-  height:68px;position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;border-bottom:1px solid var(--line);background:rgba(7,8,11,.84);backdrop-filter:blur(18px)
-}
-.brand{font-weight:900;letter-spacing:.18em;font-size:14px}
-.nav{display:flex;gap:6px}
-.nav button{border:1px solid transparent;background:none;color:#aeb5c4;padding:9px 12px;border-radius:10px;cursor:pointer}
-.nav button:hover,.nav button.active{color:#fff;border-color:var(--line);background:rgba(255,255,255,.05)}
-.power-chip{font-size:10px;letter-spacing:.18em;color:#aab1c0;border:1px solid var(--line);border-radius:999px;padding:9px 11px;background:rgba(255,255,255,.03)}
-.shell{max-width:1240px;margin:0 auto;padding:0 24px 90px}
-.page{display:none}.page.active{display:block}
-.eyebrow{font-size:10px;letter-spacing:.22em;color:#aeb4c4;text-transform:uppercase}
-.hero{padding:34px 0 24px;display:flex;justify-content:space-between;align-items:flex-end;gap:28px}
-.hero h1{font-size:58px;line-height:.92;letter-spacing:-.06em;margin:8px 0 12px}
-.hero p{max-width:650px;margin:0;color:#b1b8c7;line-height:1.6;font-size:15px}
-.heroStats{display:flex;gap:10px;flex-wrap:wrap}
-.heroStat{min-width:118px;padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035)}
-.heroStat span{display:block;font-size:9px;letter-spacing:.14em;color:#8f96a6}.heroStat strong{display:block;margin-top:5px;font-size:19px}
-.frame{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(13,16,23,.95),rgba(9,11,16,.92));box-shadow:0 28px 76px rgba(0,0,0,.30)}
-.shop{padding:24px;overflow:hidden}
-.shopHead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
-.shopHead h2{font-size:34px;letter-spacing:-.045em;margin:6px 0 4px}.shopHead p{margin:0;color:var(--muted)}
-.counter{font-size:11px;letter-spacing:.18em;border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:rgba(255,255,255,.04)}
-.stage{margin-top:18px;display:grid;grid-template-columns:54px 1fr 54px;gap:14px;align-items:center}
-.arrow{width:54px;height:54px;border-radius:50%;border:1px solid var(--line);background:#121721;color:#fff;font-size:28px;cursor:pointer;transition:.18s}
-.arrow:hover{background:#1a2230;transform:scale(1.04)}
-.stageCore{display:grid;grid-template-columns:120px minmax(300px,390px) 120px;gap:18px;align-items:center;justify-content:center}
-.neighbor{color:#7f8798;text-align:center;font-weight:800;font-size:15px}
-.pack{
-  min-height:485px;border-radius:28px;border:1px solid rgba(255,255,255,.16);position:relative;overflow:hidden;
-  box-shadow:0 40px 92px rgba(0,0,0,.42)
-}
-.pack:after{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 10%,rgba(255,255,255,.10) 33%,transparent 49%);transform:translateX(-70%);animation:foil 7s ease-in-out infinite;pointer-events:none}
-@keyframes foil{0%,52%{transform:translateX(-80%)}82%,100%{transform:translateX(88%)}}
-.pack.bronze{background:radial-gradient(circle at 50% 13%,rgba(213,139,86,.42),transparent 34%),linear-gradient(135deg,#25160f,#60351d 40%,#170f0b 70%,#0c0d10)}
-.pack.silver{background:radial-gradient(circle at 50% 13%,rgba(241,245,255,.40),transparent 31%),linear-gradient(135deg,#252a32,#a2aab8 38%,#262b33 58%,#0d0f13)}
-.pack.gold{background:radial-gradient(circle at 50% 13%,rgba(255,216,91,.44),transparent 34%),linear-gradient(135deg,#372908,#b98d20 40%,#251907 64%,#0b0c10)}
-.pack.platinum{background:radial-gradient(circle at 50% 13%,rgba(194,247,255,.42),transparent 34%),linear-gradient(135deg,#1c2e34,#95bac4 38%,#1d272e 62%,#0a0d11)}
-.pack.diamond{background:radial-gradient(circle at 50% 13%,rgba(126,232,255,.42),transparent 33%),linear-gradient(135deg,#0b2b3a,#2e80a3 38%,#11212b 64%,#090b11)}
-.pack.elite{background:radial-gradient(circle at 50% 13%,rgba(255,109,150,.39),transparent 33%),linear-gradient(135deg,#2b0f1c,#8c2649 39%,#1f1018 63%,#09090f)}
-.pack.astral{background:radial-gradient(circle at 50% 13%,rgba(161,130,255,.44),transparent 34%),radial-gradient(circle at 23% 76%,rgba(88,65,205,.25),transparent 28%),linear-gradient(135deg,#1d1235,#4d357f 41%,#130f1f 70%,#09090f)}
-.pack.mythic{background:radial-gradient(circle at 50% 13%,rgba(255,128,234,.42),transparent 34%),linear-gradient(135deg,#2b1128,#662160 41%,#180f18 68%,#09090f)}
-.pack.celestial{background:radial-gradient(circle at 50% 13%,rgba(126,245,255,.42),transparent 34%),linear-gradient(135deg,#103139,#196372 41%,#102129 68%,#090b10)}
-.pack.eclipse{background:radial-gradient(circle at 50% 13%,rgba(125,105,255,.44),transparent 34%),linear-gradient(135deg,#0f0f19,#3f3275 41%,#14121f 68%,#09090f)}
-.pack.omega{background:radial-gradient(circle at 50% 13%,rgba(255,103,103,.42),transparent 34%),linear-gradient(135deg,#390d13,#912428 40%,#1b0d11 67%,#09090f)}
-.pack.singularity{background:radial-gradient(circle at 50% 13%,rgba(255,255,255,.58),transparent 30%),linear-gradient(135deg,#30333c,#d5d7e0 35%,#31333d 56%,#0a0b0f)}
-.crimp{height:21px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.13) 0 3px,transparent 3px 8px),linear-gradient(180deg,rgba(255,255,255,.1),transparent)}
-.packInner{min-height:443px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:1}
-.packBrand{font-size:13px;letter-spacing:.28em;font-weight:900}.packSeries{font-size:9px;letter-spacing:.18em;color:#d7dae3c5;margin-top:7px}
-.packSeal{width:104px;height:104px;border-radius:50%;margin:18px auto 14px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,9,13,.55);font-size:31px;font-weight:900}
-.packName{text-align:center;font-size:47px;line-height:.95;letter-spacing:-.06em;font-weight:900}.packTag{text-align:center;margin-top:9px;font-size:10px;letter-spacing:.18em;color:#eef0f5c4}
-.packRule{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);margin:20px 0 17px}
-.packBottom{display:flex;justify-content:space-between;align-items:flex-end}.packBottom span{display:block;font-size:9px;letter-spacing:.17em;color:#d5d9e3bf}.packBottom strong{display:block;margin-top:6px;font-size:27px}.packBottom .right{text-align:right}
-.summary{display:grid;grid-template-columns:1fr 450px;gap:18px;margin-top:20px}
-.summary>div{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.03)}
-.summaryLeft{padding:20px}.summaryLeft h3{font-size:34px;letter-spacing:-.05em;margin:7px 0 8px}.summaryLeft p{margin:0;color:var(--muted)}
-.summaryRight{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:11px}.fact{padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.fact span{display:block;font-size:9px;letter-spacing:.17em;color:#aab0bf}.fact strong{display:block;margin-top:7px;font-size:21px}
-.rip{grid-column:1/-1;height:52px;border:0;border-radius:15px;background:linear-gradient(180deg,#f7f8fb,#d9dde6);color:#090a0d;font-weight:900;letter-spacing:.05em;cursor:pointer}
-.grailHeader{display:flex;justify-content:space-between;align-items:flex-end;margin:24px 0 13px}.grailHeader h3{font-size:26px;margin:7px 0 0;letter-spacing:-.04em}.poolNote{font-size:11px;color:#8f96a5}
-.grails{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}
-.grailCard{border:1px solid var(--line);border-radius:20px;background:#0d1016;overflow:hidden;cursor:pointer;transition:.18s;display:flex;flex-direction:column}
-.grailCard:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)}
-.grailArt{height:280px;padding:14px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 28%,rgba(104,115,160,.24),rgba(10,12,18,.8) 78%);position:relative;overflow:hidden;flex:0 0 280px}
-.grailArt img{max-width:100%;max-height:242px;object-fit:contain;display:block;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}
-.grailPrice{position:absolute;top:10px;right:10px;z-index:2;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(7,8,12,.86);font-weight:900}
-.grailInfo{position:relative;z-index:3;padding:18px 15px 20px;min-height:112px;background:#0a0c12;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;justify-content:flex-start}
-.grailTitle{display:block;font-size:18px;line-height:1.15;font-weight:900;margin:0;white-space:normal;overflow:visible}.grailSub{display:block;margin-top:8px;color:#9aa0af;font-size:11px;line-height:1.45;white-space:normal}
-.empty{grid-column:1/-1;padding:28px;border:1px dashed var(--line);border-radius:18px;color:#a6adba;background:rgba(255,255,255,.02)}
-.daily{margin-top:18px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}.daily h3{font-size:22px;margin:7px 0}.daily p{margin:0;color:var(--muted)}.daily button{height:46px;padding:0 18px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font-weight:900;cursor:pointer}.cooldown{margin-top:6px;color:#9ca2af;font-size:11px;text-align:right}
-.pageTitle{padding:50px 0 24px;display:flex;justify-content:space-between;align-items:flex-end}.pageTitle h1{font-size:50px;margin:7px 0}.pageTitle p{margin:0;color:var(--muted)}.vaultValue{text-align:right}.vaultValue strong{display:block;font-size:29px;margin-top:7px}.vaultValue small{color:var(--muted)}
-.vaultGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.vaultCard{border:1px solid var(--line);border-radius:18px;background:#0d1016;overflow:hidden}.vaultArt{height:270px;padding:14px;display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(120,105,255,.17),rgba(10,12,18,.8) 78%)}.vaultArt img{max-width:100%;max-height:100%;object-fit:contain}.vaultInfo{padding:14px}.vaultInfo h3{font-size:18px;margin:0}.vaultInfo p{font-size:11px;color:var(--muted)}.vaultBottom{display:flex;justify-content:space-between;align-items:center}.pill{font-size:9px;letter-spacing:.14em;padding:6px 8px;border:1px solid var(--line);border-radius:999px}
-.activity{display:flex;flex-direction:column;gap:10px}.activityItem{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.activityIcon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center}.activityItem p{margin:4px 0 0;color:var(--muted);font-size:12px}.activityItem time{font-size:11px;color:var(--muted)}
-.overlay{position:fixed;inset:0;z-index:80;display:none;align-items:flex-start;justify-content:center;padding:80px 20px 30px;background:rgba(5,6,10,.80);backdrop-filter:blur(18px);overflow:auto}
-.overlay.open{display:flex}.reveal{position:relative;width:min(900px,100%);padding:26px;border:1px solid var(--line);border-radius:28px;background:#0d1017;box-shadow:0 34px 90px rgba(0,0,0,.44)}
-.close{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#11151d;color:#fff;font-size:22px;cursor:pointer}
-.revealPack{width:300px;min-height:460px;margin:0 auto;border-radius:24px;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:24px;background:radial-gradient(circle at 50% 14%,rgba(117,101,255,.35),transparent 34%),linear-gradient(135deg,#1a1d26,#0b0d13);cursor:pointer}
-.revealSeal{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);font-size:30px;font-weight:900}.revealName{font-size:42px;line-height:.92;font-weight:900}
-.result{display:none;grid-template-columns:280px 1fr;gap:24px;align-items:center}.overlay.resultMode .revealPack{display:none}.overlay.resultMode .result{display:grid}
-.result img{width:100%;max-height:430px;object-fit:contain}.resultCopy h2{font-size:36px;margin:7px 0}.market{font-size:24px;margin:10px 0 16px}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}.actions .primary{background:#f5f6f9;color:#090a0d;border:0}.fine{font-size:10px;color:#858b98;margin-top:10px}
-.modal{position:fixed;inset:0;z-index:90;display:none;align-items:flex-start;justify-content:center;padding:80px 20px;background:rgba(5,6,10,.76);backdrop-filter:blur(14px);overflow:auto}.modal.show{display:flex}.detail{width:min(760px,100%);padding:20px;border:1px solid var(--line);border-radius:24px;background:#0d1017;display:grid;grid-template-columns:270px 1fr;gap:20px}.detail img{width:100%;max-height:390px;object-fit:contain}.detail h2{font-size:32px}.detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detailStat{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}.detailStat span{font-size:9px;letter-spacing:.15em;color:#9ca2af;display:block}.detailStat strong{display:block;margin-top:7px}
-.toast{position:fixed;left:50%;bottom:24px;z-index:100;transform:translate(-50%,20px);opacity:0;padding:11px 14px;border-radius:11px;background:#f5f6f9;color:#11151d;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:1000px){.summary{grid-template-columns:1fr}.grails,.vaultGrid{grid-template-columns:repeat(2,1fr)}.stageCore{grid-template-columns:1fr}.neighbor{display:none}.heroStats{display:none}.result,.detail{grid-template-columns:1fr}}
-@media(max-width:650px){.shell{padding:0 14px 70px}.hero{padding-top:26px}.hero h1{font-size:42px}.shop{padding:16px}.stage{grid-template-columns:42px 1fr 42px}.arrow{width:42px;height:42px;font-size:23px}.pack{max-width:285px;margin:auto;min-height:390px}.packInner{min-height:348px;padding:22px}.packSeal{width:82px;height:82px}.packName{font-size:35px}.summaryRight{grid-template-columns:1fr}.grails,.vaultGrid{grid-template-columns:1fr 1fr;gap:10px}.grailArt{height:225px;flex-basis:225px}.grailArt img{max-height:170px}.grailTitle{font-size:15px}.grailInfo{min-height:92px;padding:12px 12px 15px}.daily,.shopHead,.pageTitle,.grailHeader{align-items:flex-start;flex-direction:column}.overlay{padding-top:64px}.nav button{font-size:11px;padding:8px}.brand{font-size:12px}}
+:root{--bg:#07080b;--panel:#0d1016;--line:rgba(255,255,255,.10);--muted:#9aa1b0;--text:#f6f7fb}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh;background:radial-gradient(circle at 50% -10%,rgba(110,91,255,.14),transparent 30%),linear-gradient(180deg,#090a0f,#06070a 48%,#050609)}
+button{font:inherit}.stroke{-webkit-text-stroke:.35px rgba(255,255,255,.12);text-shadow:0 1px 0 rgba(0,0,0,.4)}
+header{height:68px;position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--line);background:rgba(7,8,11,.88);backdrop-filter:blur(18px)}
+.brand{font-weight:900;letter-spacing:.18em}.nav{display:flex;gap:6px}.nav button{border:1px solid transparent;background:none;color:#aeb5c3;padding:9px 12px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover{color:#fff;border-color:var(--line);background:rgba(255,255,255,.05)}
+.status{font-size:10px;letter-spacing:.15em;border:1px solid var(--line);border-radius:999px;padding:8px 10px;background:rgba(255,255,255,.04);color:#aeb5c3}.status.online{color:#baf0ce;border-color:rgba(92,216,142,.22)}
+main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.active{display:block}.ey{font-size:10px;letter-spacing:.22em;color:#aeb4c4;text-transform:uppercase}
+.hero{padding:34px 0 24px;display:flex;justify-content:space-between;align-items:flex-end;gap:26px}.hero h1{font-size:58px;line-height:.92;letter-spacing:-.06em;margin:8px 0 12px}.hero p{margin:0;max-width:650px;color:#b1b8c6;line-height:1.6}
+.stats{display:flex;gap:10px}.stat{min-width:116px;padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035)}.stat span{display:block;font-size:9px;letter-spacing:.14em;color:#8e95a4}.stat strong{display:block;margin-top:5px;font-size:19px}
+.frame{border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,rgba(13,16,23,.96),rgba(9,11,16,.94));box-shadow:0 28px 76px rgba(0,0,0,.30)}.shop{padding:24px}
+.shopHead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}.shopHead h2{font-size:34px;margin:6px 0 4px;letter-spacing:-.045em}.shopHead p{margin:0;color:var(--muted)}.counter{font-size:11px;letter-spacing:.18em;border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:rgba(255,255,255,.04)}
+.stage{margin-top:18px;display:grid;grid-template-columns:54px 1fr 54px;gap:14px;align-items:center}.arrow{width:54px;height:54px;border-radius:50%;border:1px solid var(--line);background:#121721;color:#fff;font-size:28px;cursor:pointer}.arrow:hover{background:#1a2230}.stageCore{display:grid;grid-template-columns:120px minmax(300px,390px) 120px;gap:18px;align-items:center;justify-content:center}.neighbor{text-align:center;color:#7e8798;font-weight:800}
+.pack{min-height:485px;border-radius:28px;border:1px solid rgba(255,255,255,.16);overflow:hidden;position:relative;box-shadow:0 40px 92px rgba(0,0,0,.42)}.pack:after{content:"";position:absolute;inset:0;background:linear-gradient(118deg,transparent 10%,rgba(255,255,255,.10) 33%,transparent 49%);transform:translateX(-70%);animation:foil 7s ease-in-out infinite;pointer-events:none}@keyframes foil{0%,52%{transform:translateX(-80%)}82%,100%{transform:translateX(88%)}}
+.bronze{background:radial-gradient(circle at 50% 13%,rgba(213,139,86,.42),transparent 34%),linear-gradient(135deg,#25160f,#60351d 40%,#170f0b 70%,#0c0d10)}.silver{background:radial-gradient(circle at 50% 13%,rgba(241,245,255,.40),transparent 31%),linear-gradient(135deg,#252a32,#a2aab8 38%,#262b33 58%,#0d0f13)}.gold{background:radial-gradient(circle at 50% 13%,rgba(255,216,91,.44),transparent 34%),linear-gradient(135deg,#372908,#b98d20 40%,#251907 64%,#0b0c10)}.platinum{background:radial-gradient(circle at 50% 13%,rgba(194,247,255,.42),transparent 34%),linear-gradient(135deg,#1c2e34,#95bac4 38%,#1d272e 62%,#0a0d11)}.diamond{background:radial-gradient(circle at 50% 13%,rgba(126,232,255,.42),transparent 33%),linear-gradient(135deg,#0b2b3a,#2e80a3 38%,#11212b 64%,#090b11)}.elite{background:radial-gradient(circle at 50% 13%,rgba(255,109,150,.39),transparent 33%),linear-gradient(135deg,#2b0f1c,#8c2649 39%,#1f1018 63%,#09090f)}.astral{background:radial-gradient(circle at 50% 13%,rgba(161,130,255,.44),transparent 34%),radial-gradient(circle at 23% 76%,rgba(88,65,205,.25),transparent 28%),linear-gradient(135deg,#1d1235,#4d357f 41%,#130f1f 70%,#09090f)}.mythic{background:radial-gradient(circle at 50% 13%,rgba(255,128,234,.42),transparent 34%),linear-gradient(135deg,#2b1128,#662160 41%,#180f18 68%,#09090f)}.celestial{background:radial-gradient(circle at 50% 13%,rgba(126,245,255,.42),transparent 34%),linear-gradient(135deg,#103139,#196372 41%,#102129 68%,#090b10)}.eclipse{background:radial-gradient(circle at 50% 13%,rgba(125,105,255,.44),transparent 34%),linear-gradient(135deg,#0f0f19,#3f3275 41%,#14121f 68%,#09090f)}.omega{background:radial-gradient(circle at 50% 13%,rgba(255,103,103,.42),transparent 34%),linear-gradient(135deg,#390d13,#912428 40%,#1b0d11 67%,#09090f)}.singularity{background:radial-gradient(circle at 50% 13%,rgba(255,255,255,.58),transparent 30%),linear-gradient(135deg,#30333c,#d5d7e0 35%,#31333d 56%,#0a0b0f)}
+.crimp{height:21px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.13) 0 3px,transparent 3px 8px),linear-gradient(180deg,rgba(255,255,255,.1),transparent)}.packInner{min-height:443px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:1}.packBrand{font-size:13px;letter-spacing:.28em;font-weight:900}.packSeries{font-size:9px;letter-spacing:.18em;color:#d7dae3c5;margin-top:7px}.packSeal{width:104px;height:104px;border-radius:50%;margin:18px auto 14px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,9,13,.55);font-size:31px;font-weight:900}.packName{text-align:center;font-size:47px;line-height:.95;letter-spacing:-.06em;font-weight:900}.packTag{text-align:center;margin-top:9px;font-size:10px;letter-spacing:.18em;color:#eef0f5c4}.packRule{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);margin:20px 0 17px}.packBottom{display:flex;justify-content:space-between;align-items:flex-end}.packBottom span{display:block;font-size:9px;letter-spacing:.17em;color:#d5d9e3bf}.packBottom strong{display:block;margin-top:6px;font-size:27px}.packBottom .right{text-align:right}
+.summary{display:grid;grid-template-columns:1fr 450px;gap:18px;margin-top:20px}.summary>div{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.03)}.sLeft{padding:20px}.sLeft h3{font-size:34px;margin:7px 0 8px}.sLeft p{margin:0;color:var(--muted)}.sRight{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:11px}.fact{padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.fact span{display:block;font-size:9px;letter-spacing:.17em;color:#aab0bf}.fact strong{display:block;margin-top:7px;font-size:21px}.rip{grid-column:1/-1;height:52px;border:0;border-radius:15px;background:linear-gradient(180deg,#f7f8fb,#d9dde6);color:#090a0d;font-weight:900;letter-spacing:.05em;cursor:pointer}.rip:disabled{opacity:.45;cursor:not-allowed}
+.poolHead{display:flex;justify-content:space-between;align-items:flex-end;margin:24px 0 13px}.poolHead h3{font-size:26px;margin:7px 0 0}.poolNote{font-size:11px;color:#8f96a5}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}.card{border:1px solid var(--line);border-radius:20px;background:#0d1016;overflow:hidden;cursor:pointer;transition:.18s;display:flex;flex-direction:column}.card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)}.art{height:280px;padding:14px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 28%,rgba(104,115,160,.24),rgba(10,12,18,.8) 78%);position:relative;overflow:hidden;flex:0 0 280px}.art img{max-width:100%;max-height:242px;object-fit:contain;display:block;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}.price{position:absolute;top:10px;right:10px;z-index:2;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(7,8,12,.86);font-weight:900}.cardInfo{position:relative;z-index:3;padding:18px 15px 20px;min-height:112px;background:#0a0c12;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column}.cardTitle{font-size:18px;line-height:1.15;font-weight:900}.cardSub{margin-top:8px;color:#9aa0af;font-size:11px;line-height:1.45}.empty{grid-column:1/-1;padding:28px;border:1px dashed var(--line);border-radius:18px;color:#a6adba;background:rgba(255,255,255,.02)}.retry{margin-top:12px;border:1px solid var(--line);background:#151a24;color:#fff;padding:9px 12px;border-radius:10px;cursor:pointer}
+.daily{margin-top:18px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}.daily h3{font-size:22px;margin:7px 0}.daily p{margin:0;color:var(--muted)}.daily button{height:46px;padding:0 18px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font-weight:900;cursor:pointer}.cool{margin-top:6px;color:#9ca2af;font-size:11px;text-align:right}
+.pageTitle{padding:50px 0 24px;display:flex;justify-content:space-between;align-items:flex-end}.pageTitle h1{font-size:50px;margin:7px 0}.pageTitle p{margin:0;color:var(--muted)}.vValue{text-align:right}.vValue strong{display:block;font-size:29px;margin-top:7px}.vValue small{color:var(--muted)}.vault{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.vCard{border:1px solid var(--line);border-radius:18px;background:#0d1016;overflow:hidden}.vArt{height:270px;padding:14px;display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(120,105,255,.17),rgba(10,12,18,.8) 78%)}.vArt img{max-width:100%;max-height:100%;object-fit:contain}.vInfo{padding:14px}.vInfo h3{font-size:18px;margin:0}.vInfo p{font-size:11px;color:var(--muted)}.vBot{display:flex;justify-content:space-between;align-items:center}.pill{font-size:9px;letter-spacing:.14em;padding:6px 8px;border:1px solid var(--line);border-radius:999px}
+.activity{display:flex;flex-direction:column;gap:10px}.aItem{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.aIcon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center}.aItem p{margin:4px 0 0;color:var(--muted);font-size:12px}.aItem time{font-size:11px;color:var(--muted)}
+.overlay{position:fixed;inset:0;z-index:80;display:none;align-items:flex-start;justify-content:center;padding:72px 20px 30px;background:rgba(5,6,10,.82);backdrop-filter:blur(18px);overflow:auto}.overlay.open{display:flex}.reveal{position:relative;width:min(900px,100%);padding:26px;border:1px solid var(--line);border-radius:28px;background:#0d1017;box-shadow:0 34px 90px rgba(0,0,0,.44)}.close{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#11151d;color:#fff;font-size:22px;cursor:pointer}.rPack{width:300px;min-height:460px;margin:auto;border-radius:24px;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:24px;background:radial-gradient(circle at 50% 14%,rgba(117,101,255,.35),transparent 34%),linear-gradient(135deg,#1a1d26,#0b0d13);cursor:pointer}.rSeal{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);font-size:30px;font-weight:900}.rName{font-size:42px;line-height:.92;font-weight:900}.result{display:none;grid-template-columns:280px 1fr;gap:24px;align-items:center}.overlay.resultMode .rPack{display:none}.overlay.resultMode .result{display:grid}.result img{width:100%;max-height:430px;object-fit:contain}.result h2{font-size:36px;margin:7px 0}.market{font-size:24px;margin:10px 0 16px}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}.actions .primary{background:#f5f6f9;color:#090a0d;border:0}.fine{font-size:10px;color:#858b98;margin-top:10px}.modal{position:fixed;inset:0;z-index:90;display:none;align-items:flex-start;justify-content:center;padding:72px 20px;background:rgba(5,6,10,.76);backdrop-filter:blur(14px);overflow:auto}.modal.show{display:flex}.detail{width:min(760px,100%);padding:20px;border:1px solid var(--line);border-radius:24px;background:#0d1017;display:grid;grid-template-columns:270px 1fr;gap:20px}.detail img{width:100%;max-height:390px;object-fit:contain}.detail h2{font-size:32px}.dGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dStat{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}.dStat span{font-size:9px;letter-spacing:.15em;color:#9ca2af;display:block}.dStat strong{display:block;margin-top:7px}.toast{position:fixed;left:50%;bottom:24px;z-index:100;transform:translate(-50%,20px);opacity:0;padding:11px 14px;border-radius:11px;background:#f5f6f9;color:#11151d;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1000px){.summary{grid-template-columns:1fr}.cards,.vault{grid-template-columns:repeat(2,1fr)}.stageCore{grid-template-columns:1fr}.neighbor{display:none}.stats{display:none}.result,.detail{grid-template-columns:1fr}}
+@media(max-width:650px){main{padding:0 14px 70px}.hero h1{font-size:42px}.shop{padding:16px}.stage{grid-template-columns:42px 1fr 42px}.arrow{width:42px;height:42px;font-size:23px}.pack{max-width:285px;margin:auto;min-height:390px}.packInner{min-height:348px;padding:22px}.packSeal{width:82px;height:82px}.packName{font-size:35px}.sRight{grid-template-columns:1fr}.cards,.vault{grid-template-columns:1fr 1fr;gap:10px}.art{height:225px;flex-basis:225px}.art img{max-height:170px}.cardTitle{font-size:15px}.cardInfo{min-height:92px;padding:12px 12px 15px}.daily,.shopHead,.pageTitle,.poolHead{align-items:flex-start;flex-direction:column}.overlay,.modal{padding-top:62px}.nav button{font-size:11px;padding:8px}.brand{font-size:12px}.status{display:none}}
 </style>
 </head>
 <body>
-<header class="topbar">
-  <div class="brand stroke">VAULTDROP</div>
-  <div class="nav">
-    <button class="active" data-page="home">Pack Shop</button>
-    <button data-page="vault">Vault</button>
-    <button data-page="activity">Activity</button>
-  </div>
-  <div class="power-chip stroke">POWER PACKS</div>
-</header>
-
-<main class="shell">
+<header><div class="brand stroke">VAULTDROP</div><div class="nav"><button class="active" data-page="home">Pack Shop</button><button data-page="vault">Vault</button><button data-page="activity">Activity</button></div><div id="feedStatus" class="status">CARD FEED CONNECTING</div></header>
+<main>
 <section id="home" class="page active">
-  <div class="hero">
-    <div>
-      <div class="eyebrow">POWER PACK COLLECTION</div>
-      <h1 class="stroke">Pick a pack.<br>Chase a grail.</h1>
-      <p>Use the arrows to move through every VaultDrop tier. Each pack loads a full card pool with live market references and a grail target around 20× the pack price.</p>
-    </div>
-    <div class="heroStats">
-      <div class="heroStat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div>
-      <div class="heroStat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div>
-      <div class="heroStat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div>
-    </div>
-  </div>
-
+  <div class="hero"><div><div class="ey">POWER PACK COLLECTION</div><h1 class="stroke">Pick a pack.<br>Chase a grail.</h1><p>Every pack uses a server-side TCGdex card feed. Browse the full loaded pool, then rip a card from that tier.</p></div><div class="stats"><div class="stat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div><div class="stat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div><div class="stat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div></div></div>
   <section class="frame shop">
-    <div class="shopHead">
-      <div>
-        <div class="eyebrow">PACK SHOP</div>
-        <h2 class="stroke">Open a pack</h2>
-        <p>One pack at a time. Full loaded grail pool underneath.</p>
-      </div>
-      <div class="counter stroke" id="counter">01 / 12</div>
-    </div>
-
-    <div class="stage">
-      <button class="arrow" id="prev" aria-label="Previous pack">‹</button>
-      <div class="stageCore">
-        <div class="neighbor stroke" id="prevLabel"></div>
-        <div class="pack bronze" id="pack"></div>
-        <div class="neighbor stroke" id="nextLabel"></div>
-      </div>
-      <button class="arrow" id="next" aria-label="Next pack">›</button>
-    </div>
-
-    <div class="summary">
-      <div class="summaryLeft">
-        <div class="eyebrow">CURRENT TIER</div>
-        <h3 class="stroke" id="tierName"></h3>
-        <p id="tierCopy"></p>
-      </div>
-      <div class="summaryRight">
-        <div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div>
-        <div class="fact"><span>GRAIL RANGE</span><strong id="tierRange"></strong></div>
-        <button class="rip stroke" id="openPack">RIP THIS PACK</button>
-      </div>
-    </div>
-
-    <div class="grailHeader">
-      <div>
-        <div class="eyebrow">FULL LOADED POOL</div>
-        <h3 class="stroke">Cards in this pack</h3>
-      </div>
-      <div class="poolNote" id="poolNote">Loading live TCGdex cards…</div>
-    </div>
-    <div class="grails" id="grails"></div>
+    <div class="shopHead"><div><div class="ey">PACK SHOP</div><h2 class="stroke">Open a pack</h2><p>One tier at a time. Full loaded card pool underneath.</p></div><div class="counter stroke" id="counter">01 / 12</div></div>
+    <div class="stage"><button class="arrow" id="prev">‹</button><div class="stageCore"><div class="neighbor stroke" id="prevLabel"></div><div id="pack" class="pack bronze"></div><div class="neighbor stroke" id="nextLabel"></div></div><button class="arrow" id="next">›</button></div>
+    <div class="summary"><div class="sLeft"><div class="ey">CURRENT TIER</div><h3 class="stroke" id="tierName"></h3><p id="tierCopy"></p></div><div class="sRight"><div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div><div class="fact"><span>GRAIL TARGET</span><strong id="tierRange"></strong></div><button id="openPack" class="rip stroke" disabled>LOADING CARDS…</button></div></div>
+    <div class="poolHead"><div><div class="ey">FULL LOADED POOL</div><h3 class="stroke">Cards in this pack</h3></div><div class="poolNote" id="poolNote">Connecting…</div></div>
+    <div id="cards" class="cards"></div>
   </section>
-
-  <section class="frame daily">
-    <div>
-      <div class="eyebrow">FREE DAILY</div>
-      <h3 class="stroke">Daily Drop</h3>
-      <p>One free preview pull every 24 hours.</p>
-    </div>
-    <div>
-      <button id="dailyBtn" class="stroke">CLAIM FREE DROP</button>
-      <div class="cooldown" id="cooldown">Ready now</div>
-    </div>
-  </section>
+  <section class="frame daily"><div><div class="ey">FREE DAILY</div><h3 class="stroke">Daily Drop</h3><p>One free preview pull every 24 hours.</p></div><div><button id="dailyBtn" class="stroke">CLAIM FREE DROP</button><div class="cool" id="cooldown">Ready now</div></div></section>
 </section>
-
-<section id="vault" class="page">
-  <div class="pageTitle">
-    <div><div class="eyebrow">YOUR COLLECTION</div><h1 class="stroke">The Vault</h1><p>Cards you kept from pack openings.</p></div>
-    <div class="vaultValue"><span class="eyebrow">EST. VALUE</span><strong id="vaultValue">$0.00</strong><small id="vaultCount">0 cards</small></div>
-  </div>
-  <div class="vaultGrid" id="vaultGrid"></div>
-</section>
-
-<section id="activity" class="page">
-  <div class="pageTitle"><div><div class="eyebrow">TIMELINE</div><h1 class="stroke">Activity</h1><p>Everything you opened, kept, fulfilled, or sold back in preview.</p></div></div>
-  <div class="activity" id="activityList"></div>
-</section>
+<section id="vault" class="page"><div class="pageTitle"><div><div class="ey">YOUR COLLECTION</div><h1 class="stroke">The Vault</h1><p>Cards you kept from pack openings.</p></div><div class="vValue"><span class="ey">EST. VALUE</span><strong id="vaultValue">$0.00</strong><small id="vaultCount">0 cards</small></div></div><div id="vaultGrid" class="vault"></div></section>
+<section id="activity" class="page"><div class="pageTitle"><div><div class="ey">TIMELINE</div><h1 class="stroke">Activity</h1><p>Everything you opened, kept, fulfilled, or sold back in preview.</p></div></div><div id="activityList" class="activity"></div></section>
 </main>
-
-<div class="overlay" id="overlay">
-  <div class="reveal">
-    <button class="close" id="close">×</button>
-    <div class="revealPack" id="revealPack">
-      <div class="packBrand stroke">VAULTDROP</div>
-      <div class="revealSeal stroke">VD</div>
-      <div class="revealName stroke" id="revealPackName"></div>
-      <div class="eyebrow stroke">TAP TO REVEAL</div>
-    </div>
-    <div class="result" id="result">
-      <img id="resultImg" alt="">
-      <div class="resultCopy">
-        <div class="eyebrow" id="resultSet"></div>
-        <h2 class="stroke" id="resultName"></h2>
-        <div class="market stroke" id="resultMarket"></div>
-        <div class="actions">
-          <button class="primary stroke" id="keep">KEEP IN VAULT</button>
-          <button class="stroke" id="fulfill">FULFILL</button>
-          <button class="stroke" id="sell">SELL BACK <span id="sellVal"></span></button>
-        </div>
-        <div class="fine">Sell Back is preview-only and does not transfer money.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="modal"><div class="detail" id="detail"></div></div>
-<div class="toast" id="toast"></div>
-
+<div id="overlay" class="overlay"><div class="reveal"><button id="close" class="close">×</button><div id="revealPack" class="rPack"><div class="packBrand stroke">VAULTDROP</div><div class="rSeal stroke">VD</div><div id="revealPackName" class="rName stroke"></div><div class="ey stroke">TAP TO REVEAL</div></div><div class="result"><img id="resultImg"><div><div id="resultSet" class="ey"></div><h2 id="resultName" class="stroke"></h2><div id="resultMarket" class="market stroke"></div><div class="actions"><button id="keep" class="primary stroke">KEEP IN VAULT</button><button id="fulfill" class="stroke">FULFILL</button><button id="sell" class="stroke">SELL BACK <span id="sellVal"></span></button></div><div class="fine">Sell Back is preview-only and does not transfer money.</div></div></div></div></div>
+<div id="modal" class="modal"><div id="detail" class="detail"></div></div><div id="toast" class="toast"></div>
 <script>
-const $=q=>document.querySelector(q), $$=q=>[...document.querySelectorAll(q)];
+const API='https://vaultdrop-fulfillment-api-production.up.railway.app';
+const PACKS=[
+{name:'Bronze',price:1,skin:'bronze'},{name:'Silver',price:5,skin:'silver'},{name:'Gold',price:10,skin:'gold'},
+{name:'Platinum',price:25,skin:'platinum'},{name:'Diamond',price:50,skin:'diamond'},{name:'Elite',price:100,skin:'elite'},
+{name:'Astral',price:250,skin:'astral'},{name:'Mythic',price:500,skin:'mythic'},{name:'Celestial',price:1000,skin:'celestial'},
+{name:'Eclipse',price:2500,skin:'eclipse'},{name:'Omega',price:5000,skin:'omega'},{name:'Singularity',price:10000,skin:'singularity'}];
+const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
 const money=n=>'$'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc=s=>String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
-const PACKS=[
-  {name:'Bronze',price:1,skin:'bronze'},{name:'Silver',price:5,skin:'silver'},{name:'Gold',price:10,skin:'gold'},
-  {name:'Platinum',price:25,skin:'platinum'},{name:'Diamond',price:50,skin:'diamond'},{name:'Elite',price:100,skin:'elite'},
-  {name:'Astral',price:250,skin:'astral'},{name:'Mythic',price:500,skin:'mythic'},{name:'Celestial',price:1000,skin:'celestial'},
-  {name:'Eclipse',price:2500,skin:'eclipse'},{name:'Omega',price:5000,skin:'omega'},{name:'Singularity',price:10000,skin:'singularity'}
-];
-const NAMES=['Charizard','Umbreon','Rayquaza','Pikachu','Gengar','Mewtwo','Mew','Lugia','Giratina','Espeon','Blastoise','Venusaur','Sylveon','Dragonite','Gyarados','Ho-Oh','Snorlax','Latias','Latios','Leafeon','Glaceon','Vaporeon','Jolteon','Flareon','Eevee','Greninja','Lucario','Arceus','Dialga','Palkia','Darkrai','Machamp','Alakazam','Gardevoir','Magikarp','Tyranitar','Aerodactyl','Zapdos','Moltres','Articuno','Raichu','Charmander','Squirtle','Bulbasaur','Scizor','Metagross','Salamence','Groudon','Kyogre','Deoxys','Celebi','Jirachi','Suicune','Entei','Raikou','Reshiram','Zekrom'];
-let index=0,pending=null,cache=new Map();
-let state=(()=>{try{return JSON.parse(localStorage.vd_rebuild||'{"vault":[],"activity":[],"opened":0,"next":0}')}catch{return{vault:[],activity:[],opened:0,next:0}}})();
-const save=()=>localStorage.vd_rebuild=JSON.stringify(state);
-const band=p=>({target:p.price*20,min:p.price*16,max:p.price*24});
-const img=(c,size='high')=>c.image?c.image+'/'+size+'.webp':'';
-
-function market(c){
-  const t=c.pricing?.tcgplayer||c.tcgplayer?.prices||{};
-  for(const k of Object.keys(t)){
-    const v=t[k];
-    if(v&&typeof v==='object'){
-      const n=Number(v.marketPrice??v.market??v.midPrice??v.mid??v.highPrice??v.high??v.lowPrice??v.low);
-      if(n)return n;
-    }
-  }
-  const cm=c.pricing?.cardmarket||c.cardmarket?.prices||{};
-  return Number(cm.trend??cm.trendPrice??cm.averageSellPrice??cm.avg??cm.lowPrice??cm.low||0);
+const img=(c,size='high')=>c&&c.image?c.image+'/'+size+'.webp':'';
+let idx=0,pending=null;const cache=new Map();
+let state=(()=>{try{return JSON.parse(localStorage.vd_server_reboot||'{"vault":[],"activity":[],"opened":0,"next":0}')}catch(e){return{vault:[],activity:[],opened:0,next:0}}})();
+function save(){localStorage.vd_server_reboot=JSON.stringify(state)}
+function band(p){return{target:p.price*20,min:p.price*16,max:p.price*24}}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
+function setFeed(ok,text){const e=$('#feedStatus');e.textContent=text;e.classList.toggle('online',ok)}
+async function fetchPool(i,force=false){
+  if(cache.has(i)&&!force)return cache.get(i);
+  const p=PACKS[i],controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
+  try{
+    const r=await fetch(API+'/api/pool?price='+encodeURIComponent(p.price),{signal:controller.signal});
+    if(!r.ok)throw new Error('Card feed '+r.status);
+    const data=await r.json();
+    if(!data||!Array.isArray(data.cards)||!data.cards.length)throw new Error('No cards returned');
+    cache.set(i,data);setFeed(true,'CARD FEED ONLINE');return data;
+  }finally{clearTimeout(timer)}
 }
-async function api(path){const r=await fetch('https://api.tcgdex.net/v2/en'+path);if(!r.ok)throw new Error('TCGdex '+r.status);return r.json()}
-async function full(id){
-  const c=await api('/cards/'+encodeURIComponent(id)),m=market(c);
-  if(!m||!c.image)return null;
-  return {id:c.id,name:c.name,image:c.image,market:m,setName:c.set?.name||'Pokémon TCG',localId:c.localId||'',rarity:c.rarity||'—',hp:c.hp||'—',types:c.types||[]};
-}
-async function pool(idx){
-  if(cache.has(idx))return cache.get(idx);
-  const p=PACKS[idx],b=band(p),exact=[],near=[],seen=new Set();
-  for(const n of NAMES){
-    if(exact.length>=36)break;
-    try{
-      const list=await api('/cards?name='+encodeURIComponent(n)+'&pagination:page=1&pagination:itemsPerPage=60');
-      const a=(Array.isArray(list)?list:[]).filter(x=>x&&x.id&&x.image);
-      if(!a.length)continue;
-      const sample=[],take=Math.min(14,a.length);
-      for(let k=0;k<take;k++){
-        const q=a[Math.floor(k*(a.length-1)/Math.max(1,take-1))];
-        if(q&&!sample.some(x=>x.id===q.id))sample.push(q);
-      }
-      for(let k=0;k<sample.length;k+=4){
-        const fs=await Promise.all(sample.slice(k,k+4).map(x=>full(x.id).catch(()=>null)));
-        for(const c of fs){
-          if(!c||seen.has(c.id))continue;
-          seen.add(c.id);
-          const d=Math.abs(c.market-b.target);
-          near.push({...c,_d:d});
-          if(c.market>=b.min&&c.market<=b.max)exact.push(c);
-        }
-      }
-    }catch{}
-  }
-  near.sort((a,b)=>a._d-b._d);
-  const out=[...exact];
-  if(out.length<16){
-    for(const c of near){
-      if(!out.some(x=>x.id===c.id))out.push(c);
-      if(out.length>=24)break;
-    }
-  }
-  out.sort((a,b)=>Math.abs(a.market-b.target)-Math.abs(b.market-b.target));
-  cache.set(idx,out);
-  return out;
-}
-
-function stats(){
+function renderStats(){
   const v=state.vault.reduce((s,c)=>s+Number(c.market||0),0);
   $('#vaultStat').textContent=money(v);$('#cardsStat').textContent=state.vault.length;$('#openedStat').textContent=state.opened;
   $('#vaultValue').textContent=money(v);$('#vaultCount').textContent=state.vault.length+' card'+(state.vault.length===1?'':'s');
 }
 function renderPack(){
-  const p=PACKS[index],b=band(p),prev=PACKS[(index-1+PACKS.length)%PACKS.length],next=PACKS[(index+1)%PACKS.length];
-  $('#counter').textContent=String(index+1).padStart(2,'0')+' / '+PACKS.length;
-  $('#prevLabel').textContent='← '+prev.name;$('#nextLabel').textContent=next.name+' →';
+  const p=PACKS[idx],b=band(p),prev=PACKS[(idx-1+PACKS.length)%PACKS.length],next=PACKS[(idx+1)%PACKS.length];
+  $('#counter').textContent=String(idx+1).padStart(2,'0')+' / '+PACKS.length;$('#prevLabel').textContent='← '+prev.name;$('#nextLabel').textContent=next.name+' →';
   $('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);
-  $('#tierCopy').textContent='Target market value around '+money(b.target)+'. Exact cards are preferred; nearest live matches fill sparse tiers.';
-  $('#pack').className='pack '+p.skin;
-  $('#pack').innerHTML=
-    '<div class="crimp"></div><div class="packInner">'+
-      '<div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(index+1).padStart(2,'0')+'</div></div>'+
-      '<div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div>'+
-      '<div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL RANGE</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div>'+
-    '</div><div class="crimp"></div>';
-  renderPool(index);
+  $('#tierCopy').textContent='Target market value '+money(b.target)+'. If the exact band is sparse, the backend returns the nearest live-priced cards instead of leaving the pack empty.';
+  $('#pack').className='pack '+p.skin;$('#pack').innerHTML='<div class="crimp"></div><div class="packInner"><div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(idx+1).padStart(2,'0')+'</div></div><div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div><div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL TARGET</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div></div><div class="crimp"></div>';
+  loadAndRender(idx);
 }
-async function renderPool(idx){
-  const g=$('#grails'),p=PACKS[idx],b=band(p);
-  $('#poolNote').textContent='Loading live TCGdex cards…';
-  g.innerHTML='<div class="empty">Loading '+esc(p.name)+' pool around '+money(b.target)+'…</div>';
-  const a=await pool(idx);
-  if(idx!==index)return;
-  $('#poolNote').textContent=a.length+' cards loaded · live TCGdex references';
-  if(!a.length){g.innerHTML='<div class="empty">No live cards are available for this tier right now.</div>';return}
-  g.innerHTML=a.map((c,k)=>
-    '<article class="grailCard" data-k="'+k+'">'+
-      '<div class="grailArt"><div class="grailPrice stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" alt="'+esc(c.name)+'"></div>'+
-      '<div class="grailInfo"><span class="grailTitle stroke">'+esc(c.name)+'</span><span class="grailSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+'</span></div>'+
-    '</article>'
-  ).join('');
-  $$('.grailCard').forEach((el,k)=>el.onclick=()=>detail(a[k]));
+async function loadAndRender(i,force=false){
+  const cards=$('#cards'),note=$('#poolNote'),open=$('#openPack'),p=PACKS[i];
+  cards.innerHTML='<div class="empty">Loading '+esc(p.name)+' card pool from the server…</div>';note.textContent='Loading…';open.disabled=true;open.textContent='LOADING CARDS…';
+  try{
+    const data=await fetchPool(i,force);if(i!==idx)return;
+    note.textContent=data.cards.length+' cards loaded · '+data.exactCount+' inside exact target band';
+    open.disabled=false;open.textContent='RIP THIS PACK';
+    cards.innerHTML=data.cards.map((c,k)=>'<article class="card" data-k="'+k+'"><div class="art"><div class="price stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="cardInfo"><span class="cardTitle stroke">'+esc(c.name)+'</span><span class="cardSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+' · '+esc(c.rarity||'—')+'</span></div></article>').join('');
+    $$('.card').forEach((el,k)=>el.onclick=()=>showDetail(data.cards[k]));
+    preloadNeighbors();
+  }catch(e){
+    if(i!==idx)return;setFeed(false,'CARD FEED RETRY NEEDED');note.textContent='Card feed error';
+    cards.innerHTML='<div class="empty">The card server did not return this pool.<br><button id="retry" class="retry">RETRY CARD FEED</button></div>';open.disabled=true;open.textContent='CARDS UNAVAILABLE';
+    setTimeout(()=>{const r=$('#retry');if(r)r.onclick=()=>loadAndRender(i,true)},0);
+  }
 }
-function detail(c){
-  $('#detail').innerHTML=
-    '<img src="'+img(c)+'" alt="'+esc(c.name)+'"><div>'+
-      '<div class="eyebrow">'+esc(c.setName)+' · '+esc(c.rarity)+'</div>'+
-      '<h2 class="stroke">'+esc(c.name)+'</h2><p style="color:#9aa2b2">Live TCGdex market reference.</p>'+
-      '<div class="detailGrid"><div class="detailStat"><span>MARKET</span><strong>'+money(c.market)+'</strong></div>'+
-      '<div class="detailStat"><span>CARD NO.</span><strong>#'+esc(c.localId||'—')+'</strong></div>'+
-      '<div class="detailStat"><span>TYPE</span><strong>'+esc((c.types||[]).join(', ')||'—')+'</strong></div>'+
-      '<div class="detailStat"><span>HP</span><strong>'+esc(c.hp||'—')+'</strong></div></div>'+
-    '</div>';
+function preloadNeighbors(){
+  const a=(idx+1)%PACKS.length,b=(idx-1+PACKS.length)%PACKS.length;
+  setTimeout(()=>fetchPool(a).catch(()=>{}),300);setTimeout(()=>fetchPool(b).catch(()=>{}),800);
+}
+function showDetail(c){
+  $('#detail').innerHTML='<img src="'+img(c)+'" alt="'+esc(c.name)+'"><div><div class="ey">'+esc(c.setName)+' · '+esc(c.rarity)+'</div><h2 class="stroke">'+esc(c.name)+'</h2><p style="color:#9aa1b0">Server-backed TCGdex market reference.</p><div class="dGrid"><div class="dStat"><span>MARKET</span><strong>'+money(c.market)+'</strong></div><div class="dStat"><span>CARD NO.</span><strong>#'+esc(c.localId||'—')+'</strong></div><div class="dStat"><span>TYPE</span><strong>'+esc((c.types||[]).join(', ')||'—')+'</strong></div><div class="dStat"><span>HP</span><strong>'+esc(c.hp||'—')+'</strong></div></div></div>';
   $('#modal').classList.add('show');
 }
-function renderVault(){
-  const g=$('#vaultGrid');
-  g.innerHTML=state.vault.slice().reverse().map(c=>
-    '<article class="vaultCard"><div class="vaultArt"><img src="'+img(c)+'" alt="'+esc(c.name)+'"></div>'+
-    '<div class="vaultInfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.setName)+' · '+esc(c.rarity)+'</p>'+
-    '<div class="vaultBottom"><strong>'+money(c.market)+'</strong><span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span></div></div></article>'
-  ).join('')||'<div class="empty">Your vault is empty. Rip a pack and keep a card.</div>';
-}
-function renderActivity(){
-  const g=$('#activityList'),icons={open:'✦',keep:'✓',fulfill:'↗',sell:'$'};
-  g.innerHTML=state.activity.slice().reverse().map(x=>
-    '<div class="activityItem"><div class="activityIcon">'+(icons[x.type]||'•')+'</div><div><strong class="stroke">'+esc(x.title)+'</strong><p>'+esc(x.detail)+'</p></div><time>'+new Date(x.at).toLocaleString()+'</time></div>'
-  ).join('')||'<div class="empty">No activity yet.</div>';
-}
-function renderAll(){renderPack();stats();renderVault();renderActivity();cooldown()}
-async function openPack(idx){
-  const a=await pool(idx);if(!a.length)return toast('No card available for this tier right now.');
-  const p=PACKS[idx],c=a[Math.floor(Math.random()*Math.min(8,a.length))];
-  pending={p,c};$('#overlay').classList.add('open');$('#overlay').classList.remove('resultMode');
-  $('#revealPackName').textContent=p.name.toUpperCase();$('#resultImg').src=img(c);$('#resultSet').textContent=c.setName+' · '+c.rarity;
-  $('#resultName').textContent=c.name;$('#resultMarket').textContent='Market '+money(c.market);$('#sellVal').textContent=money(c.market*.72);
-  state.opened++;state.activity.push({type:'open',title:'Opened '+p.name+' pack',detail:money(c.market)+' market card',at:Date.now()});save();stats();renderActivity();
+async function openPack(i){
+  try{
+    const data=await fetchPool(i),p=PACKS[i];let source=data.cards;
+    if(Number(data.exactCount)>0)source=data.cards.slice(0,Math.min(Number(data.exactCount),data.cards.length));
+    if(!source.length)source=data.cards;if(!source.length)throw new Error('No cards');
+    const c=source[Math.floor(Math.random()*source.length)];pending={p,c};
+    $('#revealPackName').textContent=p.name.toUpperCase();$('#resultImg').src=img(c);$('#resultSet').textContent=c.setName+' · '+c.rarity;$('#resultName').textContent=c.name;$('#resultMarket').textContent='Market '+money(c.market);$('#sellVal').textContent=money(c.market*.72);
+    $('#overlay').classList.add('open');$('#overlay').classList.remove('resultMode');
+    state.opened++;state.activity.push({type:'open',title:'Opened '+p.name+' pack',detail:money(c.market)+' market card',at:Date.now()});save();renderStats();renderActivity();
+  }catch(e){toast('Card pool is still loading. Try again in a moment.')}
 }
 function settle(a){
-  if(!pending)return;const {p,c}=pending;
+  if(!pending)return;const p=pending.p,c=pending.c;
   if(a==='sell')state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market*.72)+' preview offer',at:Date.now()});
   else{state.vault.push({...c,action:a,pack:p.name});state.activity.push({type:a,title:(a==='keep'?'Kept ':'Fulfillment requested: ')+c.name,detail:p.name+' · '+money(c.market),at:Date.now()})}
-  save();renderAll();closeReveal();toast(a==='sell'?'Sell-back preview recorded.':'Card added to vault.');
+  save();renderStats();renderVault();renderActivity();closeReveal();toast(a==='sell'?'Sell-back preview recorded.':'Card added to vault.');
+}
+function renderVault(){
+  $('#vaultGrid').innerHTML=state.vault.slice().reverse().map(c=>'<article class="vCard"><div class="vArt"><img src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="vInfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.setName)+' · '+esc(c.rarity)+'</p><div class="vBot"><strong>'+money(c.market)+'</strong><span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span></div></div></article>').join('')||'<div class="empty">Your vault is empty. Rip a pack and keep a card.</div>';
+}
+function renderActivity(){
+  const icons={open:'✦',keep:'✓',fulfill:'↗',sell:'$'};
+  $('#activityList').innerHTML=state.activity.slice().reverse().map(x=>'<div class="aItem"><div class="aIcon">'+(icons[x.type]||'•')+'</div><div><strong class="stroke">'+esc(x.title)+'</strong><p>'+esc(x.detail)+'</p></div><time>'+new Date(x.at).toLocaleString()+'</time></div>').join('')||'<div class="empty">No activity yet.</div>';
 }
 function closeReveal(){$('#overlay').classList.remove('open','resultMode');pending=null}
-function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
 function cooldown(){
   const d=state.next-Date.now(),b=$('#dailyBtn'),c=$('#cooldown');
-  if(d<=0){b.disabled=false;b.textContent='CLAIM FREE DROP';c.textContent='Ready now'}
-  else{b.disabled=true;b.textContent='DAILY CLAIMED';c.textContent='Next drop in '+Math.floor(d/36e5)+'h '+Math.floor(d%36e5/6e4)+'m'}
+  if(d<=0){b.disabled=false;b.textContent='CLAIM FREE DROP';c.textContent='Ready now'}else{b.disabled=true;b.textContent='DAILY CLAIMED';c.textContent='Next drop in '+Math.floor(d/36e5)+'h '+Math.floor(d%36e5/6e4)+'m'}
 }
-async function daily(){if(Date.now()<state.next)return;state.next=Date.now()+86400000;save();cooldown();openPack(0)}
+async function daily(){if(Date.now()<state.next)return;state.next=Date.now()+86400000;save();cooldown();await openPack(0)}
 setInterval(cooldown,30000);
-
-$('#prev').onclick=()=>{index=(index-1+PACKS.length)%PACKS.length;renderPack()};
-$('#next').onclick=()=>{index=(index+1)%PACKS.length;renderPack()};
-$('#openPack').onclick=()=>openPack(index);$('#dailyBtn').onclick=daily;$('#revealPack').onclick=()=>$('#overlay').classList.add('resultMode');
-$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#fulfill').onclick=()=>settle('fulfill');$('#sell').onclick=()=>settle('sell');
-$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};
-$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
+$('#prev').onclick=()=>{idx=(idx-1+PACKS.length)%PACKS.length;renderPack()};$('#next').onclick=()=>{idx=(idx+1)%PACKS.length;renderPack()};$('#openPack').onclick=()=>openPack(idx);$('#dailyBtn').onclick=daily;$('#revealPack').onclick=()=>$('#overlay').classList.add('resultMode');$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#fulfill').onclick=()=>settle('fulfill');$('#sell').onclick=()=>settle('sell');$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
 $$('[data-page]').forEach(b=>b.onclick=()=>{$$('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));$$('[data-page]').forEach(x=>x.classList.toggle('active',x===b))});
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
-
-renderAll();
+window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
+renderStats();renderVault();renderActivity();cooldown();renderPack();
 </script>
-</body>
-</html>
+</body></html>
