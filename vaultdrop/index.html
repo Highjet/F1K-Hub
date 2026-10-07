@@ -64,7 +64,7 @@ const img=(c,size='high')=>c&&c.image?(c.imageMode==='direct'?c.image:c.image+'/
 let idx=0,pending=null,currentGame='pokemon',revealTimer=null;const cache=new Map();
 let state=(()=>{try{return JSON.parse(localStorage.vd_server_reboot||'{"vault":[],"activity":[],"opened":0,"next":0}')}catch(e){return{vault:[],activity:[],opened:0,next:0}}})();
 function save(){localStorage.vd_server_reboot=JSON.stringify(state)}
-function band(p){return{target:p.price*20,min:p.price*16,max:p.price*24}}
+function band(p){return{target:p.price*18,min:p.price*8,max:p.price*20}}
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
 function setFeed(ok,text){const e=$('#feedStatus');e.textContent=text;e.classList.toggle('online',ok)}
 async function fetchPool(i,force=false){
@@ -87,7 +87,7 @@ function renderPack(){
   const p=PACKS[idx],b=band(p),prev=PACKS[(idx-1+PACKS.length)%PACKS.length],next=PACKS[(idx+1)%PACKS.length];
   $('#counter').textContent=String(idx+1).padStart(2,'0')+' / '+PACKS.length;$('#prevLabel').textContent='← '+prev.name;$('#nextLabel').textContent=next.name+' →';
   $('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#minValue').textContent=money(p.price*.25);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);
-  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview pack. Hard minimum card value: '+money(p.price*.25)+' (25% of pack price). Most pulls still come from filler/base pools; hits and grails are rarer.';
+  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview pack. Hard minimum card value: '+money(p.price*.25)+' (25% of pack price). Grails are capped at '+money(p.price*20)+' (20× pack price).';
   $('#pack').className='pack '+p.skin;$('#pack').innerHTML='<div class="crimp"></div><div class="packInner"><div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(idx+1).padStart(2,'0')+'</div></div><div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div><div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL TARGET</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div></div><div class="crimp"></div>';
   loadAndRender(idx);
 }
