@@ -303,13 +303,13 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
       <div class="walletBrand"><span class="stroke">VAULTDROP</span><span>STORE CREDIT</span></div>
       <div class="ey">AVAILABLE CREDIT</div>
       <strong id="walletBalance">$0.00</strong>
-      <div class="walletMeta"><span id="walletCurrency">USD</span><span id="walletUpdated">Not synced</span></div>
+      <div class="walletMeta"><span id="walletCurrency">USD</span><span id="walletUpdated">Not synced</span></div><div class="walletMeta" style="margin-top:10px"><span>PREVIEW CREDIT</span><strong id="walletPreviewBalance" style="font-size:12px">$0.00</strong></div>
     </div>
     <div class="walletFunding">
       <div class="ey">HOW IT WORKS</div><h3 class="stroke">Sell a card. Get full market value in credit.</h3>
       <p>Eligible paid-pack cards sell back for 100% of their current displayed VaultDrop market value. Credit is applied to future pack purchases before any remaining amount is charged.</p>
       <div class="accountState good">NON-WITHDRAWABLE · NON-TRANSFERABLE · NOT REDEEMABLE FOR CASH</div>
-      <div id="walletFundingState" class="walletFundingState">Preview pulls cannot create real credit. Paid-pack cards become credit-eligible automatically once paid mode is enabled.</div>
+      <div id="walletFundingState" class="walletFundingState">Preview cards can be sold back now and will add Preview Credit immediately. Preview Credit is for testing and will not reduce a real-money charge when paid mode goes live.</div>
       <div style="display:none" aria-hidden="true"><button data-fund="10"></button><button data-fund="25"></button><button data-fund="50"></button><button data-fund="100"></button><input id="fundAmount" value="25"><button id="fundWalletBtn"></button></div>
     </div>
   </div>
@@ -409,7 +409,7 @@ async function fetchPoolForGame(game,i){
     cache.set(key,data);persistPool(key,data);return data;
   }finally{clearTimeout(timer)}
 }
-let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login',walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0},transitItems=[];
+let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login',walletState={currency:'USD',balanceCents:0,previewBalanceCents:0,ledger:[],updatedAt:0},transitItems=[];
 const I18N={
 en:{navPack:'Pack Shop',navVault:'Vault',navTransit:'Transit',navWallet:'Credit',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
 es:{navPack:'Packs',navVault:'Bóveda',navTransit:'En tránsito',navWallet:'Crédito',navActivity:'Actividad',navProfile:'Perfil',homeTitle:'Elige un pack.<br>Persigue un grail.',shopTitle:'Abre un pack',vaultTitle:'La Bóveda',activityTitle:'Actividad',profileTitle:'Tu cuenta VaultDrop',ship:'ENVIARME',requested:'ENVÍO SOLICITADO',signIn:'INICIAR SESIÓN',create:'CREAR CUENTA',signOut:'CERRAR SESIÓN',saveProfile:'GUARDAR DIRECCIÓN',addressRequired:'Añade primero tu dirección de envío.'},
@@ -641,7 +641,7 @@ async function syncTransactions(){
     const r=await apiFetch('/api/transactions'),d=await r.json();if(!r.ok)return;
     for(const x of d.items||[]){
       if(state.activity.some(a=>a.cloudId===x.id||((a.title===x.title)&&Math.abs(Number(a.at||0)-Number(x.createdAt||0))<10000)))continue;
-      state.activity.push({cloudId:x.id,type:x.type==='purchase'?'fulfill':(x.type==='sellback_preview'?'sell':(x.type==='pack_open'?'open':(x.type==='vault'?'keep':'fulfill'))),title:x.title,detail:x.detail,at:x.createdAt});
+      state.activity.push({cloudId:x.id,type:x.type==='purchase'?'fulfill':((x.type==='sellback_preview'||x.type==='sellback_preview_credit'||x.type==='sellback_credit')?'sell':(x.type==='pack_open'?'open':(x.type==='vault'?'keep':'fulfill'))),title:x.title,detail:x.detail,at:x.createdAt});
     }
     state.activity.sort((a,b)=>a.at-b.at);if(state.activity.length>1000)state.activity=state.activity.slice(-1000);save();renderActivity();
   }catch{}
@@ -716,7 +716,7 @@ function renderVault(){
     const tr=Array.isArray(f?.tracking)?f.tracking:[],td=tr.find(x=>x?.shippingDetail)||null,sd=td?.shippingDetail||{};
     const trackText=sd.trackingNumber?('Tracking · '+sd.trackingNumber):(sd.shippingCarrierCode?('Carrier · '+sd.shippingCarrierCode):'');
     const eligible=Boolean(c.creditEligible),offer=Number(c.creditOfferCents||Math.round(Number(c.market||0)*100))/100;
-    const sellLabel=eligible?('<span class="creditMain">SELL FOR '+money(offer)+'</span><span class="creditSub">VAULTDROP CREDIT</span>'):('<span class="creditMain">CREDIT PREVIEW · '+money(Number(c.market||0))+'</span><span class="creditSub">PAID-PACK CARDS ONLY</span>');
+    const sellLabel=eligible?('<span class="creditMain">SELL BACK · '+money(offer)+'</span><span class="creditSub">VAULTDROP CREDIT</span>'):('<span class="creditMain">SELL BACK · '+money(offer)+'</span><span class="creditSub">PREVIEW CREDIT</span>');
     return '<article class="vCard"><div class="vArt"><img src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="vInfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.game==='onepiece'?'One Piece':'Pokémon')+' · '+esc(c.setName)+' · '+esc(c.rarity)+'</p><div class="vBot"><strong>'+money(c.market)+'</strong>'+(c.cloud?'<span class="cloudPill">CLOUD VAULT</span>':'<span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span>')+(eligible?'<span class="cloudPill">CREDIT ELIGIBLE</span>':'<span class="pill">PREVIEW CARD</span>')+(f?'<div class="fulfillTrack"><strong>EBAY FULFILLMENT · '+esc(status)+'</strong>'+(f.candidate?'<div>'+esc(f.candidate.title||'Card found')+' · '+money(f.candidate.total)+'</div>':'')+(trackText?'<div class="trackingLine">'+esc(trackText)+'</div>':'')+'</div>':'')+'<div class="vaultActions"><button class="shipBtn stroke '+(!currentUser?'needsProfile':'')+'" data-ship-index="'+i+'" '+(f?'disabled':'')+'>'+(f?t('requested'):t('ship'))+'</button><button class="sellVaultBtn stroke" data-sell-index="'+i+'" '+(f?'disabled':'')+'>'+sellLabel+'</button></div></div></div></article>';
   }).join('')||'<div class="empty">Your vault is empty. Rip a pack and keep a card.</div>';
 }
@@ -726,17 +726,16 @@ async function sellFromVault(i){
   const offer=Number(c.creditOfferCents||Math.round(Number(c.market||0)*100))/100;
   if(!authToken||!currentUser){goPage('profile');toast('Sign in before selling from your Vault.');return}
   if(!c.serverVaultId){const v=await claimVaultCard(c);if(!v)return}
-  if(!c.creditEligible){sfx('ui');toast('Preview card: '+money(offer)+' credit is a preview only. Paid-pack cards will be credit eligible.');return}
-  if(!window.confirm('Sell '+c.name+' for '+money(offer)+' VaultDrop Credit?\n\nThis removes the card from your Vault. Credit cannot be withdrawn or transferred.'))return;
   sfx('sell');
   try{
     const r=await apiFetch('/api/vault/'+encodeURIComponent(c.serverVaultId)+'/sellback',{method:'POST'}),d=await r.json();
     if(!r.ok)throw new Error(d.error||'Sell back failed');
-    if(d.status==='credited'){
+    if(d.status==='credited'||d.status==='preview_credited'){
       walletState=d.wallet||walletState;
-      state.activity.push({type:'sell',title:'Sold for VaultDrop Credit: '+c.name,detail:walletMoney(Number(d.offerCents||0))+' credit posted',at:Date.now()});
-      state.vault.splice(i,1);save();renderStats();renderVault();renderActivity();renderWallet();refreshPackQuote(PACKS[idx].price);sfx('success');toast(walletMoney(Number(d.offerCents||0))+' VaultDrop Credit added.');
-    }else toast(d.message||'This card is not eligible for real credit yet.');
+      const preview=Boolean(d.preview),label=preview?'Preview Credit':'VaultDrop Credit';
+      state.activity.push({type:'sell',title:'Sold for '+label+': '+c.name,detail:walletMoney(Number(d.offerCents||0))+' '+label+' posted',at:Date.now()});
+      state.vault.splice(i,1);save();renderStats();renderVault();renderActivity();renderWallet();refreshPackQuote(PACKS[idx].price);sfx('success');toast(walletMoney(Number(d.offerCents||0))+' '+label+' added.');
+    }else toast(d.message||'Sell back could not complete.');
   }catch(e){sfx('error');toast(String(e?.message||e))}
 }
 async function requestShip(i){
@@ -775,7 +774,7 @@ async function pollFulfillments(){
 
 function walletMoney(cents){return money(Number(cents||0)/100)}
 async function loadWallet(){
-  if(!authToken||!currentUser){walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0};renderWallet();return}
+  if(!authToken||!currentUser){walletState={currency:'USD',balanceCents:0,previewBalanceCents:0,ledger:[],updatedAt:0};renderWallet();return}
   try{
     const r=await apiFetch('/api/wallet'),d=await r.json();if(!r.ok)throw new Error(d.error||'Wallet unavailable');
     walletState=d.wallet||walletState;renderWallet();refreshPackQuote(PACKS[idx].price);
@@ -783,12 +782,13 @@ async function loadWallet(){
 }
 function renderWallet(){
   $('#walletBalance').textContent=walletMoney(walletState.balanceCents);
+  $('#walletPreviewBalance').textContent=walletMoney(walletState.previewBalanceCents);
   $('#walletCurrency').textContent=walletState.currency||'USD';
   $('#walletUpdated').textContent=walletState.updatedAt?('Updated '+new Date(walletState.updatedAt).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})):'Not synced';
   const rows=Array.isArray(walletState.ledger)?walletState.ledger:[];
   $('#walletActivity').innerHTML=rows.length?rows.map(x=>{
     const credit=Number(x.amountCents||0)>=0;
-    return '<div class="walletRow"><div class="walletRowIcon">'+(credit?'＋':'−')+'</div><div><strong class="stroke">'+esc(x.title||'Wallet activity')+'</strong><p>'+esc(x.detail||x.status||'')+' · '+new Date(x.createdAt||Date.now()).toLocaleString()+'</p></div><div class="walletAmount '+(credit?'credit':'')+'">'+(credit?'+':'−')+walletMoney(Math.abs(Number(x.amountCents||0)))+'</div></div>';
+    return '<div class="walletRow"><div class="walletRowIcon">'+(credit?'＋':'−')+'</div><div><strong class="stroke">'+esc(x.title||'Wallet activity')+'</strong><p>'+esc((x.preview?'PREVIEW · ':'')+(x.detail||x.status||''))+' · '+new Date(x.createdAt||Date.now()).toLocaleString()+'</p></div><div class="walletAmount '+(credit?'credit':'')+'">'+(credit?'+':'−')+walletMoney(Math.abs(Number(x.amountCents||0)))+'</div></div>';
   }).join(''):'<div class="walletEmpty">'+(authToken?'No VaultDrop Credit activity yet.':'Sign in to view your VaultDrop Credit.')+'</div>';
   $('#fundWalletBtn').disabled=!authToken;
 }
