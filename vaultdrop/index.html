@@ -487,11 +487,22 @@ async function saveDeliveryProfile(){
 async function logout(){
   try{await apiFetch('/api/auth/logout',{method:'POST'})}catch{}authToken='';currentUser=null;localStorage.removeItem('vd_auth_token');renderAccount();toast('Signed out.');
 }
-function settle(a){
-  if(!pending)return;const p=pending.p,c=pending.c;
-  if(a==='sell'){state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market*.72)+' preview offer',at:Date.now()});recordEvent('sellback_preview','Sell-back preview: '+c.name,money(c.market*.72)+' preview offer',c.market)}
-  else{const item={...c,vaultId:crypto.randomUUID(),fulfillment:null,action:a,pack:p.name,game:pending.game};state.vault.push(item);state.activity.push({type:a,title:(a==='keep'?'Kept ':'Fulfillment requested: ')+c.name,detail:(pending.game==='onepiece'?'One Piece':'Pokémon')+' · '+p.name+' · '+pending.bucket.toUpperCase()+' · '+money(c.market),at:Date.now()});claimVaultCard(item)}
-  save();renderStats();renderVault();renderActivity();closeReveal();toast(a==='sell'?'Sell-back preview recorded.':'Card added to vault.');
+async function settle(a){
+  if(!pending)return;const p=pending.p,c=pending.c,game=pending.game,bucket=pending.bucket;
+  if(a==='sell'){
+    state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market*.72)+' preview offer',at:Date.now()});
+    recordEvent('sellback_preview','Sell-back preview: '+c.name,money(c.market*.72)+' preview offer',c.market);
+    save();renderStats();renderVault();renderActivity();closeReveal();toast('Sell-back preview recorded.');return;
+  }
+  const item={...c,vaultId:crypto.randomUUID(),fulfillment:null,action:a,pack:p.name,game};
+  state.vault.push(item);const localIndex=state.vault.length-1;
+  state.activity.push({type:a,title:(a==='keep'?'Kept ':'Fulfillment requested: ')+c.name,detail:(game==='onepiece'?'One Piece':'Pokémon')+' · '+p.name+' · '+bucket.toUpperCase()+' · '+money(c.market),at:Date.now()});
+  save();renderStats();renderVault();renderActivity();closeReveal();
+  const claimed=await claimVaultCard(item);
+  if(a==='fulfill'){
+    if(!authToken||!currentUser){goPage('profile');toast('Card saved. Sign in and add a shipping address to fulfill it.');return}
+    if(claimed)await requestShip(localIndex);else toast('Card saved; cloud sync must finish before shipping.');
+  }else toast('Card added to vault.');
 }
 function renderVault(){
   const rows=state.vault.map((c,i)=>({c,i})).reverse();
