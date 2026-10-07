@@ -265,7 +265,32 @@ let language=localStorage.vd_language||((navigator.language||'en').startsWith('z
 const money=n=>new Intl.NumberFormat(LOCALES[language]||'en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(n||0));
 const esc=s=>String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const img=(c,size='high')=>c&&c.image?(c.imageMode==='direct'?c.image:c.image+'/'+size+'.webp'):'';
-let idx=0,pending=null,currentGame='pokemon',revealTimer=null,renderSeq=0,installPrompt=null;const cache=new Map(),lastGoodPools=new Map();document.body.dataset.game=currentGame;
+let idx=0,pending=null,currentGame='pokemon',revealTimer=null,renderSeq=0,installPrompt=null;const cache=new Map(),lastGoodPools=new Map(),preloadedGames=new Set();document.body.dataset.game=currentGame;
+const POOL_CACHE_KEY='vd_pool_cache_v1',POOL_CACHE_MAX_AGE=24*60*60*1000;
+let persistedPools=(()=>{try{return JSON.parse(localStorage.getItem(POOL_CACHE_KEY)||'{}')}catch{return {}}})();
+for(const [k,v] of Object.entries(persistedPools)){if(v&&Date.now()-Number(v.at||0)<POOL_CACHE_MAX_AGE&&v.data)cache.set(k,v.data)}
+function persistPool(key,data){
+  try{
+    persistedPools[key]={at:Date.now(),data};
+    const entries=Object.entries(persistedPools).sort((a,b)=>Number(b[1]?.at||0)-Number(a[1]?.at||0)).slice(0,18);
+    persistedPools=Object.fromEntries(entries);localStorage.setItem(POOL_CACHE_KEY,JSON.stringify(persistedPools));
+  }catch{}
+}
+function preloadCurrentGame(){
+  if(preloadedGames.has(currentGame))return;preloadedGames.add(currentGame);
+  const game=currentGame,runner=async()=>{for(let i=0;i<PACKS.length;i++){if(game!==currentGame&&cache.has(game+':'+i))continue;try{await fetchPoolForGame(game,i)}catch{}await new Promise(r=>setTimeout(r,120))}};
+  if('requestIdleCallback'in window)requestIdleCallback(()=>runner(),{timeout:1500});else setTimeout(runner,600);
+}
+async function fetchPoolForGame(game,i){
+  const key=game+':'+i;if(cache.has(key))return cache.get(key);
+  const p=PACKS[i],controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
+  try{
+    const r=await fetch(API+'/api/pool?game='+encodeURIComponent(game)+'&price='+encodeURIComponent(p.price),{signal:controller.signal});
+    if(!r.ok)throw new Error('Card feed '+r.status);const data=await r.json();
+    if(!data||!Array.isArray(data.cards)||!data.cards.length)throw new Error('No cards returned');
+    cache.set(key,data);persistPool(key,data);return data;
+  }finally{clearTimeout(timer)}
+}
 let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login';
 const I18N={
 en:{navPack:'Pack Shop',navVault:'Vault',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
@@ -357,15 +382,11 @@ function cardKey(c){return String(c?.sourceCardId||c?.id||((c?.name||'')+'|'+(c?
 function uniqueGrails(cards){const seen=new Set(),out=[];for(const c of(cards||[])){const k=cardKey(c);if(!k||seen.has(k))continue;seen.add(k);out.push(c)}return out}
 function fallbackImg(c){return !c?.image?'':(c.imageMode==='direct'?c.image:c.image+'/low.webp')}
 async function fetchPool(i,force=false){
-  const key=currentGame+':'+i;if(cache.has(key)&&!force)return cache.get(key);
-  const p=PACKS[i],controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
-  try{
-    const r=await fetch(API+'/api/pool?game='+encodeURIComponent(currentGame)+'&price='+encodeURIComponent(p.price),{signal:controller.signal});
-    if(!r.ok)throw new Error('Card feed '+r.status);
-    const data=await r.json();
-    if(!data||!Array.isArray(data.cards)||!data.cards.length)throw new Error('No cards returned');
-    cache.set(key,data);setFeed(true,(currentGame==='onepiece'?'ONE PIECE':'POKÉMON')+' FEED ONLINE');return data;
-  }finally{clearTimeout(timer)}
+  const game=currentGame,key=game+':'+i;if(cache.has(key)&&!force){setFeed(true,(game==='onepiece'?'ONE PIECE':'POKÉMON')+' FEED READY');return cache.get(key)}
+  if(force){cache.delete(key);delete persistedPools[key];try{localStorage.setItem(POOL_CACHE_KEY,JSON.stringify(persistedPools))}catch{}}
+  const data=await fetchPoolForGame(game,i);
+  setFeed(true,(game==='onepiece'?'ONE PIECE':'POKÉMON')+' FEED ONLINE');
+  return data;
 }
 function renderStats(){
   const v=state.vault.reduce((s,c)=>s+Number(c.market||0),0);
@@ -398,7 +419,7 @@ async function loadAndRender(i,force=false){
       note.textContent=data.unavailableReason||'No verified raw grail is currently available in the 10×–20× band.';
       cards.innerHTML='<div class="empty"><strong>No verified grail available right now.</strong></div>';open.disabled=true;open.textContent='TIER TEMPORARILY UNAVAILABLE';return;
     }
-    lastGoodPools.set(key,{data,grails});
+    lastGoodPools.set(key,{data,grails});preloadCurrentGame();
     note.textContent=grails.length+' unique verified raw grail'+(grails.length===1?'':'s')+' · 10×–20× band';
     open.disabled=false;open.textContent='RIP THIS PACK';
     cards.innerHTML='<section class="bucketSection"><div class="bucketTitle"><h4 class="stroke">Grail · '+Math.round((b.grail?.odds||0)*100)+'%</h4><span>'+grails.length+' unique grail'+(grails.length===1?'':'s')+'</span></div><div class="bucketCards">'+grails.map((c,k)=>'<article class="card" data-k="'+k+'"><div class="art"><div class="bucketTag">GRAIL</div><div class="price stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" data-fallback="'+esc(fallbackImg(c))+'" alt="'+esc(c.name)+'"></div><div class="cardInfo"><span class="cardTitle stroke">'+esc(c.name)+'</span><span class="cardSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+' · '+Number(c.packMultiple||0).toFixed(2)+'× pack</span></div></article>').join('')+'</div></section>';
