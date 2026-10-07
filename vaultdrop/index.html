@@ -216,8 +216,8 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
   <section class="frame shop">
     <div class="shopHead"><div><div class="ey">PACK SHOP</div><h2 id="shopTitle" class="stroke">Open a pack</h2><p>Choose a game, then a tier. Odds are shown before every preview opening.</p></div><div class="shopTools"><div class="gameSwitch"><button class="gameBtn active" data-game="pokemon">Pokémon</button><button class="gameBtn" data-game="onepiece">One Piece</button></div><div class="counter stroke" id="counter">01 / 09</div></div></div>
     <div class="stage"><button class="arrow" id="prev">‹</button><div class="stageCore"><div class="neighbor stroke" id="prevLabel"></div><div id="pack" class="pack bronze"></div><div class="neighbor stroke" id="nextLabel"></div></div><button class="arrow" id="next">›</button></div>
-    <div class="summary"><div class="sLeft"><div class="ey">CURRENT TIER</div><h3 class="stroke" id="tierName"></h3><p id="tierCopy"></p></div><div class="sRight"><div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div><div class="fact"><span>MIN CARD VALUE</span><strong id="minValue"></strong></div><div class="fact"><span>GRAIL TARGET</span><strong id="tierRange"></strong></div><button id="openPack" class="rip stroke" disabled>LOADING CARDS…</button></div></div>
-    <div class="previewBanner" id="previewBanner">PREVIEW MODE · Live paid randomized checkout is intentionally disabled while store/legal review is pending. The card feed, pulls, Vault and fulfillment workflow can be tested now.</div><div class="oddsWrap"><div class="ey">PREVIEW ODDS</div><div class="oddsGrid"><div class="oddsBox filler"><span>FILLER</span><strong>72%</strong><small id="fillerRange">—</small></div><div class="oddsBox base"><span>BASE</span><strong>20%</strong><small id="baseRange">—</small></div><div class="oddsBox hit"><span>HIT</span><strong>7%</strong><small id="hitRange">—</small></div><div class="oddsBox grail"><span>GRAIL</span><strong>1%</strong><small id="grailRange">—</small></div></div></div><div class="poolHead"><div><div class="ey">GRAIL SHOWCASE</div><h3 class="stroke">Grails in this pack</h3></div><div class="poolNote" id="poolNote">Connecting…</div></div>
+    <div class="summary"><div class="sLeft"><div class="ey">CURRENT TIER</div><h3 class="stroke" id="tierName"></h3><p id="tierCopy"></p></div><div class="sRight"><div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div><div class="fact"><span>MIN CARD VALUE</span><strong id="minValue"></strong></div><div class="fact"><span>GRAIL TARGET</span><strong id="tierRange"></strong></div><div class="fact"><span>CREDIT / CASH DUE</span><strong id="checkoutQuote">—</strong></div><button id="openPack" class="rip stroke" disabled>LOADING CARDS…</button></div></div>
+    <div class="previewBanner" id="previewBanner">PREVIEW MODE · Store-credit plumbing is live for eligible paid-pack cards, but real-money pack checkout remains held until payment/legal approval. Preview pulls cannot mint real credit.</div><div class="oddsWrap"><div class="ey">PREVIEW ODDS</div><div class="oddsGrid"><div class="oddsBox filler"><span>FILLER</span><strong>72%</strong><small id="fillerRange">—</small></div><div class="oddsBox base"><span>BASE</span><strong>20%</strong><small id="baseRange">—</small></div><div class="oddsBox hit"><span>HIT</span><strong>7%</strong><small id="hitRange">—</small></div><div class="oddsBox grail"><span>GRAIL</span><strong>1%</strong><small id="grailRange">—</small></div></div></div><div class="poolHead"><div><div class="ey">GRAIL SHOWCASE</div><h3 class="stroke">Grails in this pack</h3></div><div class="poolNote" id="poolNote">Connecting…</div></div>
     <div id="cards" class="cards"></div>
   </section>
 </section>
@@ -448,7 +448,16 @@ function renderPack(){
   $('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#minValue').textContent=money(p.price*.25);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);
   $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview pack. Hard minimum card value: '+money(p.price*.25)+'. Verified grails must fall between 10× and 20×, targeting about 19.5×.';
   $('#pack').className='pack '+p.skin;$('#pack').innerHTML='<div class="crimp"></div><div class="packInner"><div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(idx+1).padStart(2,'0')+'</div></div><div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div><div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL TARGET</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div></div><div class="crimp"></div>';
-  loadAndRender(idx);
+  loadAndRender(idx);refreshPackQuote(p.price);
+}
+async function refreshPackQuote(price){
+  const el=$('#checkoutQuote');if(!el)return;
+  if(!authToken){el.textContent='SIGN IN';return}
+  try{
+    const r=await apiFetch('/api/purchases/quote',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({price})}),d=await r.json();
+    if(!r.ok)throw new Error();
+    el.textContent=walletMoney(d.creditAppliedCents)+' / '+walletMoney(d.cashDueCents);
+  }catch{el.textContent='—'}
 }
 async function loadAndRender(i,force=false){
   const cards=$('#cards'),note=$('#poolNote'),open=$('#openPack'),p=PACKS[i];
@@ -657,7 +666,7 @@ async function sellFromVault(i){
     if(d.status==='credited'){
       walletState=d.wallet||walletState;
       state.activity.push({type:'sell',title:'Sold for VaultDrop Credit: '+c.name,detail:walletMoney(Number(d.offerCents||0))+' credit posted',at:Date.now()});
-      state.vault.splice(i,1);save();renderStats();renderVault();renderActivity();renderWallet();sfx('success');toast(walletMoney(Number(d.offerCents||0))+' VaultDrop Credit added.');
+      state.vault.splice(i,1);save();renderStats();renderVault();renderActivity();renderWallet();refreshPackQuote(PACKS[idx].price);sfx('success');toast(walletMoney(Number(d.offerCents||0))+' VaultDrop Credit added.');
     }else toast(d.message||'This card is not eligible for real credit yet.');
   }catch(e){sfx('error');toast(String(e?.message||e))}
 }
@@ -700,7 +709,7 @@ async function loadWallet(){
   if(!authToken||!currentUser){walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0};renderWallet();return}
   try{
     const r=await apiFetch('/api/wallet'),d=await r.json();if(!r.ok)throw new Error(d.error||'Wallet unavailable');
-    walletState=d.wallet||walletState;renderWallet();
+    walletState=d.wallet||walletState;renderWallet();refreshPackQuote(PACKS[idx].price);
   }catch(e){$('#walletFundingState').textContent=String(e?.message||e);$('#walletFundingState').className='walletFundingState warn'}
 }
 function renderWallet(){
