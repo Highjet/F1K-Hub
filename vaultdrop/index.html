@@ -230,7 +230,7 @@ main{padding:0 12px 70px}.hero h1{font-size:42px}.shop{padding:16px 12px}
         <button id="authSubmit" class="accountBtn">SIGN IN</button>
       </div>
       <button id="logoutBtn" class="accountBtn secondary" style="display:none">SIGN OUT</button>
-      <div class="installRow" style="margin-top:14px"><button id="installBtn" class="accountBtn secondary" style="display:none;width:auto;padding:0 14px">INSTALL VAULTDROP</button><button id="notifyBtn" class="accountBtn secondary" style="width:auto;padding:0 14px">ENABLE NOTIFICATIONS</button><span id="installStatus" class="miniStatus"></span></div>
+      <div class="installRow" style="margin-top:14px"><button id="installBtn" class="accountBtn secondary" style="display:none;width:auto;padding:0 14px">INSTALL VAULTDROP</button><button id="notifyBtn" class="accountBtn secondary" style="width:auto;padding:0 14px">ENABLE NOTIFICATIONS</button><span id="installStatus" class="miniStatus"></span></div><div id="ebayState" class="accountState" style="margin-top:12px">Checking eBay fulfillment engine…</div>
     </div>
     <div class="accountCard">
       <div class="ey">FULFILLMENT PROFILE</div><h3 id="shippingHeading">Shipping address</h3><p>Your delivery profile is encrypted at rest on the VaultDrop backend and is used only when you request a physical card shipment.</p>
@@ -439,6 +439,14 @@ async function syncTransactions(){
     }
     state.activity.sort((a,b)=>a.at-b.at);if(state.activity.length>1000)state.activity=state.activity.slice(-1000);save();renderActivity();
   }catch{}
+}
+async function loadEbayState(){
+  try{
+    const r=await fetch(API+'/api/ebay/status'),d=await r.json();
+    const bits=[d.browseConnected?'SEARCH CONNECTED':'SEARCH OFFLINE',d.memberCheckoutConnected?'USER OAUTH CONNECTED':'USER OAUTH OFFLINE',String(d.environment||'sandbox').toUpperCase()];
+    $('#ebayState').textContent=bits.join(' · ')+' · Checkout activates when eBay Order API access permits it.';
+    $('#ebayState').classList.toggle('good',Boolean(d.browseConnected&&d.memberCheckoutConnected));
+  }catch{$('#ebayState').textContent='eBay fulfillment status unavailable.'}
 }
 async function loadAccount(){
   if(!authToken){currentUser=null;renderAccount();return}
