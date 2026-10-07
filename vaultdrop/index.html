@@ -41,7 +41,7 @@ main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.a
     <div class="shopHead"><div><div class="ey">PACK SHOP</div><h2 class="stroke">Open a pack</h2><p>Choose a game, then a tier. Odds are shown before every preview opening.</p></div><div class="shopTools"><div class="gameSwitch"><button class="gameBtn active" data-game="pokemon">Pokémon</button><button class="gameBtn" data-game="onepiece">One Piece</button></div><div class="counter stroke" id="counter">01 / 12</div></div></div>
     <div class="stage"><button class="arrow" id="prev">‹</button><div class="stageCore"><div class="neighbor stroke" id="prevLabel"></div><div id="pack" class="pack bronze"></div><div class="neighbor stroke" id="nextLabel"></div></div><button class="arrow" id="next">›</button></div>
     <div class="summary"><div class="sLeft"><div class="ey">CURRENT TIER</div><h3 class="stroke" id="tierName"></h3><p id="tierCopy"></p></div><div class="sRight"><div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div><div class="fact"><span>GRAIL TARGET</span><strong id="tierRange"></strong></div><button id="openPack" class="rip stroke" disabled>LOADING CARDS…</button></div></div>
-    <div class="oddsWrap"><div class="ey">PREVIEW ODDS</div><div class="oddsGrid"><div class="oddsBox filler"><span>FILLER</span><strong>72%</strong><small id="fillerRange">—</small></div><div class="oddsBox base"><span>BASE</span><strong>20%</strong><small id="baseRange">—</small></div><div class="oddsBox hit"><span>HIT</span><strong>7%</strong><small id="hitRange">—</small></div><div class="oddsBox grail"><span>GRAIL</span><strong>1%</strong><small id="grailRange">—</small></div></div></div><div class="poolHead"><div><div class="ey">FULL LOADED POOL</div><h3 class="stroke">Cards in this pack</h3></div><div class="poolNote" id="poolNote">Connecting…</div></div>
+    <div class="oddsWrap"><div class="ey">PREVIEW ODDS</div><div class="oddsGrid"><div class="oddsBox filler"><span>FILLER</span><strong>72%</strong><small id="fillerRange">—</small></div><div class="oddsBox base"><span>BASE</span><strong>20%</strong><small id="baseRange">—</small></div><div class="oddsBox hit"><span>HIT</span><strong>7%</strong><small id="hitRange">—</small></div><div class="oddsBox grail"><span>GRAIL</span><strong>1%</strong><small id="grailRange">—</small></div></div></div><div class="poolHead"><div><div class="ey">FEATURED CHASES</div><h3 class="stroke">Hits & grails in this pack</h3></div><div class="poolNote" id="poolNote">Connecting…</div></div>
     <div id="cards" class="cards"></div>
   </section>
   <section class="frame daily"><div><div class="ey">FREE DAILY</div><h3 class="stroke">Daily Drop</h3><p>One free preview pull every 24 hours.</p></div><div><button id="dailyBtn" class="stroke">CLAIM FREE DROP</button><div class="cool" id="cooldown">Ready now</div></div></section>
@@ -94,7 +94,7 @@ function renderPack(){
 }
 async function loadAndRender(i,force=false){
   const cards=$('#cards'),note=$('#poolNote'),open=$('#openPack'),p=PACKS[i];
-  cards.innerHTML='<div class="empty">Loading '+esc(p.name)+' '+(currentGame==='onepiece'?'One Piece':'Pokémon')+' pool from the server…</div>';
+  cards.innerHTML='<div class="empty">Loading '+esc(p.name)+' hit and grail cards…</div>';
   note.textContent='Loading…';open.disabled=true;open.textContent='LOADING CARDS…';
   try{
     const data=await fetchPool(i,force);if(i!==idx)return;
@@ -103,10 +103,11 @@ async function loadAndRender(i,force=false){
     $('#baseRange').textContent=money(b.base?.range?.min)+' – '+money(b.base?.range?.max);
     $('#hitRange').textContent=money(b.hit?.range?.min)+' – '+money(b.hit?.range?.max);
     $('#grailRange').textContent=money(b.grail?.range?.min)+' – '+money(b.grail?.range?.max);
-    const total=['filler','base','hit','grail'].reduce((n,k)=>n+(b[k]?.cards?.length||0),0);
-    note.textContent=total+' cards loaded · transparent preview distribution';
+    const hidden=(b.filler?.cards?.length||0)+(b.base?.cards?.length||0);
+    const shown=(b.hit?.cards?.length||0)+(b.grail?.cards?.length||0);
+    note.textContent=shown+' chase cards shown · '+hidden+' filler/base cards remain in opening pool';
     open.disabled=false;open.textContent='RIP THIS PACK';
-    const order=['filler','base','hit','grail'];
+    const order=['hit','grail'];
     cards.innerHTML=order.map(key=>{
       const x=b[key];if(!x||!x.cards?.length)return '';
       const fallback=x.fallback?' · nearest available values':'';
