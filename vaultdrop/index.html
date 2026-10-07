@@ -13,6 +13,9 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
 body[data-game="pokemon"]::before{background-image:url("./pokemon-bg.jpg")}
 body[data-game="onepiece"]::before{background-image:url("./onepiece-bg.jpg")}
 @supports not (height:100dvh){body::before{background-size:auto 100vh}}
+@media(max-width:650px){
+  @supports not (height:100dvh){body::before{width:56.25vh;height:100vh;background-size:cover}}
+}
 header,main{position:relative;z-index:1}
 button{font:inherit}.stroke{-webkit-text-stroke:.35px rgba(255,255,255,.12);text-shadow:0 1px 0 rgba(0,0,0,.4)}
 header{height:68px;position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--line);background:rgba(7,8,11,.88);backdrop-filter:blur(18px)}
@@ -37,6 +40,18 @@ main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.a
 .sourceLink{display:inline-block;margin-top:8px;color:#aeb7ff;font-size:9px;font-weight:900;letter-spacing:.12em;text-decoration:none}.sourceLink:hover{text-decoration:underline}
 @media(max-width:1000px){.summary{grid-template-columns:1fr}.cards,.vault{grid-template-columns:repeat(2,1fr)}.stageCore{grid-template-columns:1fr}.neighbor{display:none}.stats{display:none}.result,.detail{grid-template-columns:1fr}}
 @media(max-width:650px){
+body::before{
+  inset:auto;
+  top:0;
+  left:50%;
+  width:56.25dvh;
+  height:100dvh;
+  aspect-ratio:9/16;
+  transform:translateX(-50%);
+  background-size:cover;
+  background-position:center center;
+}
+
 .shopTools{width:100%;justify-content:space-between;align-items:center}
 .oddsGrid{grid-template-columns:1fr 1fr}.bucketCards{grid-template-columns:1fr 1fr}.gameSwitch{order:1}.counter{order:2}
 main{padding:0 12px 70px}.hero h1{font-size:42px}.shop{padding:16px 12px}
