@@ -121,6 +121,49 @@ main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.a
 @keyframes cardHitStrong{0%{transform:translateY(70px) scale(.6) rotate(-4deg);opacity:0}55%{transform:translateY(-14px) scale(1.13) rotate(2deg)}76%{transform:translateY(3px) scale(.97)}100%{transform:none;opacity:1}}
 @keyframes cardGrailStrong{0%{transform:scale(.38) rotateY(65deg) rotateZ(-5deg);opacity:0}45%{transform:scale(1.18) rotateY(-10deg) rotateZ(2deg)}64%{transform:scale(.92) rotateY(4deg)}82%{transform:scale(1.06) rotateY(-2deg)}100%{transform:scale(1) rotateY(0) rotateZ(0);opacity:1}}
 
+
+/* Reveal keeps the exact pack-tier identity while rarity controls intensity */
+.overlay{
+  --tierAccent:#ffffff;
+  --tierGlow:rgba(255,255,255,.42);
+  --tierGlowStrong:rgba(255,255,255,.85);
+  --tierFlash:rgba(255,255,255,.78);
+  --tierDeep:#171a22;
+}
+.overlay.theme-bronze{--tierAccent:#d58b56;--tierGlow:rgba(213,139,86,.52);--tierGlowStrong:rgba(213,139,86,.98);--tierFlash:rgba(255,208,166,.92);--tierDeep:#25160f}
+.overlay.theme-silver{--tierAccent:#e7ecf7;--tierGlow:rgba(224,231,244,.56);--tierGlowStrong:rgba(241,245,255,.98);--tierFlash:rgba(255,255,255,.98);--tierDeep:#252a32}
+.overlay.theme-gold{--tierAccent:#ffd85b;--tierGlow:rgba(255,216,91,.56);--tierGlowStrong:rgba(255,216,91,.98);--tierFlash:rgba(255,246,191,.98);--tierDeep:#372908}
+.overlay.theme-platinum{--tierAccent:#c2f7ff;--tierGlow:rgba(194,247,255,.58);--tierGlowStrong:rgba(194,247,255,.98);--tierFlash:rgba(242,254,255,.98);--tierDeep:#1c2e34}
+.overlay.theme-diamond{--tierAccent:#7ee8ff;--tierGlow:rgba(126,232,255,.58);--tierGlowStrong:rgba(126,232,255,.98);--tierFlash:rgba(225,251,255,.98);--tierDeep:#0b2b3a}
+.overlay.theme-elite{--tierAccent:#ff6d96;--tierGlow:rgba(255,109,150,.58);--tierGlowStrong:rgba(255,109,150,.98);--tierFlash:rgba(255,218,229,.98);--tierDeep:#2b0f1c}
+.overlay.theme-astral{--tierAccent:#a182ff;--tierGlow:rgba(161,130,255,.6);--tierGlowStrong:rgba(161,130,255,.98);--tierFlash:rgba(230,219,255,.98);--tierDeep:#1d1235}
+.overlay.theme-mythic{--tierAccent:#ff80ea;--tierGlow:rgba(255,128,234,.6);--tierGlowStrong:rgba(255,128,234,.98);--tierFlash:rgba(255,220,250,.98);--tierDeep:#2b1128}
+.overlay.theme-celestial{--tierAccent:#7ef5ff;--tierGlow:rgba(126,245,255,.62);--tierGlowStrong:rgba(126,245,255,.99);--tierFlash:rgba(231,254,255,.99);--tierDeep:#103139}
+
+.overlay.theme-bronze .rPack{background:radial-gradient(circle at 50% 13%,rgba(213,139,86,.42),transparent 34%),linear-gradient(135deg,#25160f,#60351d 40%,#170f0b 70%,#0c0d10)}
+.overlay.theme-silver .rPack{background:radial-gradient(circle at 50% 13%,rgba(241,245,255,.40),transparent 31%),linear-gradient(135deg,#252a32,#a2aab8 38%,#262b33 58%,#0d0f13)}
+.overlay.theme-gold .rPack{background:radial-gradient(circle at 50% 13%,rgba(255,216,91,.44),transparent 34%),linear-gradient(135deg,#372908,#b98d20 40%,#251907 64%,#0b0c10)}
+.overlay.theme-platinum .rPack{background:radial-gradient(circle at 50% 13%,rgba(194,247,255,.42),transparent 34%),linear-gradient(135deg,#1c2e34,#95bac4 38%,#1d272e 62%,#0a0d11)}
+.overlay.theme-diamond .rPack{background:radial-gradient(circle at 50% 13%,rgba(126,232,255,.42),transparent 33%),linear-gradient(135deg,#0b2b3a,#2e80a3 38%,#11212b 64%,#090b11)}
+.overlay.theme-elite .rPack{background:radial-gradient(circle at 50% 13%,rgba(255,109,150,.39),transparent 33%),linear-gradient(135deg,#2b0f1c,#8c2649 39%,#1f1018 63%,#09090f)}
+.overlay.theme-astral .rPack{background:radial-gradient(circle at 50% 13%,rgba(161,130,255,.44),transparent 34%),radial-gradient(circle at 23% 76%,rgba(88,65,205,.25),transparent 28%),linear-gradient(135deg,#1d1235,#4d357f 41%,#130f1f 70%,#09090f)}
+.overlay.theme-mythic .rPack{background:radial-gradient(circle at 50% 13%,rgba(255,128,234,.42),transparent 34%),linear-gradient(135deg,#2b1128,#662160 41%,#180f18 68%,#09090f)}
+.overlay.theme-celestial .rPack{background:radial-gradient(circle at 50% 13%,rgba(126,245,255,.42),transparent 34%),linear-gradient(135deg,#103139,#196372 41%,#102129 68%,#090b10)}
+
+.overlay.waiting .rPack{border-color:var(--tierAccent);box-shadow:0 0 30px var(--tierGlow),0 0 70px rgba(0,0,0,.5)}
+.overlay.waiting .revealProgress i{background:linear-gradient(90deg,var(--tierAccent),var(--tierFlash))}
+.overlay.resultMode .reveal{border-color:var(--tierAccent)}
+.overlay.resultMode.fx-filler .reveal{box-shadow:0 34px 90px rgba(0,0,0,.55),0 0 48px var(--tierGlow)!important}
+.overlay.resultMode.fx-base .reveal{box-shadow:0 34px 100px rgba(0,0,0,.55),0 0 56px var(--tierGlowStrong),0 0 112px var(--tierGlow)!important}
+.overlay.resultMode.fx-hit .reveal{box-shadow:0 34px 110px rgba(0,0,0,.62),0 0 68px var(--tierGlowStrong),0 0 150px var(--tierGlow)!important}
+.overlay.resultMode.fx-grail .reveal{box-shadow:0 34px 120px rgba(0,0,0,.66),0 0 78px var(--tierGlowStrong),0 0 180px var(--tierGlow),0 0 235px var(--tierGlow)!important}
+.overlay.resultMode.fx-base .reveal::before{background:radial-gradient(circle at 50% 45%,var(--tierFlash),var(--tierGlow) 31%,transparent 70%)!important}
+.overlay.resultMode.fx-hit .reveal::before{background:repeating-conic-gradient(from 0deg,var(--tierFlash) 0deg 3deg,transparent 3deg 18deg),radial-gradient(circle,var(--tierFlash),var(--tierGlowStrong) 34%,transparent 68%)!important}
+.overlay.resultMode.fx-grail .reveal::before{background:repeating-conic-gradient(from 0deg,var(--tierFlash) 0deg 2deg,transparent 2deg 14deg),conic-gradient(from 0deg,var(--tierAccent),var(--tierFlash),var(--tierAccent),var(--tierGlowStrong),var(--tierAccent))!important}
+.overlay.resultMode.fx-grail .reveal::after{background:radial-gradient(circle at 50% 42%,var(--tierFlash),var(--tierGlowStrong) 22%,var(--tierGlow) 45%,transparent 70%)!important}
+.overlay.resultMode.fx-hit #resultImg{filter:drop-shadow(0 0 28px var(--tierGlowStrong))!important}
+.overlay.resultMode.fx-grail #resultImg{filter:drop-shadow(0 0 28px var(--tierFlash)) drop-shadow(0 0 56px var(--tierGlowStrong))!important}
+
 .sourceLink{display:inline-block;margin-top:8px;color:#aeb7ff;font-size:9px;font-weight:900;letter-spacing:.12em;text-decoration:none}.sourceLink:hover{text-decoration:underline}
 @media(max-width:1000px){.summary{grid-template-columns:1fr}.cards,.vault{grid-template-columns:repeat(2,1fr)}.stageCore{grid-template-columns:1fr}.neighbor{display:none}.stats{display:none}.result,.detail{grid-template-columns:1fr}}
 @media(max-width:650px){
@@ -277,7 +320,10 @@ async function openPack(i){
     pending={p,c,bucket,game:currentGame};
     $('#revealPackName').textContent=p.name.toUpperCase();$('#resultImg').src=img(c);$('#resultSet').textContent=(currentGame==='onepiece'?'ONE PIECE · ':'POKÉMON · ')+c.setName+' · '+c.rarity;
     $('#resultName').textContent=c.name;$('#resultMarket').textContent=bucket.toUpperCase()+' · Market '+money(c.market);$('#sellVal').textContent=money(c.market*.72);
-    $('#revealHint').textContent='TAP TO START';$('#revealCountdown').textContent='';$('#overlay').classList.add('open');$('#overlay').classList.remove('resultMode','waiting','fx-filler','fx-base','fx-hit','fx-grail');
+    $('#revealHint').textContent='TAP TO START';$('#revealCountdown').textContent='';
+    const revealOverlay=$('#overlay');
+    revealOverlay.classList.remove('resultMode','waiting','fx-filler','fx-base','fx-hit','fx-grail','theme-bronze','theme-silver','theme-gold','theme-platinum','theme-diamond','theme-elite','theme-astral','theme-mythic','theme-celestial');
+    revealOverlay.classList.add('open','theme-'+p.skin);
     if(revealTimer){clearTimeout(revealTimer);revealTimer=null}
     state.opened++;state.activity.push({type:'open',title:'Opened '+p.name+' '+(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview',detail:'Result pending · disclosed '+Math.round((data.odds?.[bucket]||0)*100)+'% '+bucket+' bucket',at:Date.now()});
     save();renderStats();renderActivity();
@@ -310,7 +356,7 @@ function renderActivity(){
   const icons={open:'✦',keep:'✓',fulfill:'↗',sell:'$'};
   $('#activityList').innerHTML=state.activity.slice().reverse().map(x=>'<div class="aItem"><div class="aIcon">'+(icons[x.type]||'•')+'</div><div><strong class="stroke">'+esc(x.title)+'</strong><p>'+esc(x.detail)+'</p></div><time>'+new Date(x.at).toLocaleString()+'</time></div>').join('')||'<div class="empty">No activity yet.</div>';
 }
-function closeReveal(){if(revealTimer){clearInterval(revealTimer);revealTimer=null}$('#revealCountdown').textContent='';$('#overlay').classList.remove('open','resultMode','waiting','fx-filler','fx-base','fx-hit','fx-grail');pending=null}
+function closeReveal(){if(revealTimer){clearInterval(revealTimer);revealTimer=null}$('#revealCountdown').textContent='';$('#overlay').classList.remove('open','resultMode','waiting','fx-filler','fx-base','fx-hit','fx-grail','theme-bronze','theme-silver','theme-gold','theme-platinum','theme-diamond','theme-elite','theme-astral','theme-mythic','theme-celestial');pending=null}
 $('#prev').onclick=()=>{idx=(idx-1+PACKS.length)%PACKS.length;renderSeq++;$('#cards').dataset.ready='0';renderPack()};$('#next').onclick=()=>{idx=(idx+1)%PACKS.length;renderSeq++;$('#cards').dataset.ready='0';renderPack()};
 let swipeX=0,swipeY=0;
 const swipeStage=$('.stageCore');
