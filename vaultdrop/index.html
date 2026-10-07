@@ -64,7 +64,7 @@ const img=(c,size='high')=>c&&c.image?(c.imageMode==='direct'?c.image:c.image+'/
 let idx=0,pending=null,currentGame='pokemon',revealTimer=null;const cache=new Map();
 let state=(()=>{try{return JSON.parse(localStorage.vd_server_reboot||'{"vault":[],"activity":[],"opened":0,"next":0}')}catch(e){return{vault:[],activity:[],opened:0,next:0}}})();
 function save(){localStorage.vd_server_reboot=JSON.stringify(state)}
-function band(p){return{target:p.price*18,min:p.price*8,max:p.price*20}}
+function band(p){return{target:p.price*19.5,min:p.price*15,max:p.price*20}}
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
 function setFeed(ok,text){const e=$('#feedStatus');e.textContent=text;e.classList.toggle('online',ok)}
 async function fetchPool(i,force=false){
@@ -87,7 +87,7 @@ function renderPack(){
   const p=PACKS[idx],b=band(p),prev=PACKS[(idx-1+PACKS.length)%PACKS.length],next=PACKS[(idx+1)%PACKS.length];
   $('#counter').textContent=String(idx+1).padStart(2,'0')+' / '+PACKS.length;$('#prevLabel').textContent='← '+prev.name;$('#nextLabel').textContent=next.name+' →';
   $('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#minValue').textContent=money(p.price*.25);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);
-  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview pack. Hard minimum card value: '+money(p.price*.25)+' (25% of pack price). Grails are capped at '+money(p.price*20)+' (20× pack price).';
+  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview pack. Hard minimum card value: '+money(p.price*.25)+'. Grails use raw market pricing and target about 19.5×, with a hard 20× ceiling.';
   $('#pack').className='pack '+p.skin;$('#pack').innerHTML='<div class="crimp"></div><div class="packInner"><div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(idx+1).padStart(2,'0')+'</div></div><div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div><div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL TARGET</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div></div><div class="crimp"></div>';
   loadAndRender(idx);
 }
@@ -105,14 +105,14 @@ async function loadAndRender(i,force=false){
     $('#grailRange').textContent=money(b.grail?.range?.min)+' – '+money(b.grail?.range?.max);
     const hidden=(b.filler?.cards?.length||0)+(b.base?.cards?.length||0)+(b.hit?.cards?.length||0);
     const shown=(b.grail?.cards?.length||0);
-    note.textContent=shown+' grails shown · '+hidden+' non-grail cards remain hidden in the opening pool';
+    note.textContent=shown+' raw-priced grails shown · target 19.5× · hard cap 20×';
     open.disabled=false;open.textContent='RIP THIS PACK';
     const order=['grail'];
     cards.innerHTML=order.map(key=>{
       const x=b[key];if(!x||!x.cards?.length)return '';
       const fallback=x.fallback?' · nearest available values':'';
       return '<section class="bucketSection"><div class="bucketTitle"><h4 class="stroke">'+esc(x.label)+' · '+Math.round((x.odds||0)*100)+'%</h4><span>'+x.cards.length+' cards'+fallback+'</span></div><div class="bucketCards">'+
-        x.cards.map((c,k)=>'<article class="card" data-bucket="'+key+'" data-k="'+k+'"><div class="art"><div class="bucketTag">'+esc(x.label.toUpperCase())+'</div><div class="price stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="cardInfo"><span class="cardTitle stroke">'+esc(c.name)+'</span><span class="cardSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+' · '+esc(c.rarity||'—')+'</span></div></article>').join('')+
+        x.cards.map((c,k)=>'<article class="card" data-bucket="'+key+'" data-k="'+k+'"><div class="art"><div class="bucketTag">'+esc(x.label.toUpperCase())+'</div><div class="price stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="cardInfo"><span class="cardTitle stroke">'+esc(c.name)+'</span><span class="cardSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+' · '+esc(c.rarity||'—')+' · '+esc(c.rawVariant||'raw')+' · '+esc(c.priceSource||'raw market')+' · '+Number(c.packMultiple||0).toFixed(2)+'× pack</span></div></article>').join('')+
       '</div></section>';
     }).join('');
     $$('.card').forEach(el=>{el.onclick=()=>{const k=el.dataset.bucket,n=Number(el.dataset.k);showDetail(b[k].cards[n])}});
