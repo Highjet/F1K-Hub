@@ -362,10 +362,10 @@ let swipeX=0,swipeY=0;
 const swipeStage=$('.stageCore');
 swipeStage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];swipeX=t.clientX;swipeY=t.clientY},{passive:true});
 swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-swipeX,dy=t.clientY-swipeY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.15){if(dx<0)$('#next').click();else $('#prev').click()}},{passive:true});$('#openPack').onclick=()=>openPack(idx);$('#revealPack').onclick=startRevealWait;$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#fulfill').onclick=()=>settle('fulfill');$('#sell').onclick=()=>settle('sell');$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
-$$('[data-game]').forEach(b=>b.onclick=()=>{currentGame=b.dataset.game;document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';$$('[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
+$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();currentGame=b.dataset.game;document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
 $$('[data-page]').forEach(b=>b.onclick=()=>{$$('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));$$('[data-page]').forEach(x=>x.classList.toggle('active',x===b))});
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-renderStats();renderVault();renderActivity();renderPack();
+$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));renderStats();renderVault();renderActivity();renderPack();
 </script>
 </body></html>
