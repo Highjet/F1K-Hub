@@ -542,7 +542,7 @@ async function claimVaultCard(c){
   try{
     const r=await apiFetch('/api/vault/claim',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({card:c,clientVaultId:c.vaultId,action:c.action,pack:c.pack,game:c.game})});
     const d=await r.json();if(!r.ok)throw new Error(d.error||'Vault sync failed');
-    c.serverVaultId=d.item.id;c.cloud=true;save();return d.item;
+    c.serverVaultId=d.item.id;c.cloud=true;c.creditEligible=Boolean(d.item.creditEligible);c.creditOfferCents=Math.round(Number(d.item.card?.market||c.market||0)*100);save();return d.item;
   }catch(e){toast('Cloud Vault sync pending.');return null}
 }
 async function syncCloudVault(){
@@ -551,8 +551,8 @@ async function syncCloudVault(){
     const r=await apiFetch('/api/vault'),d=await r.json();if(!r.ok)return;
     for(const v of d.items||[]){
       let local=state.vault.find(x=>x.serverVaultId===v.id||(v.clientVaultId&&x.vaultId===v.clientVaultId));
-      if(local){local.serverVaultId=v.id;local.cloud=true;if(v.fulfillmentId&&!local.fulfillment)local.fulfillment={id:v.fulfillmentId,status:'requested',provider:'ebay'}}
-      else state.vault.push({...v.card,vaultId:v.clientVaultId||crypto.randomUUID(),serverVaultId:v.id,cloud:true,action:v.action,pack:v.pack,game:v.game,fulfillment:v.fulfillmentId?{id:v.fulfillmentId,status:'requested',provider:'ebay'}:null});
+      if(local){local.serverVaultId=v.id;local.cloud=true;local.creditEligible=Boolean(v.creditEligible);local.creditOfferCents=Number(v.creditOfferCents||0);if(v.fulfillmentId&&!local.fulfillment)local.fulfillment={id:v.fulfillmentId,status:'requested',provider:'ebay'}}
+      else state.vault.push({...v.card,vaultId:v.clientVaultId||crypto.randomUUID(),serverVaultId:v.id,cloud:true,action:v.action,pack:v.pack,game:v.game,creditEligible:Boolean(v.creditEligible),creditOfferCents:Number(v.creditOfferCents||0),fulfillment:v.fulfillmentId?{id:v.fulfillmentId,status:'requested',provider:'ebay'}:null});
     }
     save();renderStats();renderVault();
   }catch{}
@@ -637,27 +637,28 @@ function renderVault(){
     const f=c.fulfillment||null,status=f?.status?String(f.status).replaceAll('_',' ').toUpperCase():'';
     const tr=Array.isArray(f?.tracking)?f.tracking:[],td=tr.find(x=>x?.shippingDetail)||null,sd=td?.shippingDetail||{};
     const trackText=sd.trackingNumber?('Tracking · '+sd.trackingNumber):(sd.shippingCarrierCode?('Carrier · '+sd.shippingCarrierCode):'');
-    return '<article class="vCard"><div class="vArt"><img src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="vInfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.game==='onepiece'?'One Piece':'Pokémon')+' · '+esc(c.setName)+' · '+esc(c.rarity)+'</p><div class="vBot"><strong>'+money(c.market)+'</strong>'+(c.cloud?'<span class="cloudPill">CLOUD VAULT</span>':'<span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span>')+(f?'<div class="fulfillTrack"><strong>EBAY FULFILLMENT · '+esc(status)+'</strong>'+(f.candidate?'<div>'+esc(f.candidate.title||'Card found')+' · '+money(f.candidate.total)+'</div>':'')+(trackText?'<div class="trackingLine">'+esc(trackText)+'</div>':'')+'</div>':'')+'<div class="vaultActions"><button class="shipBtn stroke '+(!currentUser?'needsProfile':'')+'" data-ship-index="'+i+'" '+(f?'disabled':'')+'>'+(f?t('requested'):t('ship'))+'</button><button class="sellVaultBtn stroke" data-sell-index="'+i+'" '+(f?'disabled':'')+'>SELL BACK · '+money(Number(c.market||0)*.72)+'</button></div></div></div></article>';
+    const eligible=Boolean(c.creditEligible),offer=Number(c.creditOfferCents||Math.round(Number(c.market||0)*100))/100;
+    const sellLabel=eligible?('SELL FOR '+money(offer)+' CREDIT'):('CREDIT PREVIEW · '+money(Number(c.market||0)));
+    return '<article class="vCard"><div class="vArt"><img src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="vInfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.game==='onepiece'?'One Piece':'Pokémon')+' · '+esc(c.setName)+' · '+esc(c.rarity)+'</p><div class="vBot"><strong>'+money(c.market)+'</strong>'+(c.cloud?'<span class="cloudPill">CLOUD VAULT</span>':'<span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span>')+(eligible?'<span class="cloudPill">CREDIT ELIGIBLE</span>':'<span class="pill">PREVIEW CARD</span>')+(f?'<div class="fulfillTrack"><strong>EBAY FULFILLMENT · '+esc(status)+'</strong>'+(f.candidate?'<div>'+esc(f.candidate.title||'Card found')+' · '+money(f.candidate.total)+'</div>':'')+(trackText?'<div class="trackingLine">'+esc(trackText)+'</div>':'')+'</div>':'')+'<div class="vaultActions"><button class="shipBtn stroke '+(!currentUser?'needsProfile':'')+'" data-ship-index="'+i+'" '+(f?'disabled':'')+'>'+(f?t('requested'):t('ship'))+'</button><button class="sellVaultBtn stroke" data-sell-index="'+i+'" '+(f?'disabled':'')+'>'+sellLabel+'</button></div></div></div></article>';
   }).join('')||'<div class="empty">Your vault is empty. Rip a pack and keep a card.</div>';
 }
 
 async function sellFromVault(i){
   const c=state.vault[i];if(!c||c.fulfillment)return;
-  const offer=Number(c.market||0)*.72;
-  if(!window.confirm('Sell '+c.name+' back for '+money(offer)+'?\n\nAre you sure?'))return;
-  sfx('sell');
+  const offer=Number(c.creditOfferCents||Math.round(Number(c.market||0)*100))/100;
   if(!authToken||!currentUser){goPage('profile');toast('Sign in before selling from your Vault.');return}
   if(!c.serverVaultId){const v=await claimVaultCard(c);if(!v)return}
+  if(!c.creditEligible){sfx('ui');toast('Preview card: '+money(offer)+' credit is a preview only. Paid-pack cards will be credit eligible.');return}
+  if(!window.confirm('Sell '+c.name+' for '+money(offer)+' VaultDrop Credit?\n\nThis removes the card from your Vault. Credit cannot be withdrawn or transferred.'))return;
+  sfx('sell');
   try{
     const r=await apiFetch('/api/vault/'+encodeURIComponent(c.serverVaultId)+'/sellback',{method:'POST'}),d=await r.json();
     if(!r.ok)throw new Error(d.error||'Sell back failed');
-    state.activity.push({type:'sell',title:'Sell-back: '+c.name,detail:money(Number(d.offer||offer))+' offer',at:Date.now()});
-    if(d.status==='sold'){
-      state.vault.splice(i,1);toast('Card sold back for '+money(Number(d.offer||offer))+'.');
-    }else{
-      toast('Sell-back preview recorded. Live payouts are not enabled yet.');
-    }
-    save();renderStats();renderVault();renderActivity();
+    if(d.status==='credited'){
+      walletState=d.wallet||walletState;
+      state.activity.push({type:'sell',title:'Sold for VaultDrop Credit: '+c.name,detail:walletMoney(Number(d.offerCents||0))+' credit posted',at:Date.now()});
+      state.vault.splice(i,1);save();renderStats();renderVault();renderActivity();renderWallet();sfx('success');toast(walletMoney(Number(d.offerCents||0))+' VaultDrop Credit added.');
+    }else toast(d.message||'This card is not eligible for real credit yet.');
   }catch(e){sfx('error');toast(String(e?.message||e))}
 }
 async function requestShip(i){
@@ -710,7 +711,7 @@ function renderWallet(){
   $('#walletActivity').innerHTML=rows.length?rows.map(x=>{
     const credit=Number(x.amountCents||0)>=0;
     return '<div class="walletRow"><div class="walletRowIcon">'+(credit?'＋':'−')+'</div><div><strong class="stroke">'+esc(x.title||'Wallet activity')+'</strong><p>'+esc(x.detail||x.status||'')+' · '+new Date(x.createdAt||Date.now()).toLocaleString()+'</p></div><div class="walletAmount '+(credit?'credit':'')+'">'+(credit?'+':'−')+walletMoney(Math.abs(Number(x.amountCents||0)))+'</div></div>';
-  }).join(''):'<div class="walletEmpty">'+(authToken?'No wallet activity yet.':'Sign in to view and fund your VaultDrop wallet.')+'</div>';
+  }).join(''):'<div class="walletEmpty">'+(authToken?'No VaultDrop Credit activity yet.':'Sign in to view your VaultDrop Credit.')+'</div>';
   $('#fundWalletBtn').disabled=!authToken;
 }
 async function requestWalletTopup(){
