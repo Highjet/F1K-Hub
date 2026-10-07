@@ -231,6 +231,50 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
 }
 
 .art img,.detail img,#revealImage,.revealCard img{filter:none!important;backdrop-filter:none!important}
+
+/* Transit spacing pass */
+.transitList{gap:18px}
+.transitCard{grid-template-columns:190px minmax(0,1fr);gap:22px;padding:18px;align-items:stretch;border:1px solid rgba(255,255,255,.10);border-radius:24px;background:linear-gradient(180deg,rgba(17,21,30,.97),rgba(9,12,18,.98));box-shadow:0 20px 52px rgba(0,0,0,.24)}
+.transitImage{height:auto;min-height:238px;border-radius:18px;background:radial-gradient(circle at 50% 25%,rgba(117,106,255,.20),rgba(8,10,15,.94) 76%);display:grid;place-items:center;padding:18px;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+.transitImage img{display:block;width:100%;height:100%;max-width:154px;max-height:220px;object-fit:contain;position:relative;z-index:1}
+.transitBody{min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:14px;padding:2px 2px 2px 0}
+.transitTop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:start}
+.transitTop>div:first-child{min-width:0}
+.transitTop h3{font-size:23px;line-height:1.08;margin:5px 0 6px;overflow-wrap:anywhere}
+.transitTop p{margin:0;color:var(--muted);font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+.transitStatus{align-self:start;max-width:190px;text-align:center;white-space:normal;line-height:1.25;padding:8px 11px}
+.transitProgress{margin:3px 0 2px;padding:12px 13px;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:rgba(255,255,255,.018)}
+.transitTrack{height:6px}
+.transitSteps{gap:8px;margin-top:9px}
+.transitSteps span{font-size:8px;line-height:1.2;white-space:normal}
+.transitDetails{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.transitDetail{min-width:0;padding:12px 12px;border-radius:13px}
+.transitDetail strong{font-size:11px;line-height:1.45;overflow-wrap:anywhere;word-break:break-word}
+.transitDetail span{margin-bottom:6px}
+
+/* Vault action polish */
+.vaultActions{width:100%;display:grid;grid-template-columns:1fr;gap:9px;margin-top:10px}
+.shipBtn,.sellVaultBtn{width:100%;min-height:46px;height:auto;padding:10px 12px;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;white-space:normal;overflow-wrap:anywhere}
+.sellVaultBtn{font-size:10px;letter-spacing:.045em}
+.sellVaultBtn .creditMain{display:block;font-size:10px;font-weight:900;line-height:1.15}
+.sellVaultBtn .creditSub{display:block;margin-top:3px;font-size:8px;letter-spacing:.10em;color:#9da8c8;line-height:1.15}
+.vCard .cloudPill,.vCard .pill{max-width:100%;white-space:normal;text-align:center;line-height:1.2}
+@media(max-width:850px){
+  .transitCard{grid-template-columns:150px minmax(0,1fr);gap:16px;padding:14px}
+  .transitImage{min-height:196px;padding:14px}.transitImage img{max-width:126px;max-height:180px}
+  .transitDetails{grid-template-columns:1fr 1fr}
+}
+@media(max-width:620px){
+  .transitCard{grid-template-columns:1fr;gap:14px}
+  .transitImage{min-height:280px}
+  .transitImage img{max-width:190px;max-height:260px}
+  .transitBody{padding:0}
+  .transitTop{grid-template-columns:1fr;gap:10px}
+  .transitStatus{justify-self:start;max-width:100%}
+  .transitDetails{grid-template-columns:1fr}
+  .transitSteps{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+}
+
 </style>
 </head>
 <body>
@@ -672,7 +716,7 @@ function renderVault(){
     const tr=Array.isArray(f?.tracking)?f.tracking:[],td=tr.find(x=>x?.shippingDetail)||null,sd=td?.shippingDetail||{};
     const trackText=sd.trackingNumber?('Tracking · '+sd.trackingNumber):(sd.shippingCarrierCode?('Carrier · '+sd.shippingCarrierCode):'');
     const eligible=Boolean(c.creditEligible),offer=Number(c.creditOfferCents||Math.round(Number(c.market||0)*100))/100;
-    const sellLabel=eligible?('SELL FOR '+money(offer)+' CREDIT'):('CREDIT PREVIEW · '+money(Number(c.market||0)));
+    const sellLabel=eligible?('<span class="creditMain">SELL FOR '+money(offer)+'</span><span class="creditSub">VAULTDROP CREDIT</span>'):('<span class="creditMain">CREDIT PREVIEW · '+money(Number(c.market||0))+'</span><span class="creditSub">PAID-PACK CARDS ONLY</span>');
     return '<article class="vCard"><div class="vArt"><img src="'+img(c)+'" alt="'+esc(c.name)+'"></div><div class="vInfo"><h3 class="stroke">'+esc(c.name)+'</h3><p>'+esc(c.game==='onepiece'?'One Piece':'Pokémon')+' · '+esc(c.setName)+' · '+esc(c.rarity)+'</p><div class="vBot"><strong>'+money(c.market)+'</strong>'+(c.cloud?'<span class="cloudPill">CLOUD VAULT</span>':'<span class="pill">'+esc((c.action||'keep').toUpperCase())+'</span>')+(eligible?'<span class="cloudPill">CREDIT ELIGIBLE</span>':'<span class="pill">PREVIEW CARD</span>')+(f?'<div class="fulfillTrack"><strong>EBAY FULFILLMENT · '+esc(status)+'</strong>'+(f.candidate?'<div>'+esc(f.candidate.title||'Card found')+' · '+money(f.candidate.total)+'</div>':'')+(trackText?'<div class="trackingLine">'+esc(trackText)+'</div>':'')+'</div>':'')+'<div class="vaultActions"><button class="shipBtn stroke '+(!currentUser?'needsProfile':'')+'" data-ship-index="'+i+'" '+(f?'disabled':'')+'>'+(f?t('requested'):t('ship'))+'</button><button class="sellVaultBtn stroke" data-sell-index="'+i+'" '+(f?'disabled':'')+'>'+sellLabel+'</button></div></div></div></article>';
   }).join('')||'<div class="empty">Your vault is empty. Rip a pack and keep a card.</div>';
 }
@@ -796,7 +840,7 @@ function renderTransit(){
   $('#transitList').innerHTML=transitItems.map(item=>{
     const step=transitStep(item.status),progress=Math.round(step/(TRANSIT_STEPS.length-1)*100),tm=transitTrackMeta(item),card=item.card||{},status=String(item.status||'requested').replaceAll('_',' ').toUpperCase();
     const seller=item.sourceCandidate?.seller?.username||'—',order=item.purchaseOrderId||'—',eta=tm.eta?(new Date(tm.eta).toString()==='Invalid Date'?tm.eta:new Date(tm.eta).toLocaleDateString()):'—';
-    return '<article class="transitCard"><div class="transitImage">'+(transitImage(card)?'<img src="'+esc(transitImage(card))+'" alt="'+esc(card.name||'Card')+'">':'')+'</div><div><div class="transitTop"><div><div class="ey">'+esc(card.game==='onepiece'?'ONE PIECE':'POKÉMON')+' · '+esc(card.setName||'')+'</div><h3 class="stroke">'+esc(card.name||'Card')+'</h3><p>#'+esc(card.localId||'—')+(item.sourceCandidate?.total?' · sourced at '+money(item.sourceCandidate.total):'')+'</p></div><div class="transitStatus '+(step>=3?'shipped ':'')+(step===4?'delivered':'')+'">'+esc(status)+'</div></div><div class="transitProgress"><div class="transitTrack"><i style="width:'+progress+'%"></i></div><div class="transitSteps">'+TRANSIT_STEPS.map((x,i)=>'<span class="'+(i<=step?'done':'')+'">'+x+'</span>').join('')+'</div></div><div class="transitDetails"><div class="transitDetail"><span>TRACKING</span><strong class="trackingNumber">'+esc(tm.number||'Not assigned yet')+'</strong></div><div class="transitDetail"><span>CARRIER / ETA</span><strong>'+esc((tm.carrier||'Pending')+(eta!=='—'?' · '+eta:''))+'</strong></div><div class="transitDetail"><span>ORDER / SELLER</span><strong>'+esc(order)+' · '+esc(seller)+'</strong></div></div></div></article>';
+    return '<article class="transitCard"><div class="transitImage">'+(transitImage(card)?'<img src="'+esc(transitImage(card))+'" alt="'+esc(card.name||'Card')+'">':'')+'</div><div class="transitBody"><div class="transitTop"><div><div class="ey">'+esc(card.game==='onepiece'?'ONE PIECE':'POKÉMON')+' · '+esc(card.setName||'')+'</div><h3 class="stroke">'+esc(card.name||'Card')+'</h3><p>#'+esc(card.localId||'—')+(item.sourceCandidate?.total?' · sourced at '+money(item.sourceCandidate.total):'')+'</p></div><div class="transitStatus '+(step>=3?'shipped ':'')+(step===4?'delivered':'')+'">'+esc(status)+'</div></div><div class="transitProgress"><div class="transitTrack"><i style="width:'+progress+'%"></i></div><div class="transitSteps">'+TRANSIT_STEPS.map((x,i)=>'<span class="'+(i<=step?'done':'')+'">'+x+'</span>').join('')+'</div></div><div class="transitDetails"><div class="transitDetail"><span>TRACKING</span><strong class="trackingNumber">'+esc(tm.number||'Not assigned yet')+'</strong></div><div class="transitDetail"><span>CARRIER / ETA</span><strong>'+esc((tm.carrier||'Pending')+(eta!=='—'?' · '+eta:''))+'</strong></div><div class="transitDetail"><span>ORDER / SELLER</span><strong>'+esc(order)+' · '+esc(seller)+'</strong></div></div></div></article>';
   }).join('');
 }
 
