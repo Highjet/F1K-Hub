@@ -8,8 +8,8 @@
 :root{--bg:#07080b;--panel:#0d1016;--line:rgba(255,255,255,.10);--muted:#9aa1b0;--text:#f6f7fb}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 body{min-height:100vh;position:relative;background:#06070a;isolation:isolate}
-body::before{content:"";position:fixed;inset:-18px;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;filter:blur(6px) saturate(.95) brightness(.62);transform:scale(1.035);transition:background-image .3s ease,opacity .3s ease}
-body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,7,12,.26),rgba(5,7,12,.63) 62%,rgba(5,7,12,.80)),radial-gradient(circle at 50% 0%,rgba(110,91,255,.10),transparent 34%)}
+body::before{content:"";position:fixed;inset:-18px;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;filter:blur(2.2px) saturate(1) brightness(.68);transform:scale(1.015);transition:background-image .3s ease,opacity .3s ease}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,7,12,.18),rgba(5,7,12,.50) 62%,rgba(5,7,12,.72)),radial-gradient(circle at 50% 0%,rgba(110,91,255,.08),transparent 34%)}
 body[data-game="pokemon"]::before{background-image:url("./pokemon-bg.jpg")}
 body[data-game="onepiece"]::before{background-image:url("./onepiece-bg.jpg")}
 header,main{position:relative;z-index:1}
@@ -35,7 +35,21 @@ main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.a
 .shopTools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}.gameSwitch{display:flex;padding:4px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03)}.gameBtn{border:0;background:transparent;color:#8f96a5;padding:7px 11px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:800}.gameBtn.active{background:#f3f4f8;color:#0b0d11}.oddsWrap{margin-top:20px;padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}.oddsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.oddsBox{padding:13px;border:1px solid var(--line);border-radius:14px;background:#0b0e14}.oddsBox span{display:block;font-size:9px;letter-spacing:.17em;color:#a3aaba}.oddsBox strong{display:block;font-size:24px;margin-top:4px}.oddsBox small{display:block;margin-top:6px;color:#858c9a;font-size:10px}.oddsBox.filler{box-shadow:inset 0 2px 0 #73798a}.oddsBox.base{box-shadow:inset 0 2px 0 #7aa4c5}.oddsBox.hit{box-shadow:inset 0 2px 0 #c59f56}.oddsBox.grail{box-shadow:inset 0 2px 0 #a77cff}.bucketSection{grid-column:1/-1;margin-top:10px}.bucketSection .bucketTitle h4{font-size:22px}.bucketSection .bucketCards{margin-top:4px}.bucketTitle{display:flex;justify-content:space-between;align-items:end;padding:4px 2px 10px}.bucketTitle h4{margin:0;font-size:18px}.bucketTitle span{font-size:11px;color:#8f96a5}.bucketCards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.bucketTag{position:absolute;left:10px;top:10px;z-index:2;padding:6px 8px;border-radius:999px;background:rgba(7,8,12,.84);border:1px solid rgba(255,255,255,.13);font-size:9px;letter-spacing:.12em}.revealProgress{width:190px;height:5px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden;opacity:0;transition:.18s}.revealProgress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#8d7aff,#fff)}.overlay.waiting .revealProgress{opacity:1}.overlay.waiting .revealProgress i{animation:revealWait 2s linear forwards}@keyframes revealWait{to{width:100%}}.overlay.waiting .rPack{pointer-events:none;filter:saturate(.85)}
 .sourceLink{display:inline-block;margin-top:8px;color:#aeb7ff;font-size:9px;font-weight:900;letter-spacing:.12em;text-decoration:none}.sourceLink:hover{text-decoration:underline}
 @media(max-width:1000px){.summary{grid-template-columns:1fr}.cards,.vault{grid-template-columns:repeat(2,1fr)}.stageCore{grid-template-columns:1fr}.neighbor{display:none}.stats{display:none}.result,.detail{grid-template-columns:1fr}}
-@media(max-width:650px){.shopTools{width:100%;justify-content:space-between}.oddsGrid{grid-template-columns:1fr 1fr}.bucketCards{grid-template-columns:1fr 1fr}.gameSwitch{order:1}.counter{order:2}main{padding:0 14px 70px}.hero h1{font-size:42px}.shop{padding:16px}.stage{grid-template-columns:42px 1fr 42px}.arrow{width:42px;height:42px;font-size:23px}.pack{width:285px;height:390px;max-width:285px;min-height:390px;margin:auto}.packInner{height:348px;min-height:348px;padding:22px}.packSeal{width:82px;height:82px}.packName{font-size:35px}.sRight{grid-template-columns:1fr}.cards,.vault{grid-template-columns:1fr 1fr;gap:10px}.art{height:225px;flex-basis:225px}.art img{max-height:170px}.cardTitle{font-size:15px}.cardInfo{min-height:92px;padding:12px 12px 15px}.daily,.shopHead,.pageTitle,.poolHead{align-items:flex-start;flex-direction:column}.overlay,.modal{padding-top:62px}.nav button{font-size:11px;padding:8px}.brand{font-size:12px}.status{display:none}}
+@media(max-width:650px){
+.shopTools{width:100%;justify-content:space-between;align-items:center}
+.oddsGrid{grid-template-columns:1fr 1fr}.bucketCards{grid-template-columns:1fr 1fr}.gameSwitch{order:1}.counter{order:2}
+main{padding:0 12px 70px}.hero h1{font-size:42px}.shop{padding:16px 12px}
+.stage{display:block;position:relative;width:100%;margin-top:16px}
+.stageCore{display:flex;width:100%;justify-content:center;align-items:center;gap:0;touch-action:pan-y}
+.neighbor{display:none}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:42px;height:42px;font-size:23px;background:rgba(12,16,24,.82);backdrop-filter:blur(8px)}
+#prev{left:4px}#next{right:4px}
+.pack{width:min(285px,calc(100vw - 62px));height:390px;max-width:285px;min-height:390px;margin:0 auto}
+.packInner{height:348px;min-height:348px;padding:22px 20px}.packSeal{width:82px;height:82px}.packName{font-size:35px}
+.packBottom{gap:10px}.packBottom strong{font-size:21px;white-space:nowrap}.packBottom .right{min-width:0}
+.sRight{grid-template-columns:1fr}.cards,.vault{grid-template-columns:1fr 1fr;gap:10px}.art{height:225px;flex-basis:225px}.art img{max-height:170px}.cardTitle{font-size:15px}.cardInfo{min-height:92px;padding:12px 12px 15px}
+.daily,.shopHead,.pageTitle,.poolHead{align-items:flex-start;flex-direction:column}.overlay,.modal{padding-top:62px}.nav button{font-size:11px;padding:8px}.brand{font-size:12px}.status{display:none}
+}
 </style>
 </head>
 <body>
@@ -110,11 +124,11 @@ function renderPack(){
 }
 async function loadAndRender(i,force=false){
   const cards=$('#cards'),note=$('#poolNote'),open=$('#openPack'),p=PACKS[i];
-  const key=currentGame+':'+i,token=++renderToken,prior=lastGood.get(key);
+  const key=currentGame+':'+i,token=++renderSeq,prior=lastGoodPools.get(key);
   if(!prior){cards.innerHTML='<div class="empty">Loading '+esc(p.name)+' grails…</div>';open.disabled=true;open.textContent='LOADING CARDS…'}
   else note.textContent='Refreshing live pricing…';
   try{
-    const data=await fetchPool(i,force);if(token!==renderToken||i!==idx)return;
+    const data=await fetchPool(i,force);if(token!==renderSeq||i!==idx)return;
     const b=data.buckets||{};
     $('#fillerRange').textContent=money(b.filler?.range?.min)+' – '+money(b.filler?.range?.max);
     $('#baseRange').textContent=money(b.base?.range?.min)+' – '+money(b.base?.range?.max);
@@ -126,7 +140,7 @@ async function loadAndRender(i,force=false){
       note.textContent=data.unavailableReason||'No verified raw grail is currently available in the 10×–20× band.';
       cards.innerHTML='<div class="empty"><strong>No verified grail available right now.</strong></div>';open.disabled=true;open.textContent='TIER TEMPORARILY UNAVAILABLE';return;
     }
-    lastGood.set(key,{data,grails});
+    lastGoodPools.set(key,{data,grails});
     note.textContent=grails.length+' unique verified raw grail'+(grails.length===1?'':'s')+' · 10×–20× band';
     open.disabled=false;open.textContent='RIP THIS PACK';
     cards.innerHTML='<section class="bucketSection"><div class="bucketTitle"><h4 class="stroke">Grail · '+Math.round((b.grail?.odds||0)*100)+'%</h4><span>'+grails.length+' unique grail'+(grails.length===1?'':'s')+'</span></div><div class="bucketCards">'+grails.map((c,k)=>'<article class="card" data-k="'+k+'"><div class="art"><div class="bucketTag">GRAIL</div><div class="price stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" data-fallback="'+esc(fallbackImg(c))+'" alt="'+esc(c.name)+'"></div><div class="cardInfo"><span class="cardTitle stroke">'+esc(c.name)+'</span><span class="cardSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+' · '+Number(c.packMultiple||0).toFixed(2)+'× pack</span></div></article>').join('')+'</div></section>';
@@ -134,7 +148,7 @@ async function loadAndRender(i,force=false){
     $$('.card img[data-fallback]').forEach(el=>el.onerror=()=>{const fb=el.dataset.fallback;if(fb&&el.src!==fb){el.onerror=null;el.src=fb}});
     preloadNeighbors();
   }catch(e){
-    if(token!==renderToken||i!==idx)return;
+    if(token!==renderSeq||i!==idx)return;
     if(prior){note.textContent='Live refresh failed · showing last successful grails';open.disabled=false;open.textContent='RIP THIS PACK';setFeed(false,'LIVE REFRESH RETRYING');return}
     setFeed(false,'CARD FEED RETRY NEEDED');note.textContent='Card feed error';
     cards.innerHTML='<div class="empty">The card server did not return this pool.<br><button id="retry" class="retry">RETRY CARD FEED</button></div>';
