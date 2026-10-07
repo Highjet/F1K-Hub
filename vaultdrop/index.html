@@ -315,7 +315,7 @@ async function apiFetch(path,opts={}){
  const headers={...(opts.headers||{})};if(authToken)headers.authorization='Bearer '+authToken;
  return fetch(API+path,{...opts,headers});
 }
-function goPage(id){$('.page').forEach(p=>p.classList.toggle('active',p.id===id));$('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
+function goPage(id){$$('.page').forEach(p=>p.classList.toggle('active',p.id===id));$$('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===id));sfx('nav');window.scrollTo({top:0,behavior:'smooth'})}
 let soundEnabled=localStorage.vd_sound!=='off',audioCtx=null;
 function getAudio(){
   if(!soundEnabled)return null;
@@ -424,7 +424,7 @@ async function loadAndRender(i,force=false){
     open.disabled=false;open.textContent='RIP THIS PACK';
     cards.innerHTML='<section class="bucketSection"><div class="bucketTitle"><h4 class="stroke">Grail · '+Math.round((b.grail?.odds||0)*100)+'%</h4><span>'+grails.length+' unique grail'+(grails.length===1?'':'s')+'</span></div><div class="bucketCards">'+grails.map((c,k)=>'<article class="card" data-k="'+k+'"><div class="art"><div class="bucketTag">GRAIL</div><div class="price stroke">'+money(c.market)+'</div><img loading="lazy" src="'+img(c)+'" data-fallback="'+esc(fallbackImg(c))+'" alt="'+esc(c.name)+'"></div><div class="cardInfo"><span class="cardTitle stroke">'+esc(c.name)+'</span><span class="cardSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+' · '+Number(c.packMultiple||0).toFixed(2)+'× pack</span></div></article>').join('')+'</div></section>';
     $$('.card[data-k]').forEach(el=>el.onclick=()=>{sfx('ui');showDetail(grails[Number(el.dataset.k)])});
-    $$$('.card img[data-fallback]').forEach(el=>el.onerror=()=>{const fb=el.dataset.fallback;if(fb&&el.src!==fb){el.onerror=null;el.src=fb}});
+    $$('.card img[data-fallback]').forEach(el=>el.onerror=()=>{const fb=el.dataset.fallback;if(fb&&el.src!==fb){el.onerror=null;el.src=fb}});
     preloadNeighbors();
   }catch(e){
     if(token!==renderSeq||i!==idx)return;
@@ -627,7 +627,7 @@ let swipeX=0,swipeY=0;
 const swipeStage=$('.stageCore');
 swipeStage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];swipeX=t.clientX;swipeY=t.clientY},{passive:true});
 swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-swipeX,dy=t.clientY-swipeY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.15){if(dx<0)$('#next').click();else $('#prev').click()}},{passive:true});$('#openPack').onclick=()=>openPack(idx);$('#revealPack').onclick=startRevealWait;$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#fulfill').onclick=()=>settle('fulfill');$('#sell').onclick=()=>settle('sell');$('#vaultGrid').onclick=e=>{const b=e.target.closest('[data-ship-index]');if(b)requestShip(Number(b.dataset.shipIndex))};$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
-$$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();sfx('nav');currentGame=b.dataset.game;document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';$$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
+$$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();sfx('nav');currentGame=b.dataset.game;document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
 $$('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
 $('#language').onchange=()=>{sfx('nav');language=$('#language').value;applyLanguage();if(currentUser)saveDeliveryProfile()};
 $('#soundBtn').onclick=()=>setSound(!soundEnabled);
@@ -640,6 +640,6 @@ if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serv
 setInterval(pollFulfillments,15000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();applyLanguage();renderStats();renderVault();renderActivity();renderPack();loadAccount();
+$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();applyLanguage();renderStats();renderVault();renderActivity();renderPack();loadAccount();
 </script>
 </body></html>
