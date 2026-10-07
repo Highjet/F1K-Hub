@@ -275,6 +275,7 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
   .transitSteps{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
 }
 
+.dailyPackCard{position:relative;overflow:hidden;margin:0 0 20px;padding:20px 22px;border:1px solid rgba(255,255,255,.10);border-radius:24px;background:linear-gradient(135deg,rgba(18,23,35,.96),rgba(8,11,17,.98));box-shadow:0 18px 44px rgba(0,0,0,.20);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}.dailyPackGlow{position:absolute;width:320px;height:320px;right:-120px;top:-180px;border-radius:50%;background:radial-gradient(circle,rgba(125,118,255,.25),transparent 67%);pointer-events:none}.dailyPackCopy,.dailyPackAction{position:relative;z-index:1}.dailyPackCopy h3{font-size:25px;margin:5px 0 7px}.dailyPackCopy p{max-width:720px;margin:0;color:var(--muted);font-size:11px;line-height:1.55}.dailyPackMeta{margin-top:12px;font-size:10px;color:#aeb6c8}.dailyPackAction{display:grid;grid-template-columns:72px minmax(150px,220px);gap:12px;align-items:center}.dailyMiniPack{width:72px;height:92px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:radial-gradient(circle at 50% 22%,rgba(131,119,255,.32),transparent 42%),linear-gradient(145deg,#1a1f2c,#0a0d13);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 12px 28px rgba(0,0,0,.28)}.dailyMiniPack span{font-size:25px}.dailyMiniPack small{font-size:8px;letter-spacing:.18em;color:#a8b1c3;margin-top:4px}.dailyClaimBtn{height:46px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,#f5f6fa,#dfe3eb);color:#0a0b0e;font-weight:900;letter-spacing:.05em;cursor:pointer}.dailyClaimBtn:disabled{opacity:.48;cursor:not-allowed}.dailyReset{grid-column:2;font-size:9px;color:#727c8e;text-align:center;margin-top:-7px}@media(max-width:720px){.dailyPackCard{grid-template-columns:1fr;padding:17px}.dailyPackAction{grid-template-columns:64px 1fr}.dailyMiniPack{width:64px;height:82px}.dailyReset{grid-column:2}}
 </style>
 </head>
 <body>
@@ -282,6 +283,20 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
 <main>
 <section id="home" class="page active">
   <div class="hero"><div><div class="ey">POWER PACK COLLECTION</div><h1 id="homeTitle" class="stroke">Pick a pack.<br>Chase a grail.</h1><p>Every pack uses live raw-market pricing. Browse the verified grails for that tier, then rip a card.</p></div><div class="stats"><div class="stat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div><div class="stat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div><div class="stat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div></div></div>
+  <section id="dailyPackCard" class="dailyPackCard">
+    <div class="dailyPackGlow"></div>
+    <div class="dailyPackCopy">
+      <div class="ey">DAILY PACK</div>
+      <h3 class="stroke">One free pull every day.</h3>
+      <p>Claim a free preview pack once per account each day. Your pull goes straight into the Vault and can be sold for Preview Credit.</p>
+      <div id="dailyPackMeta" class="dailyPackMeta">Sign in to claim today’s pack.</div>
+    </div>
+    <div class="dailyPackAction">
+      <div class="dailyMiniPack"><span class="stroke">VD</span><small>DAILY</small></div>
+      <button id="dailyClaimBtn" class="dailyClaimBtn stroke">SIGN IN TO CLAIM</button>
+      <div id="dailyReset" class="dailyReset"></div>
+    </div>
+  </section>
   <section class="frame shop">
     <div class="shopHead"><div><div class="ey">PACK SHOP</div><h2 id="shopTitle" class="stroke">Open a pack</h2><p>Choose a game, then a tier. Odds are shown before every preview opening.</p></div><div class="shopTools"><div class="gameSwitch"><button class="gameBtn active" data-game="pokemon">Pokémon</button><button class="gameBtn" data-game="onepiece">One Piece</button></div><div class="counter stroke" id="counter">01 / 09</div></div></div>
     <div class="stage"><button class="arrow" id="prev">‹</button><div class="stageCore"><div class="neighbor stroke" id="prevLabel"></div><div id="pack" class="pack bronze"></div><div class="neighbor stroke" id="nextLabel"></div></div><button class="arrow" id="next">›</button></div>
@@ -409,7 +424,7 @@ async function fetchPoolForGame(game,i){
     cache.set(key,data);persistPool(key,data);return data;
   }finally{clearTimeout(timer)}
 }
-let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login',walletState={currency:'USD',balanceCents:0,previewBalanceCents:0,ledger:[],updatedAt:0},transitItems=[];
+let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login',dailyState={available:false,nextResetAt:0,claim:null},dailyTimer=null,walletState={currency:'USD',balanceCents:0,previewBalanceCents:0,ledger:[],updatedAt:0},transitItems=[];
 const I18N={
 en:{navPack:'Pack Shop',navVault:'Vault',navTransit:'Transit',navWallet:'Credit',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
 es:{navPack:'Packs',navVault:'Bóveda',navTransit:'En tránsito',navWallet:'Crédito',navActivity:'Actividad',navProfile:'Perfil',homeTitle:'Elige un pack.<br>Persigue un grail.',shopTitle:'Abre un pack',vaultTitle:'La Bóveda',activityTitle:'Actividad',profileTitle:'Tu cuenta VaultDrop',ship:'ENVIARME',requested:'ENVÍO SOLICITADO',signIn:'INICIAR SESIÓN',create:'CREAR CUENTA',signOut:'CERRAR SESIÓN',saveProfile:'GUARDAR DIRECCIÓN',addressRequired:'Añade primero tu dirección de envío.'},
@@ -660,12 +675,51 @@ async function loadEbayState(){
     const ebayGood=Boolean(d.browseConnected&&d.memberCheckoutConnected);$('#ebayState').classList.toggle('good',ebayGood);$('#ebayDot').classList.toggle('good',ebayGood);
   }catch{$('#ebayState').textContent='eBay fulfillment status unavailable.'}
 }
+function dailyCountdown(){
+  const el=$('#dailyReset');if(!el)return;
+  if(!dailyState.nextResetAt){el.textContent='';return}
+  const ms=Math.max(0,dailyState.nextResetAt-Date.now()),h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);
+  el.textContent=dailyState.available?'AVAILABLE NOW':('Resets in '+h+'h '+m+'m');
+}
+function renderDailyPack(){
+  const btn=$('#dailyClaimBtn'),meta=$('#dailyPackMeta');if(!btn||!meta)return;
+  if(!authToken||!currentUser){btn.disabled=false;btn.textContent='SIGN IN TO CLAIM';meta.textContent='Sign in to claim today’s free pack.';dailyCountdown();return}
+  btn.disabled=!dailyState.available;
+  btn.textContent=dailyState.available?'CLAIM DAILY PACK':'CLAIMED TODAY';
+  meta.textContent=dailyState.available?'Choose Pokémon or One Piece above, then claim your daily pull.':'Today’s Daily Pack has already been claimed.';
+  dailyCountdown();
+}
+async function loadDailyPack(){
+  if(!authToken||!currentUser){dailyState={available:false,nextResetAt:0,claim:null};renderDailyPack();return}
+  try{
+    const r=await apiFetch('/api/daily/status'),d=await r.json();if(!r.ok)throw new Error(d.error||'Daily pack unavailable');
+    dailyState=d;renderDailyPack();
+  }catch{dailyState={available:false,nextResetAt:0,claim:null};renderDailyPack()}
+}
+async function claimDailyPack(){
+  if(!authToken||!currentUser){goPage('profile');toast('Sign in to claim your Daily Pack.');return}
+  if(!dailyState.available){toast('Today’s Daily Pack is already claimed.');return}
+  const btn=$('#dailyClaimBtn');btn.disabled=true;btn.textContent='OPENING…';sfx('open');
+  try{
+    const r=await apiFetch('/api/daily/claim',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({game:currentGame})}),d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Daily pack unavailable');
+    const c=d.card,v=d.vaultItem,item={...c,vaultId:crypto.randomUUID(),serverVaultId:v.id,cloud:true,creditEligible:false,creditOfferCents:Math.round(Number(c.market||0)*100),fulfillment:null,action:'keep',pack:'Daily',game:v.game};
+    state.vault.push(item);save();renderStats();renderVault();
+    dailyState={available:false,claimed:true,nextResetAt:d.nextResetAt,claim:{vaultId:v.id,game:v.game}};renderDailyPack();
+    pending={p:{name:'Daily',price:0,skin:'daily'},c,bucket:String(d.bucket||'filler'),game:v.game,daily:true,serverVaultId:v.id,localVaultId:item.vaultId};
+    $('#revealPackName').textContent='DAILY';$('#resultImg').src=img(c);$('#resultSet').textContent=(v.game==='onepiece'?'ONE PIECE · ':'POKÉMON · ')+c.setName+' · '+c.rarity;
+    $('#resultName').textContent=c.name;$('#resultMarket').textContent=String(d.bucket||'filler').toUpperCase()+' · Market '+money(c.market);$('#sellVal').textContent=money(c.market)+' PREVIEW CREDIT';
+    $('#revealHint').textContent='TAP TO START';$('#revealCountdown').textContent='';
+    const o=$('#overlay');o.classList.remove('resultMode','waiting','fx-filler','fx-base','fx-hit','fx-grail');o.classList.add('open','theme-daily');
+    state.opened++;state.activity.push({type:'open',title:'Opened Daily Pack',detail:(v.game==='onepiece'?'One Piece':'Pokémon')+' · '+String(d.bucket||'filler').toUpperCase()+' · '+money(c.market),at:Date.now()});save();renderStats();renderActivity();
+  }catch(e){sfx('error');toast(String(e?.message||e));await loadDailyPack()}
+}
 async function loadAccount(){
   if(!authToken){currentUser=null;renderAccount();return}
   try{
     const r=await apiFetch('/api/auth/me'),d=await r.json();if(!r.ok)throw new Error();
-    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);pollFulfillments();
-  }catch{authToken='';localStorage.removeItem('vd_auth_token');currentUser=null;renderAccount()}
+    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await loadDailyPack();await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);pollFulfillments();
+  }catch{authToken='';localStorage.removeItem('vd_auth_token');currentUser=null;renderAccount();renderDailyPack()}
 }
 function renderAccount(){
   const signed=Boolean(currentUser&&authToken);$('#authBox').style.display=signed?'none':'block';$('#logoutBtn').style.display=signed?'block':'none';
@@ -700,6 +754,13 @@ async function logout(){
 }
 async function settle(a){
   if(!pending)return;sfx(a==='sell'?'sell':(a==='fulfill'?'ship':'keep'));const p=pending.p,c=pending.c,game=pending.game,bucket=pending.bucket;
+  if(pending.daily){
+    const localIndex=state.vault.findIndex(x=>x.serverVaultId===pending.serverVaultId||x.vaultId===pending.localVaultId);
+    closeReveal();
+    if(a==='sell'&&localIndex>=0)await sellFromVault(localIndex);
+    else toast('Daily card added to your Vault.');
+    return;
+  }
   if(a==='sell'){
     state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market)+' VaultDrop Credit preview',at:Date.now()});
     recordEvent('sellback_preview','Sell-back preview: '+c.name,money(c.market)+' VaultDrop Credit preview',c.market);
@@ -863,16 +924,16 @@ swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clie
 $$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();sfx('nav');currentGame=b.dataset.game;document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
 $$('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
 $('#language').onchange=()=>{sfx('nav');language=$('#language').value;applyLanguage();if(currentUser)saveDeliveryProfile()};
-$('#soundBtn').onclick=()=>setSound(!soundEnabled);
+$('#soundBtn').onclick=()=>setSound(!soundEnabled);$('#dailyClaimBtn').onclick=claimDailyPack;
 document.addEventListener('pointerdown',e=>{if(e.target.closest('button')&&e.target.id!=='soundBtn')sfx('ui')},{passive:true});
 $('#loginTab').onclick=()=>setAuthMode('login');$('#registerTab').onclick=()=>setAuthMode('register');$('#authSubmit').onclick=submitAuth;$('#logoutBtn').onclick=logout;$('#saveProfile').onclick=saveDeliveryProfile;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installBtn').style.display='inline-flex';$('#installStatus').textContent='Installable app ready'});
 $('#installBtn').onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('#installBtn').style.display='none'};
 $('#notifyBtn').onclick=async()=>{if(!('Notification'in window)){toast('Notifications are not supported on this device.');return}const p=await Notification.requestPermission();$('#notifyBtn').textContent=p==='granted'?'NOTIFICATIONS ON':'ENABLE NOTIFICATIONS';toast(p==='granted'?'Fulfillment notifications enabled.':'Notification permission not enabled.')};
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
-setInterval(pollFulfillments,15000);
+setInterval(pollFulfillments,15000);dailyTimer=setInterval(dailyCountdown,30000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();renderPack();loadAccount();
+$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();renderDailyPack();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();renderPack();loadAccount();
 </script>
 </body></html>
