@@ -434,7 +434,7 @@ async function syncTransactions(){
   try{
     const r=await apiFetch('/api/transactions'),d=await r.json();if(!r.ok)return;
     for(const x of d.items||[]){
-      if(state.activity.some(a=>a.cloudId===x.id))continue;
+      if(state.activity.some(a=>a.cloudId===x.id||((a.title===x.title)&&Math.abs(Number(a.at||0)-Number(x.createdAt||0))<10000)))continue;
       state.activity.push({cloudId:x.id,type:x.type==='purchase'?'fulfill':(x.type==='sellback_preview'?'sell':(x.type==='pack_open'?'open':(x.type==='vault'?'keep':'fulfill'))),title:x.title,detail:x.detail,at:x.createdAt});
     }
     state.activity.sort((a,b)=>a.at-b.at);if(state.activity.length>1000)state.activity=state.activity.slice(-1000);save();renderActivity();
@@ -452,7 +452,7 @@ async function loadAccount(){
   if(!authToken){currentUser=null;renderAccount();return}
   try{
     const r=await apiFetch('/api/auth/me'),d=await r.json();if(!r.ok)throw new Error();
-    currentUser=d.user;renderAccount();await syncCloudVault();await syncTransactions();pollFulfillments();
+    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await syncCloudVault();await syncTransactions();pollFulfillments();
   }catch{authToken='';localStorage.removeItem('vd_auth_token');currentUser=null;renderAccount()}
 }
 function renderAccount(){
@@ -472,7 +472,7 @@ async function submitAuth(){
   try{
     const r=await fetch(API+endpoint,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),d=await r.json();
     if(!r.ok)throw new Error(d.error||'Sign in failed');
-    authToken=d.token;localStorage.vd_auth_token=authToken;currentUser=d.user;renderAccount();
+    authToken=d.token;localStorage.vd_auth_token=authToken;currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();
     for(const c of state.vault)if(!c.serverVaultId)await claimVaultCard(c);
     await syncCloudVault();await syncTransactions();toast(authMode==='login'?'Signed in.':'Account created.');
   }catch(e){toast(String(e.message||e))}finally{$('#authSubmit').disabled=false}
