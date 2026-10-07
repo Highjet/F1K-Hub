@@ -7,7 +7,11 @@
 <style>
 :root{--bg:#07080b;--panel:#0d1016;--line:rgba(255,255,255,.10);--muted:#9aa1b0;--text:#f6f7fb}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{min-height:100vh;background:radial-gradient(circle at 50% -10%,rgba(110,91,255,.14),transparent 30%),linear-gradient(180deg,#090a0f,#06070a 48%,#050609)}
+body{min-height:100vh;position:relative;background:#06070a}
+body::before{content:"";position:fixed;inset:-18px;z-index:-3;background-size:cover;background-position:center;background-repeat:no-repeat;filter:blur(7px) saturate(.9) brightness(.42);transform:scale(1.03);transition:background-image .3s ease,opacity .3s ease}
+body::after{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(180deg,rgba(5,7,12,.40),rgba(5,7,12,.84) 62%,rgba(5,7,12,.96)),radial-gradient(circle at 50% 0%,rgba(110,91,255,.13),transparent 34%)}
+body[data-game="pokemon"]::before{background-image:url("https://rare-gallery.com/uploads/posts/919926-digital-art-artwork-2D-portrait-display-Astero.jpg")}
+body[data-game="onepiece"]::before{background-image:url("https://p2.trrsf.com/image/fget/cf/1200/1200/middle/images.terra.com/2023/07/02/493052334-one-piece.jpeg")}
 button{font:inherit}.stroke{-webkit-text-stroke:.35px rgba(255,255,255,.12);text-shadow:0 1px 0 rgba(0,0,0,.4)}
 header{height:68px;position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--line);background:rgba(7,8,11,.88);backdrop-filter:blur(18px)}
 .brand{font-weight:900;letter-spacing:.18em}.nav{display:flex;gap:6px}.nav button{border:1px solid transparent;background:none;color:#aeb5c3;padding:9px 12px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover{color:#fff;border-color:var(--line);background:rgba(255,255,255,.05)}
@@ -62,10 +66,10 @@ const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
 const money=n=>'$'+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc=s=>String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const img=(c,size='high')=>c&&c.image?(c.imageMode==='direct'?c.image:c.image+'/'+size+'.webp'):'';
-let idx=0,pending=null,currentGame='pokemon',revealTimer=null;const cache=new Map();
+let idx=0,pending=null,currentGame='pokemon',revealTimer=null;const cache=new Map();document.body.dataset.game=currentGame;
 let state=(()=>{try{return JSON.parse(localStorage.vd_server_reboot||'{"vault":[],"activity":[],"opened":0,"next":0}')}catch(e){return{vault:[],activity:[],opened:0,next:0}}})();
 function save(){localStorage.vd_server_reboot=JSON.stringify(state)}
-function band(p){return{target:p.price*19.5,min:p.price*17,max:p.price*20}}
+function band(p){return{target:p.price*19.5,min:p.price*10,max:p.price*20}}
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
 function setFeed(ok,text){const e=$('#feedStatus');e.textContent=text;e.classList.toggle('online',ok)}
 async function fetchPool(i,force=false){
@@ -88,7 +92,7 @@ function renderPack(){
   const p=PACKS[idx],b=band(p),prev=PACKS[(idx-1+PACKS.length)%PACKS.length],next=PACKS[(idx+1)%PACKS.length];
   $('#counter').textContent=String(idx+1).padStart(2,'0')+' / '+PACKS.length;$('#prevLabel').textContent='← '+prev.name;$('#nextLabel').textContent=next.name+' →';
   $('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#minValue').textContent=money(p.price*.25);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);
-  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview pack. Hard minimum card value: '+money(p.price*.25)+'. Verified grails must fall between 17× and 20×, targeting about 19.5×.';
+  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview pack. Hard minimum card value: '+money(p.price*.25)+'. Verified grails must fall between 10× and 20×, targeting about 19.5×.';
   $('#pack').className='pack '+p.skin;$('#pack').innerHTML='<div class="crimp"></div><div class="packInner"><div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(idx+1).padStart(2,'0')+'</div></div><div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div><div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL TARGET</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div></div><div class="crimp"></div>';
   loadAndRender(idx);
 }
@@ -104,13 +108,13 @@ async function loadAndRender(i,force=false){
     $('#hitRange').textContent=money(b.hit?.range?.min)+' – '+money(b.hit?.range?.max);
     $('#grailRange').textContent=money(b.grail?.range?.min)+' – '+money(b.grail?.range?.max);
     if(data.available===false){
-      note.textContent=data.unavailableReason||'No verified raw grail is currently available in the 17×–20× band.';
+      note.textContent=data.unavailableReason||'No verified raw grail is currently available in the 10×–20× band.';
       cards.innerHTML='<div class="empty"><strong>No verified grail available right now.</strong><br>This tier stays locked until live raw pricing finds a card between '+money(b.grail?.range?.min)+' and '+money(b.grail?.range?.max)+'.</div>';
       open.disabled=true;open.textContent='TIER TEMPORARILY UNAVAILABLE';setFeed(true,'PRICING FEED ONLINE');return;
     }
     const hidden=(b.filler?.cards?.length||0)+(b.base?.cards?.length||0)+(b.hit?.cards?.length||0);
     const shown=(b.grail?.cards?.length||0);
-    note.textContent=shown+' verified raw grails · strict 17×–20× band · target 19.5×';
+    note.textContent=shown+' verified raw grails · 10×–20× band · target 19.5×';
     open.disabled=false;open.textContent='RIP THIS PACK';
     const order=['grail'];
     cards.innerHTML=order.map(key=>{
@@ -180,7 +184,7 @@ function cooldown(){
 async function daily(){if(Date.now()<state.next)return;state.next=Date.now()+86400000;save();cooldown();await openPack(0)}
 setInterval(cooldown,30000);
 $('#prev').onclick=()=>{idx=(idx-1+PACKS.length)%PACKS.length;renderPack()};$('#next').onclick=()=>{idx=(idx+1)%PACKS.length;renderPack()};$('#openPack').onclick=()=>openPack(idx);$('#dailyBtn').onclick=daily;$('#revealPack').onclick=startRevealWait;$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#fulfill').onclick=()=>settle('fulfill');$('#sell').onclick=()=>settle('sell');$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
-$$('[data-game]').forEach(b=>b.onclick=()=>{currentGame=b.dataset.game;$$('[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
+$('[data-game]').forEach(b=>b.onclick=()=>{currentGame=b.dataset.game;document.body.dataset.game=currentGame;$('[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
 $$('[data-page]').forEach(b=>b.onclick=()=>{$$('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page));$$('[data-page]').forEach(x=>x.classList.toggle('active',x===b))});
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
