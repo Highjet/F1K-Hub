@@ -209,7 +209,7 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
 </style>
 </head>
 <body>
-<header><div class="brand stroke"><img src="./icon.svg" alt="">VAULTDROP</div><div class="nav"><button id="navPack" class="active" data-page="home">Pack Shop</button><button id="navVault" data-page="vault">Vault</button><button id="navTransit" data-page="transit">Transit</button><button id="navWallet" data-page="wallet">Wallet</button><button id="navActivity" data-page="activity">Activity</button><button id="navProfile" data-page="profile">Profile</button></div><div style="display:flex;align-items:center;gap:8px"><button id="soundBtn" class="soundBtn" type="button">SOUND ON</button><select id="language" class="langSelect" aria-label="Language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ja">日本語</option><option value="fr">FR</option><option value="de">DE</option><option value="ko">한국어</option><option value="zh-TW">繁中</option><option value="it">IT</option></select><div id="feedStatus" class="status">CARD FEED CONNECTING</div></div></header>
+<header><div class="brand stroke"><img src="./icon.svg" alt="">VAULTDROP</div><div class="nav"><button id="navPack" class="active" data-page="home">Pack Shop</button><button id="navVault" data-page="vault">Vault</button><button id="navTransit" data-page="transit">Transit</button><button id="navWallet" data-page="wallet">Credit</button><button id="navActivity" data-page="activity">Activity</button><button id="navProfile" data-page="profile">Profile</button></div><div style="display:flex;align-items:center;gap:8px"><button id="soundBtn" class="soundBtn" type="button">SOUND ON</button><select id="language" class="langSelect" aria-label="Language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ja">日本語</option><option value="fr">FR</option><option value="de">DE</option><option value="ko">한국어</option><option value="zh-TW">繁中</option><option value="it">IT</option></select><div id="feedStatus" class="status">CARD FEED CONNECTING</div></div></header>
 <main>
 <section id="home" class="page active">
   <div class="hero"><div><div class="ey">POWER PACK COLLECTION</div><h1 id="homeTitle" class="stroke">Pick a pack.<br>Chase a grail.</h1><p>Every pack uses live raw-market pricing. Browse the verified grails for that tier, then rip a card.</p></div><div class="stats"><div class="stat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div><div class="stat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div><div class="stat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div></div></div>
@@ -227,24 +227,24 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
   <div id="transitList" class="transitList"></div>
 </section>
 <section id="wallet" class="page">
-  <div class="pageTitle"><div><div class="ey">VAULTDROP BALANCE</div><h1 id="walletTitle" class="stroke">Wallet</h1><p>Add funds and see every wallet balance change in one place.</p></div></div>
+  <div class="pageTitle"><div><div class="ey">VAULTDROP STORE CREDIT</div><h1 id="walletTitle" class="stroke">Credit</h1><p>Sell eligible cards back for VaultDrop Credit and use it toward future packs.</p></div></div>
   <div class="walletLayout">
     <div class="walletBalanceCard">
       <div class="walletGlow"></div>
-      <div class="walletBrand"><span class="stroke">VAULTDROP</span><span>WALLET</span></div>
-      <div class="ey">AVAILABLE BALANCE</div>
+      <div class="walletBrand"><span class="stroke">VAULTDROP</span><span>STORE CREDIT</span></div>
+      <div class="ey">AVAILABLE CREDIT</div>
       <strong id="walletBalance">$0.00</strong>
       <div class="walletMeta"><span id="walletCurrency">USD</span><span id="walletUpdated">Not synced</span></div>
     </div>
     <div class="walletFunding">
-      <div class="ey">ADD FUNDS</div><h3 class="stroke">Top up your wallet</h3><p>Choose an amount. You will always see the payment step before any charge is made.</p>
-      <div class="fundPresets"><button data-fund="10">$10</button><button data-fund="25">$25</button><button data-fund="50">$50</button><button data-fund="100">$100</button></div>
-      <div class="fundCustom"><span>$</span><input id="fundAmount" type="number" min="5" max="5000" step="1" inputmode="decimal" value="25"></div>
-      <button id="fundWalletBtn" class="accountBtn">CONTINUE TO PAYMENT</button>
-      <div id="walletFundingState" class="walletFundingState">No charge will happen until checkout is connected and you approve payment.</div>
+      <div class="ey">HOW IT WORKS</div><h3 class="stroke">Sell a card. Get full market value in credit.</h3>
+      <p>Eligible paid-pack cards sell back for 100% of their current displayed VaultDrop market value. Credit is applied to future pack purchases before any remaining amount is charged.</p>
+      <div class="accountState good">NON-WITHDRAWABLE · NON-TRANSFERABLE · NOT REDEEMABLE FOR CASH</div>
+      <div id="walletFundingState" class="walletFundingState">Preview pulls cannot create real credit. Paid-pack cards become credit-eligible automatically once paid mode is enabled.</div>
+      <div style="display:none" aria-hidden="true"><button data-fund="10"></button><button data-fund="25"></button><button data-fund="50"></button><button data-fund="100"></button><input id="fundAmount" value="25"><button id="fundWalletBtn"></button></div>
     </div>
   </div>
-  <div class="walletHistoryHead"><div><div class="ey">WALLET ACTIVITY</div><h3 class="stroke">Balance history</h3></div></div>
+  <div class="walletHistoryHead"><div><div class="ey">CREDIT ACTIVITY</div><h3 class="stroke">Credit history</h3></div></div>
   <div id="walletActivity" class="walletActivity"></div>
 </section>
 <section id="activity" class="page"><div class="pageTitle"><div><div class="ey">TIMELINE</div><h1 id="activityTitle" class="stroke">Activity</h1><p>Everything you opened, kept, fulfilled, or sold back in preview.</p></div></div><div id="activityList" class="activity"></div></section>
@@ -300,7 +300,7 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
   </div>
 </section>
 </main>
-<div id="overlay" class="overlay"><div class="reveal"><button id="close" class="close">×</button><div id="revealPack" class="rPack"><div class="packBrand stroke">VAULTDROP</div><div class="rSeal stroke">VD</div><div id="revealPackName" class="rName stroke"></div><div id="revealHint" class="ey stroke">TAP TO REVEAL</div><div id="revealCountdown" class="revealCountdown stroke"></div><div id="revealProgress" class="revealProgress"><i></i></div></div><div class="result"><img id="resultImg"><div><div id="resultSet" class="ey"></div><h2 id="resultName" class="stroke"></h2><div id="resultMarket" class="market stroke"></div><div class="actions revealActions"><button id="keep" class="primary stroke">KEEP IN VAULT</button><button id="sell" class="stroke">SELL BACK <span id="sellVal"></span></button></div><div class="fine">Sell Back is preview-only and does not transfer money.</div></div></div></div></div>
+<div id="overlay" class="overlay"><div class="reveal"><button id="close" class="close">×</button><div id="revealPack" class="rPack"><div class="packBrand stroke">VAULTDROP</div><div class="rSeal stroke">VD</div><div id="revealPackName" class="rName stroke"></div><div id="revealHint" class="ey stroke">TAP TO REVEAL</div><div id="revealCountdown" class="revealCountdown stroke"></div><div id="revealProgress" class="revealProgress"><i></i></div></div><div class="result"><img id="resultImg"><div><div id="resultSet" class="ey"></div><h2 id="resultName" class="stroke"></h2><div id="resultMarket" class="market stroke"></div><div class="actions revealActions"><button id="keep" class="primary stroke">KEEP IN VAULT</button><button id="sell" class="stroke">SELL BACK <span id="sellVal"></span></button></div><div class="fine">Preview pull: sell-back is a VaultDrop Credit preview only. Paid-pack cards will be eligible for real store credit.</div></div></div></div></div>
 <div id="modal" class="modal"><div id="detail" class="detail"></div></div><div id="toast" class="toast"></div>
 <script>
 const API='https://vaultdrop-fulfillment-api-production.up.railway.app';
@@ -342,15 +342,15 @@ async function fetchPoolForGame(game,i){
 }
 let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login',walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0},transitItems=[];
 const I18N={
-en:{navPack:'Pack Shop',navVault:'Vault',navTransit:'Transit',navWallet:'Wallet',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
-es:{navPack:'Packs',navVault:'Bóveda',navTransit:'En tránsito',navWallet:'Billetera',navActivity:'Actividad',navProfile:'Perfil',homeTitle:'Elige un pack.<br>Persigue un grail.',shopTitle:'Abre un pack',vaultTitle:'La Bóveda',activityTitle:'Actividad',profileTitle:'Tu cuenta VaultDrop',ship:'ENVIARME',requested:'ENVÍO SOLICITADO',signIn:'INICIAR SESIÓN',create:'CREAR CUENTA',signOut:'CERRAR SESIÓN',saveProfile:'GUARDAR DIRECCIÓN',addressRequired:'Añade primero tu dirección de envío.'},
-pt:{navPack:'Packs',navVault:'Cofre',navTransit:'Transporte',navWallet:'Carteira',navActivity:'Atividade',navProfile:'Perfil',homeTitle:'Escolha um pack.<br>Busque um grail.',shopTitle:'Abra um pack',vaultTitle:'O Cofre',activityTitle:'Atividade',profileTitle:'Sua conta VaultDrop',ship:'ENVIAR PARA MIM',requested:'ENVIO SOLICITADO',signIn:'ENTRAR',create:'CRIAR CONTA',signOut:'SAIR',saveProfile:'SALVAR ENDEREÇO',addressRequired:'Adicione seu endereço de entrega primeiro.'},
-ja:{navPack:'パック',navVault:'保管庫',navTransit:'配送',navWallet:'ウォレット',navActivity:'履歴',navProfile:'プロフィール',homeTitle:'パックを選ぶ。<br>レアカードを狙う。',shopTitle:'パックを開く',vaultTitle:'保管庫',activityTitle:'履歴',profileTitle:'VaultDrop アカウント',ship:'発送する',requested:'発送依頼済み',signIn:'ログイン',create:'アカウント作成',signOut:'ログアウト',saveProfile:'配送先を保存',addressRequired:'先に配送先住所を追加してください。'},
-fr:{navPack:'Packs',navVault:'Coffre',navTransit:'Transit',navWallet:'Portefeuille',navActivity:'Activité',navProfile:'Profil',homeTitle:'Choisissez un pack.<br>Visez un graal.',shopTitle:'Ouvrir un pack',vaultTitle:'Le Coffre',activityTitle:'Activité',profileTitle:'Votre compte VaultDrop',ship:'EXPÉDIER',requested:'EXPÉDITION DEMANDÉE',signIn:'CONNEXION',create:'CRÉER UN COMPTE',signOut:'DÉCONNEXION',saveProfile:'ENREGISTRER L’ADRESSE',addressRequired:'Ajoutez d’abord votre adresse de livraison.'},
-de:{navPack:'Packs',navVault:'Tresor',navTransit:'Versand',navWallet:'Wallet',navActivity:'Aktivität',navProfile:'Profil',homeTitle:'Pack wählen.<br>Grail jagen.',shopTitle:'Pack öffnen',vaultTitle:'Der Tresor',activityTitle:'Aktivität',profileTitle:'Dein VaultDrop-Konto',ship:'AN MICH SENDEN',requested:'VERSAND ANGEFORDERT',signIn:'ANMELDEN',create:'KONTO ERSTELLEN',signOut:'ABMELDEN',saveProfile:'ADRESSE SPEICHERN',addressRequired:'Füge zuerst deine Lieferadresse hinzu.'},
-ko:{navPack:'팩 상점',navVault:'보관함',navTransit:'배송',navWallet:'지갑',navActivity:'활동',navProfile:'프로필',homeTitle:'팩을 고르고.<br>그레일을 노리세요.',shopTitle:'팩 열기',vaultTitle:'보관함',activityTitle:'활동',profileTitle:'VaultDrop 계정',ship:'배송 요청',requested:'배송 요청됨',signIn:'로그인',create:'계정 만들기',signOut:'로그아웃',saveProfile:'배송지 저장',addressRequired:'먼저 배송 주소를 추가하세요.'},
-'zh-TW':{navPack:'卡包商店',navVault:'收藏庫',navTransit:'配送',navWallet:'錢包',navActivity:'活動',navProfile:'個人資料',homeTitle:'選一包。<br>追逐夢幻卡。',shopTitle:'開卡包',vaultTitle:'收藏庫',activityTitle:'活動',profileTitle:'你的 VaultDrop 帳戶',ship:'寄給我',requested:'已申請出貨',signIn:'登入',create:'建立帳戶',signOut:'登出',saveProfile:'儲存配送地址',addressRequired:'請先新增配送地址。'},
-it:{navPack:'Pacchetti',navVault:'Vault',navTransit:'Spedizioni',navWallet:'Portafoglio',navActivity:'Attività',navProfile:'Profilo',homeTitle:'Scegli un pack.<br>Caccia il grail.',shopTitle:'Apri un pack',vaultTitle:'Il Vault',activityTitle:'Attività',profileTitle:'Il tuo account VaultDrop',ship:'SPEDISCI A ME',requested:'SPEDIZIONE RICHIESTA',signIn:'ACCEDI',create:'CREA ACCOUNT',signOut:'ESCI',saveProfile:'SALVA INDIRIZZO',addressRequired:'Aggiungi prima il tuo indirizzo di spedizione.'}
+en:{navPack:'Pack Shop',navVault:'Vault',navTransit:'Transit',navWallet:'Credit',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
+es:{navPack:'Packs',navVault:'Bóveda',navTransit:'En tránsito',navWallet:'Crédito',navActivity:'Actividad',navProfile:'Perfil',homeTitle:'Elige un pack.<br>Persigue un grail.',shopTitle:'Abre un pack',vaultTitle:'La Bóveda',activityTitle:'Actividad',profileTitle:'Tu cuenta VaultDrop',ship:'ENVIARME',requested:'ENVÍO SOLICITADO',signIn:'INICIAR SESIÓN',create:'CREAR CUENTA',signOut:'CERRAR SESIÓN',saveProfile:'GUARDAR DIRECCIÓN',addressRequired:'Añade primero tu dirección de envío.'},
+pt:{navPack:'Packs',navVault:'Cofre',navTransit:'Transporte',navWallet:'Crédito',navActivity:'Atividade',navProfile:'Perfil',homeTitle:'Escolha um pack.<br>Busque um grail.',shopTitle:'Abra um pack',vaultTitle:'O Cofre',activityTitle:'Atividade',profileTitle:'Sua conta VaultDrop',ship:'ENVIAR PARA MIM',requested:'ENVIO SOLICITADO',signIn:'ENTRAR',create:'CRIAR CONTA',signOut:'SAIR',saveProfile:'SALVAR ENDEREÇO',addressRequired:'Adicione seu endereço de entrega primeiro.'},
+ja:{navPack:'パック',navVault:'保管庫',navTransit:'配送',navWallet:'クレジット',navActivity:'履歴',navProfile:'プロフィール',homeTitle:'パックを選ぶ。<br>レアカードを狙う。',shopTitle:'パックを開く',vaultTitle:'保管庫',activityTitle:'履歴',profileTitle:'VaultDrop アカウント',ship:'発送する',requested:'発送依頼済み',signIn:'ログイン',create:'アカウント作成',signOut:'ログアウト',saveProfile:'配送先を保存',addressRequired:'先に配送先住所を追加してください。'},
+fr:{navPack:'Packs',navVault:'Coffre',navTransit:'Transit',navWallet:'Crédit',navActivity:'Activité',navProfile:'Profil',homeTitle:'Choisissez un pack.<br>Visez un graal.',shopTitle:'Ouvrir un pack',vaultTitle:'Le Coffre',activityTitle:'Activité',profileTitle:'Votre compte VaultDrop',ship:'EXPÉDIER',requested:'EXPÉDITION DEMANDÉE',signIn:'CONNEXION',create:'CRÉER UN COMPTE',signOut:'DÉCONNEXION',saveProfile:'ENREGISTRER L’ADRESSE',addressRequired:'Ajoutez d’abord votre adresse de livraison.'},
+de:{navPack:'Packs',navVault:'Tresor',navTransit:'Versand',navWallet:'Credit',navActivity:'Aktivität',navProfile:'Profil',homeTitle:'Pack wählen.<br>Grail jagen.',shopTitle:'Pack öffnen',vaultTitle:'Der Tresor',activityTitle:'Aktivität',profileTitle:'Dein VaultDrop-Konto',ship:'AN MICH SENDEN',requested:'VERSAND ANGEFORDERT',signIn:'ANMELDEN',create:'KONTO ERSTELLEN',signOut:'ABMELDEN',saveProfile:'ADRESSE SPEICHERN',addressRequired:'Füge zuerst deine Lieferadresse hinzu.'},
+ko:{navPack:'팩 상점',navVault:'보관함',navTransit:'배송',navWallet:'크레딧',navActivity:'활동',navProfile:'프로필',homeTitle:'팩을 고르고.<br>그레일을 노리세요.',shopTitle:'팩 열기',vaultTitle:'보관함',activityTitle:'활동',profileTitle:'VaultDrop 계정',ship:'배송 요청',requested:'배송 요청됨',signIn:'로그인',create:'계정 만들기',signOut:'로그아웃',saveProfile:'배송지 저장',addressRequired:'먼저 배송 주소를 추가하세요.'},
+'zh-TW':{navPack:'卡包商店',navVault:'收藏庫',navTransit:'配送',navWallet:'點數',navActivity:'活動',navProfile:'個人資料',homeTitle:'選一包。<br>追逐夢幻卡。',shopTitle:'開卡包',vaultTitle:'收藏庫',activityTitle:'活動',profileTitle:'你的 VaultDrop 帳戶',ship:'寄給我',requested:'已申請出貨',signIn:'登入',create:'建立帳戶',signOut:'登出',saveProfile:'儲存配送地址',addressRequired:'請先新增配送地址。'},
+it:{navPack:'Pacchetti',navVault:'Vault',navTransit:'Spedizioni',navWallet:'Credito',navActivity:'Attività',navProfile:'Profilo',homeTitle:'Scegli un pack.<br>Caccia il grail.',shopTitle:'Apri un pack',vaultTitle:'Il Vault',activityTitle:'Attività',profileTitle:'Il tuo account VaultDrop',ship:'SPEDISCI A ME',requested:'SPEDIZIONE RICHIESTA',signIn:'ACCEDI',create:'CREA ACCOUNT',signOut:'ESCI',saveProfile:'SALVA INDIRIZZO',addressRequired:'Aggiungi prima il tuo indirizzo di spedizione.'}
 };
 const t=k=>(I18N[language]||I18N.en)[k]||I18N.en[k]||k;
 function applyLanguage(){
@@ -364,7 +364,7 @@ async function apiFetch(path,opts={}){
  const headers={...(opts.headers||{})};if(authToken)headers.authorization='Bearer '+authToken;
  return fetch(API+path,{...opts,headers});
 }
-function goPage(id){$('.page').forEach(p=>p.classList.toggle('active',p.id===id));$('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===id));sfx('nav');window.scrollTo({top:0,behavior:'smooth'});if(id==='wallet')loadWallet();if(id==='transit')loadTransit()}
+function goPage(id){$$('.page').forEach(p=>p.classList.toggle('active',p.id===id));$$('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===id));sfx('nav');window.scrollTo({top:0,behavior:'smooth'});if(id==='wallet')loadWallet();if(id==='transit')loadTransit()}
 let soundEnabled=localStorage.vd_sound!=='off',audioCtx=null;
 function getAudio(){
   if(!soundEnabled)return null;
@@ -512,7 +512,7 @@ async function openPack(i){
     if(recentKey){state.recentPulls.push(recentKey);if(state.recentPulls.length>80)state.recentPulls=state.recentPulls.slice(-80)}
     pending={p,c,bucket,game:currentGame};
     $('#revealPackName').textContent=p.name.toUpperCase();$('#resultImg').src=img(c);$('#resultSet').textContent=(currentGame==='onepiece'?'ONE PIECE · ':'POKÉMON · ')+c.setName+' · '+c.rarity;
-    $('#resultName').textContent=c.name;$('#resultMarket').textContent=bucket.toUpperCase()+' · Market '+money(c.market);$('#sellVal').textContent=money(c.market*.72);
+    $('#resultName').textContent=c.name;$('#resultMarket').textContent=bucket.toUpperCase()+' · Market '+money(c.market);$('#sellVal').textContent=money(c.market)+' CREDIT';
     $('#revealHint').textContent='TAP TO START';$('#revealCountdown').textContent='';
     const revealOverlay=$('#overlay');
     revealOverlay.classList.remove('resultMode','waiting','fx-filler','fx-base','fx-hit','fx-grail','theme-bronze','theme-silver','theme-gold','theme-platinum','theme-diamond','theme-elite','theme-astral','theme-mythic','theme-celestial');
@@ -617,8 +617,8 @@ async function logout(){
 async function settle(a){
   if(!pending)return;sfx(a==='sell'?'sell':(a==='fulfill'?'ship':'keep'));const p=pending.p,c=pending.c,game=pending.game,bucket=pending.bucket;
   if(a==='sell'){
-    state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market*.72)+' preview offer',at:Date.now()});
-    recordEvent('sellback_preview','Sell-back preview: '+c.name,money(c.market*.72)+' preview offer',c.market);
+    state.activity.push({type:'sell',title:'Sell-back preview: '+c.name,detail:money(c.market)+' VaultDrop Credit preview',at:Date.now()});
+    recordEvent('sellback_preview','Sell-back preview: '+c.name,money(c.market)+' VaultDrop Credit preview',c.market);
     save();renderStats();renderVault();renderActivity();closeReveal();toast('Sell-back preview recorded.');return;
   }
   const item={...c,vaultId:crypto.randomUUID(),fulfillment:null,action:a,pack:p.name,game};
