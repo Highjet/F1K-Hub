@@ -33,7 +33,7 @@ body[data-game="onepiece"]::before{background-image:url("./onepiece-bg.jpg")}
 header,main{position:relative;z-index:1}
 button{font:inherit}.stroke{-webkit-text-stroke:.35px rgba(255,255,255,.12);text-shadow:0 1px 0 rgba(0,0,0,.4)}
 header{height:68px;position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--line);background:rgba(7,8,11,.88);backdrop-filter:none}
-.brand{font-weight:900;letter-spacing:.18em;display:flex;align-items:center;gap:8px}.brand img{width:30px;height:30px;border-radius:8px}.nav{display:flex;gap:6px}.nav button{border:1px solid transparent;background:none;color:#aeb5c3;padding:9px 12px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover{color:#fff;border-color:var(--line);background:rgba(255,255,255,.05)}
+.brand{font-weight:900;letter-spacing:.18em;display:flex;align-items:center;gap:8px}.brand img{width:30px;height:30px;border-radius:8px}.nav{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}.nav button{border:1px solid transparent;background:none;color:#aeb5c3;padding:9px 9px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover{color:#fff;border-color:var(--line);background:rgba(255,255,255,.05)}
 .status{font-size:10px;letter-spacing:.15em;border:1px solid var(--line);border-radius:999px;padding:8px 10px;background:rgba(255,255,255,.04);color:#aeb5c3}.status.online{color:#baf0ce;border-color:rgba(92,216,142,.22)}
 main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.active{display:block}.ey{font-size:10px;letter-spacing:.22em;color:#aeb4c4;text-transform:uppercase}
 .hero{padding:34px 0 24px;display:flex;justify-content:space-between;align-items:flex-end;gap:26px}.hero h1{font-size:58px;line-height:.92;letter-spacing:-.06em;margin:8px 0 12px}.hero p{margin:0;max-width:650px;color:#b1b8c6;line-height:1.6}
@@ -49,6 +49,10 @@ main{max-width:1240px;margin:auto;padding:0 24px 90px}.page{display:none}.page.a
 .daily{margin-top:18px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}.daily h3{font-size:22px;margin:7px 0}.daily p{margin:0;color:var(--muted)}.daily button{height:46px;padding:0 18px;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;font-weight:900;cursor:pointer}.cool{margin-top:6px;color:#9ca2af;font-size:11px;text-align:right}
 .pageTitle{padding:50px 0 24px;display:flex;justify-content:space-between;align-items:flex-end}.pageTitle h1{font-size:50px;margin:7px 0}.pageTitle p{margin:0;color:var(--muted)}.vValue{text-align:right}.vValue strong{display:block;font-size:29px;margin-top:7px}.vValue small{color:var(--muted)}.vault{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.vCard{border:1px solid var(--line);border-radius:18px;background:#0d1016;overflow:hidden}.vArt{height:270px;padding:14px;display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,rgba(120,105,255,.17),rgba(10,12,18,.8) 78%)}.vArt img{max-width:100%;max-height:100%;object-fit:contain}.vInfo{padding:14px}.vInfo h3{font-size:18px;margin:0}.vInfo p{font-size:11px;color:var(--muted)}.vBot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.pill{font-size:9px;letter-spacing:.14em;padding:6px 8px;border:1px solid var(--line);border-radius:999px}.shipBtn{width:100%;margin-top:10px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(180deg,#f7f8fb,#dfe3eb);color:#0a0b0f;font-weight:900;letter-spacing:.05em;cursor:pointer}.shipBtn:disabled{opacity:.5;cursor:not-allowed}.fulfillState{width:100%;font-size:10px;color:#aab1c1;margin-top:2px}
 .activity{display:flex;flex-direction:column;gap:10px}.aItem{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.03)}.aIcon{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center}.aItem p{margin:4px 0 0;color:var(--muted);font-size:12px}.aItem time{font-size:11px;color:var(--muted)}
+.transitList{display:flex;flex-direction:column;gap:14px}.transitCard{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:16px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(17,21,30,.95),rgba(10,13,19,.96));box-shadow:0 18px 46px rgba(0,0,0,.22)}.transitImage{height:190px;border-radius:17px;background:radial-gradient(circle at 50% 28%,rgba(117,106,255,.18),rgba(8,10,15,.9) 76%);display:grid;place-items:center;padding:12px}.transitImage img{max-width:100%;max-height:100%;object-fit:contain}.transitTop{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.transitTop h3{font-size:22px;margin:3px 0 5px}.transitTop p{margin:0;color:var(--muted);font-size:11px}.transitStatus{padding:7px 10px;border-radius:999px;border:1px solid rgba(127,148,255,.25);background:rgba(97,119,255,.08);font-size:9px;font-weight:900;letter-spacing:.11em;white-space:nowrap}.transitStatus.shipped{border-color:rgba(90,207,139,.25);background:rgba(61,171,107,.08);color:#ade9c4}.transitStatus.delivered{border-color:rgba(98,222,158,.32);background:rgba(64,191,117,.10);color:#b9f0ce}.transitProgress{margin:18px 0 15px}.transitTrack{height:5px;background:#171c25;border-radius:999px;overflow:hidden}.transitTrack i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7d83ff,#8de9ff);width:0}.transitSteps{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px}.transitSteps span{font-size:8px;color:#626b7a;text-align:center}.transitSteps span.done{color:#d8def0}.transitDetails{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.transitDetail{padding:10px 11px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:#090c12}.transitDetail span{display:block;font-size:8px;letter-spacing:.12em;color:#778091}.transitDetail strong{display:block;margin-top:5px;font-size:11px;word-break:break-word}.trackingNumber{color:#b8ccff}.walletLayout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(340px,.9fr);gap:18px}.walletBalanceCard,.walletFunding{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:26px;background:linear-gradient(145deg,#121725,#080b11);padding:24px;min-height:280px}.walletBalanceCard{display:flex;flex-direction:column;justify-content:space-between}.walletGlow{position:absolute;width:320px;height:320px;right:-110px;top:-150px;border-radius:50%;background:radial-gradient(circle,rgba(117,119,255,.28),transparent 68%);pointer-events:none}.walletBrand{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.14em;color:#8d96a8}.walletBrand span:first-child{font-size:13px;color:#f5f7fb}.walletBalanceCard>.ey{margin-top:auto}.walletBalanceCard>strong{font-size:56px;letter-spacing:-.055em;line-height:1;margin:8px 0 18px}.walletMeta{display:flex;justify-content:space-between;font-size:10px;color:#7f899a}.walletFunding h3{font-size:26px;margin:6px 0 6px}.walletFunding p{font-size:11px;line-height:1.55;color:var(--muted);margin:0 0 16px}.fundPresets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.fundPresets button{height:42px;border:1px solid var(--line);border-radius:11px;background:#111620;color:#eef1f8;font-weight:900;cursor:pointer}.fundPresets button.active,.fundPresets button:hover{background:#f3f5f9;color:#0a0c11}.fundCustom{margin-top:10px;height:44px;border:1px solid var(--line);border-radius:12px;background:#080b10;display:flex;align-items:center;padding:0 12px}.fundCustom span{color:#929bac;font-weight:900}.fundCustom input{flex:1;height:100%;border:0;background:transparent;color:#fff;font-size:17px;font-weight:900;outline:0;padding:0 8px}.walletFundingState{min-height:34px;margin-top:9px;font-size:10px;line-height:1.45;color:#7f899a}.walletFundingState.good{color:#aee8c3}.walletFundingState.warn{color:#e5c684}.walletHistoryHead{display:flex;justify-content:space-between;align-items:end;margin:26px 0 12px}.walletHistoryHead h3{font-size:24px;margin:5px 0 0}.walletActivity{display:flex;flex-direction:column;gap:9px}.walletRow{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;padding:13px 15px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025)}.walletRowIcon{width:38px;height:38px;border-radius:12px;background:#111722;border:1px solid var(--line);display:grid;place-items:center;font-weight:900}.walletRow p{margin:3px 0 0;color:var(--muted);font-size:10px}.walletAmount{font-weight:900;font-size:14px}.walletAmount.credit{color:#aee8c3}.walletEmpty{padding:24px;border:1px dashed var(--line);border-radius:16px;color:#8992a3;text-align:center}
+@media(max-width:850px){.walletLayout{grid-template-columns:1fr}.transitCard{grid-template-columns:110px 1fr}.transitImage{height:150px}.transitDetails{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.transitCard{grid-template-columns:1fr}.transitImage{height:220px}.transitSteps span{font-size:7px}.transitDetails{grid-template-columns:1fr}.walletBalanceCard>strong{font-size:46px}.fundPresets{grid-template-columns:1fr 1fr}}
+
 .overlay{position:fixed;inset:0;z-index:80;display:none;align-items:flex-start;justify-content:center;padding:72px 20px 30px;background:rgba(5,6,10,.82);backdrop-filter:none;overflow:auto}.overlay.open{display:flex}.reveal{position:relative;width:min(900px,100%);padding:26px;border:1px solid var(--line);border-radius:28px;background:#0d1017;box-shadow:0 34px 90px rgba(0,0,0,.44)}.close{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#11151d;color:#fff;font-size:22px;cursor:pointer}.rPack{width:300px;min-height:460px;margin:auto;border-radius:24px;border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:24px;background:radial-gradient(circle at 50% 14%,rgba(117,101,255,.35),transparent 34%),linear-gradient(135deg,#1a1d26,#0b0d13);cursor:pointer}.rSeal{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);font-size:30px;font-weight:900}.rName{font-size:42px;line-height:.92;font-weight:900}.result{display:none;grid-template-columns:280px 1fr;gap:24px;align-items:center}.overlay.resultMode .rPack{display:none}.overlay.resultMode .result{display:grid}.result img{width:100%;max-height:430px;object-fit:contain}.result h2{font-size:36px;margin:7px 0}.market{font-size:24px;margin:10px 0 16px}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:#fff;font-weight:900;cursor:pointer}.actions .primary{background:#f5f6f9;color:#090a0d;border:0}.fine{font-size:10px;color:#858b98;margin-top:10px}.modal{position:fixed;inset:0;z-index:90;display:none;align-items:flex-start;justify-content:center;padding:72px 20px;background:rgba(5,6,10,.76);backdrop-filter:none;overflow:auto}.modal.show{display:flex}.detail{width:min(760px,100%);padding:20px;border:1px solid var(--line);border-radius:24px;background:#0d1017;display:grid;grid-template-columns:270px 1fr;gap:20px}.detail img{width:100%;max-height:390px;object-fit:contain}.detail h2{font-size:32px}.dGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.dStat{padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}.dStat span{font-size:9px;letter-spacing:.15em;color:#9ca2af;display:block}.dStat strong{display:block;margin-top:7px}.toast{position:fixed;left:50%;bottom:24px;z-index:100;transform:translate(-50%,20px);opacity:0;padding:11px 14px;border-radius:11px;background:#f5f6f9;color:#11151d;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
 .shopTools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}.gameSwitch{display:flex;padding:4px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03)}.gameBtn{border:0;background:transparent;color:#8f96a5;padding:7px 11px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:800}.gameBtn.active{background:#f3f4f8;color:#0b0d11}.oddsWrap{margin-top:20px;padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}.oddsGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.oddsBox{padding:13px;border:1px solid var(--line);border-radius:14px;background:#0b0e14}.oddsBox span{display:block;font-size:9px;letter-spacing:.17em;color:#a3aaba}.oddsBox strong{display:block;font-size:24px;margin-top:4px}.oddsBox small{display:block;margin-top:6px;color:#858c9a;font-size:10px}.oddsBox.filler{box-shadow:inset 0 2px 0 #73798a}.oddsBox.base{box-shadow:inset 0 2px 0 #7aa4c5}.oddsBox.hit{box-shadow:inset 0 2px 0 #c59f56}.oddsBox.grail{box-shadow:inset 0 2px 0 #a77cff}.bucketSection{grid-column:1/-1;margin-top:10px}.bucketSection .bucketTitle h4{font-size:22px}.bucketSection .bucketCards{margin-top:4px}.bucketTitle{display:flex;justify-content:space-between;align-items:end;padding:4px 2px 10px}.bucketTitle h4{margin:0;font-size:18px}.bucketTitle span{font-size:11px;color:#8f96a5}.bucketCards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.bucketTag{position:absolute;left:10px;top:10px;z-index:2;padding:6px 8px;border-radius:999px;background:rgba(7,8,12,.84);border:1px solid rgba(255,255,255,.13);font-size:9px;letter-spacing:.12em}.revealProgress{width:190px;height:5px;border-radius:999px;background:rgba(255,255,255,.09);overflow:hidden;opacity:0;transition:.18s}.revealProgress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#8d7aff,#fff)}.overlay.waiting .revealProgress{opacity:1}.overlay.waiting .revealProgress i{animation:revealWait 3s linear forwards}@keyframes revealWait{to{width:100%}}.overlay.waiting .rPack{pointer-events:none;filter:saturate(.85)}
 
@@ -198,14 +202,14 @@ main{padding:0 12px 70px}.hero h1{font-size:42px}.shop{padding:16px 12px}
 .packBottom{gap:10px}.packBottom strong{font-size:10.5px;white-space:nowrap}.packBottom .right{min-width:0}
 .sRight{grid-template-columns:1fr}.cards,.vault{grid-template-columns:1fr 1fr;gap:10px}.art{height:225px;flex-basis:225px}.art img{max-height:170px}.cardTitle{font-size:15px}.cardInfo{min-height:92px;padding:12px 12px 15px}
 .daily,.shopHead,.pageTitle,.poolHead{align-items:flex-start;flex-direction:column}.overlay,.modal{padding-top:92px}
-header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.brand{font-size:11px;order:1}.brand img{width:26px;height:26px}header>div:last-child{order:2;margin-left:auto}.status{display:none}.langSelect{height:30px;padding:0 8px}.nav{order:3;width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.nav button{font-size:10px;padding:7px 4px;white-space:nowrap}
+header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.brand{font-size:11px;order:1}.brand img{width:26px;height:26px}header>div:last-child{order:2;margin-left:auto}.status{display:none}.langSelect{height:30px;padding:0 8px}.nav{order:3;width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.nav button{font-size:10px;padding:7px 4px;white-space:nowrap}
 }
 
 .art img,.detail img,#revealImage,.revealCard img{filter:none!important;backdrop-filter:none!important}
 </style>
 </head>
 <body>
-<header><div class="brand stroke"><img src="./icon.svg" alt="">VAULTDROP</div><div class="nav"><button id="navPack" class="active" data-page="home">Pack Shop</button><button id="navVault" data-page="vault">Vault</button><button id="navActivity" data-page="activity">Activity</button><button id="navProfile" data-page="profile">Profile</button></div><div style="display:flex;align-items:center;gap:8px"><button id="soundBtn" class="soundBtn" type="button">SOUND ON</button><select id="language" class="langSelect" aria-label="Language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ja">日本語</option><option value="fr">FR</option><option value="de">DE</option><option value="ko">한국어</option><option value="zh-TW">繁中</option><option value="it">IT</option></select><div id="feedStatus" class="status">CARD FEED CONNECTING</div></div></header>
+<header><div class="brand stroke"><img src="./icon.svg" alt="">VAULTDROP</div><div class="nav"><button id="navPack" class="active" data-page="home">Pack Shop</button><button id="navVault" data-page="vault">Vault</button><button id="navTransit" data-page="transit">Transit</button><button id="navWallet" data-page="wallet">Wallet</button><button id="navActivity" data-page="activity">Activity</button><button id="navProfile" data-page="profile">Profile</button></div><div style="display:flex;align-items:center;gap:8px"><button id="soundBtn" class="soundBtn" type="button">SOUND ON</button><select id="language" class="langSelect" aria-label="Language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ja">日本語</option><option value="fr">FR</option><option value="de">DE</option><option value="ko">한국어</option><option value="zh-TW">繁中</option><option value="it">IT</option></select><div id="feedStatus" class="status">CARD FEED CONNECTING</div></div></header>
 <main>
 <section id="home" class="page active">
   <div class="hero"><div><div class="ey">POWER PACK COLLECTION</div><h1 id="homeTitle" class="stroke">Pick a pack.<br>Chase a grail.</h1><p>Every pack uses live raw-market pricing. Browse the verified grails for that tier, then rip a card.</p></div><div class="stats"><div class="stat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div><div class="stat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div><div class="stat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div></div></div>
@@ -218,6 +222,31 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
   </section>
 </section>
 <section id="vault" class="page"><div class="pageTitle"><div><div class="ey">YOUR COLLECTION</div><h1 id="vaultTitle" class="stroke">The Vault</h1><p>Cards you kept from pack openings.</p></div><div class="vValue"><span class="ey">EST. VALUE</span><strong id="vaultValue">$0.00</strong><small id="vaultCount">0 cards</small></div></div><div id="vaultGrid" class="vault"></div></section>
+<section id="transit" class="page">
+  <div class="pageTitle"><div><div class="ey">FULFILLMENT TRACKING</div><h1 id="transitTitle" class="stroke">Transit</h1><p>Cards being sourced, purchased, shipped, and delivered to you.</p></div><div class="vValue"><span class="ey">ACTIVE SHIPMENTS</span><strong id="transitCount">0</strong><small>live fulfillment status</small></div></div>
+  <div id="transitList" class="transitList"></div>
+</section>
+<section id="wallet" class="page">
+  <div class="pageTitle"><div><div class="ey">VAULTDROP BALANCE</div><h1 id="walletTitle" class="stroke">Wallet</h1><p>Add funds and see every wallet balance change in one place.</p></div></div>
+  <div class="walletLayout">
+    <div class="walletBalanceCard">
+      <div class="walletGlow"></div>
+      <div class="walletBrand"><span class="stroke">VAULTDROP</span><span>WALLET</span></div>
+      <div class="ey">AVAILABLE BALANCE</div>
+      <strong id="walletBalance">$0.00</strong>
+      <div class="walletMeta"><span id="walletCurrency">USD</span><span id="walletUpdated">Not synced</span></div>
+    </div>
+    <div class="walletFunding">
+      <div class="ey">ADD FUNDS</div><h3 class="stroke">Top up your wallet</h3><p>Choose an amount. You will always see the payment step before any charge is made.</p>
+      <div class="fundPresets"><button data-fund="10">$10</button><button data-fund="25">$25</button><button data-fund="50">$50</button><button data-fund="100">$100</button></div>
+      <div class="fundCustom"><span>$</span><input id="fundAmount" type="number" min="5" max="5000" step="1" inputmode="decimal" value="25"></div>
+      <button id="fundWalletBtn" class="accountBtn">CONTINUE TO PAYMENT</button>
+      <div id="walletFundingState" class="walletFundingState">No charge will happen until checkout is connected and you approve payment.</div>
+    </div>
+  </div>
+  <div class="walletHistoryHead"><div><div class="ey">WALLET ACTIVITY</div><h3 class="stroke">Balance history</h3></div></div>
+  <div id="walletActivity" class="walletActivity"></div>
+</section>
 <section id="activity" class="page"><div class="pageTitle"><div><div class="ey">TIMELINE</div><h1 id="activityTitle" class="stroke">Activity</h1><p>Everything you opened, kept, fulfilled, or sold back in preview.</p></div></div><div id="activityList" class="activity"></div></section>
 <section id="profile" class="page">
   <div class="profileTop">
@@ -311,22 +340,22 @@ async function fetchPoolForGame(game,i){
     cache.set(key,data);persistPool(key,data);return data;
   }finally{clearTimeout(timer)}
 }
-let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login';
+let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login',walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0},transitItems=[];
 const I18N={
-en:{navPack:'Pack Shop',navVault:'Vault',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
-es:{navPack:'Packs',navVault:'Bóveda',navActivity:'Actividad',navProfile:'Perfil',homeTitle:'Elige un pack.<br>Persigue un grail.',shopTitle:'Abre un pack',vaultTitle:'La Bóveda',activityTitle:'Actividad',profileTitle:'Tu cuenta VaultDrop',ship:'ENVIARME',requested:'ENVÍO SOLICITADO',signIn:'INICIAR SESIÓN',create:'CREAR CUENTA',signOut:'CERRAR SESIÓN',saveProfile:'GUARDAR DIRECCIÓN',addressRequired:'Añade primero tu dirección de envío.'},
-pt:{navPack:'Packs',navVault:'Cofre',navActivity:'Atividade',navProfile:'Perfil',homeTitle:'Escolha um pack.<br>Busque um grail.',shopTitle:'Abra um pack',vaultTitle:'O Cofre',activityTitle:'Atividade',profileTitle:'Sua conta VaultDrop',ship:'ENVIAR PARA MIM',requested:'ENVIO SOLICITADO',signIn:'ENTRAR',create:'CRIAR CONTA',signOut:'SAIR',saveProfile:'SALVAR ENDEREÇO',addressRequired:'Adicione seu endereço de entrega primeiro.'},
-ja:{navPack:'パック',navVault:'保管庫',navActivity:'履歴',navProfile:'プロフィール',homeTitle:'パックを選ぶ。<br>レアカードを狙う。',shopTitle:'パックを開く',vaultTitle:'保管庫',activityTitle:'履歴',profileTitle:'VaultDrop アカウント',ship:'発送する',requested:'発送依頼済み',signIn:'ログイン',create:'アカウント作成',signOut:'ログアウト',saveProfile:'配送先を保存',addressRequired:'先に配送先住所を追加してください。'},
-fr:{navPack:'Packs',navVault:'Coffre',navActivity:'Activité',navProfile:'Profil',homeTitle:'Choisissez un pack.<br>Visez un graal.',shopTitle:'Ouvrir un pack',vaultTitle:'Le Coffre',activityTitle:'Activité',profileTitle:'Votre compte VaultDrop',ship:'EXPÉDIER',requested:'EXPÉDITION DEMANDÉE',signIn:'CONNEXION',create:'CRÉER UN COMPTE',signOut:'DÉCONNEXION',saveProfile:'ENREGISTRER L’ADRESSE',addressRequired:'Ajoutez d’abord votre adresse de livraison.'},
-de:{navPack:'Packs',navVault:'Tresor',navActivity:'Aktivität',navProfile:'Profil',homeTitle:'Pack wählen.<br>Grail jagen.',shopTitle:'Pack öffnen',vaultTitle:'Der Tresor',activityTitle:'Aktivität',profileTitle:'Dein VaultDrop-Konto',ship:'AN MICH SENDEN',requested:'VERSAND ANGEFORDERT',signIn:'ANMELDEN',create:'KONTO ERSTELLEN',signOut:'ABMELDEN',saveProfile:'ADRESSE SPEICHERN',addressRequired:'Füge zuerst deine Lieferadresse hinzu.'},
-ko:{navPack:'팩 상점',navVault:'보관함',navActivity:'활동',navProfile:'프로필',homeTitle:'팩을 고르고.<br>그레일을 노리세요.',shopTitle:'팩 열기',vaultTitle:'보관함',activityTitle:'활동',profileTitle:'VaultDrop 계정',ship:'배송 요청',requested:'배송 요청됨',signIn:'로그인',create:'계정 만들기',signOut:'로그아웃',saveProfile:'배송지 저장',addressRequired:'먼저 배송 주소를 추가하세요.'},
-'zh-TW':{navPack:'卡包商店',navVault:'收藏庫',navActivity:'活動',navProfile:'個人資料',homeTitle:'選一包。<br>追逐夢幻卡。',shopTitle:'開卡包',vaultTitle:'收藏庫',activityTitle:'活動',profileTitle:'你的 VaultDrop 帳戶',ship:'寄給我',requested:'已申請出貨',signIn:'登入',create:'建立帳戶',signOut:'登出',saveProfile:'儲存配送地址',addressRequired:'請先新增配送地址。'},
-it:{navPack:'Pacchetti',navVault:'Vault',navActivity:'Attività',navProfile:'Profilo',homeTitle:'Scegli un pack.<br>Caccia il grail.',shopTitle:'Apri un pack',vaultTitle:'Il Vault',activityTitle:'Attività',profileTitle:'Il tuo account VaultDrop',ship:'SPEDISCI A ME',requested:'SPEDIZIONE RICHIESTA',signIn:'ACCEDI',create:'CREA ACCOUNT',signOut:'ESCI',saveProfile:'SALVA INDIRIZZO',addressRequired:'Aggiungi prima il tuo indirizzo di spedizione.'}
+en:{navPack:'Pack Shop',navVault:'Vault',navTransit:'Transit',navWallet:'Wallet',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
+es:{navPack:'Packs',navVault:'Bóveda',navTransit:'En tránsito',navWallet:'Billetera',navActivity:'Actividad',navProfile:'Perfil',homeTitle:'Elige un pack.<br>Persigue un grail.',shopTitle:'Abre un pack',vaultTitle:'La Bóveda',activityTitle:'Actividad',profileTitle:'Tu cuenta VaultDrop',ship:'ENVIARME',requested:'ENVÍO SOLICITADO',signIn:'INICIAR SESIÓN',create:'CREAR CUENTA',signOut:'CERRAR SESIÓN',saveProfile:'GUARDAR DIRECCIÓN',addressRequired:'Añade primero tu dirección de envío.'},
+pt:{navPack:'Packs',navVault:'Cofre',navTransit:'Transporte',navWallet:'Carteira',navActivity:'Atividade',navProfile:'Perfil',homeTitle:'Escolha um pack.<br>Busque um grail.',shopTitle:'Abra um pack',vaultTitle:'O Cofre',activityTitle:'Atividade',profileTitle:'Sua conta VaultDrop',ship:'ENVIAR PARA MIM',requested:'ENVIO SOLICITADO',signIn:'ENTRAR',create:'CRIAR CONTA',signOut:'SAIR',saveProfile:'SALVAR ENDEREÇO',addressRequired:'Adicione seu endereço de entrega primeiro.'},
+ja:{navPack:'パック',navVault:'保管庫',navTransit:'配送',navWallet:'ウォレット',navActivity:'履歴',navProfile:'プロフィール',homeTitle:'パックを選ぶ。<br>レアカードを狙う。',shopTitle:'パックを開く',vaultTitle:'保管庫',activityTitle:'履歴',profileTitle:'VaultDrop アカウント',ship:'発送する',requested:'発送依頼済み',signIn:'ログイン',create:'アカウント作成',signOut:'ログアウト',saveProfile:'配送先を保存',addressRequired:'先に配送先住所を追加してください。'},
+fr:{navPack:'Packs',navVault:'Coffre',navTransit:'Transit',navWallet:'Portefeuille',navActivity:'Activité',navProfile:'Profil',homeTitle:'Choisissez un pack.<br>Visez un graal.',shopTitle:'Ouvrir un pack',vaultTitle:'Le Coffre',activityTitle:'Activité',profileTitle:'Votre compte VaultDrop',ship:'EXPÉDIER',requested:'EXPÉDITION DEMANDÉE',signIn:'CONNEXION',create:'CRÉER UN COMPTE',signOut:'DÉCONNEXION',saveProfile:'ENREGISTRER L’ADRESSE',addressRequired:'Ajoutez d’abord votre adresse de livraison.'},
+de:{navPack:'Packs',navVault:'Tresor',navTransit:'Versand',navWallet:'Wallet',navActivity:'Aktivität',navProfile:'Profil',homeTitle:'Pack wählen.<br>Grail jagen.',shopTitle:'Pack öffnen',vaultTitle:'Der Tresor',activityTitle:'Aktivität',profileTitle:'Dein VaultDrop-Konto',ship:'AN MICH SENDEN',requested:'VERSAND ANGEFORDERT',signIn:'ANMELDEN',create:'KONTO ERSTELLEN',signOut:'ABMELDEN',saveProfile:'ADRESSE SPEICHERN',addressRequired:'Füge zuerst deine Lieferadresse hinzu.'},
+ko:{navPack:'팩 상점',navVault:'보관함',navTransit:'배송',navWallet:'지갑',navActivity:'활동',navProfile:'프로필',homeTitle:'팩을 고르고.<br>그레일을 노리세요.',shopTitle:'팩 열기',vaultTitle:'보관함',activityTitle:'활동',profileTitle:'VaultDrop 계정',ship:'배송 요청',requested:'배송 요청됨',signIn:'로그인',create:'계정 만들기',signOut:'로그아웃',saveProfile:'배송지 저장',addressRequired:'먼저 배송 주소를 추가하세요.'},
+'zh-TW':{navPack:'卡包商店',navVault:'收藏庫',navTransit:'配送',navWallet:'錢包',navActivity:'活動',navProfile:'個人資料',homeTitle:'選一包。<br>追逐夢幻卡。',shopTitle:'開卡包',vaultTitle:'收藏庫',activityTitle:'活動',profileTitle:'你的 VaultDrop 帳戶',ship:'寄給我',requested:'已申請出貨',signIn:'登入',create:'建立帳戶',signOut:'登出',saveProfile:'儲存配送地址',addressRequired:'請先新增配送地址。'},
+it:{navPack:'Pacchetti',navVault:'Vault',navTransit:'Spedizioni',navWallet:'Portafoglio',navActivity:'Attività',navProfile:'Profilo',homeTitle:'Scegli un pack.<br>Caccia il grail.',shopTitle:'Apri un pack',vaultTitle:'Il Vault',activityTitle:'Attività',profileTitle:'Il tuo account VaultDrop',ship:'SPEDISCI A ME',requested:'SPEDIZIONE RICHIESTA',signIn:'ACCEDI',create:'CREA ACCOUNT',signOut:'ESCI',saveProfile:'SALVA INDIRIZZO',addressRequired:'Aggiungi prima il tuo indirizzo di spedizione.'}
 };
 const t=k=>(I18N[language]||I18N.en)[k]||I18N.en[k]||k;
 function applyLanguage(){
  document.documentElement.lang=language;localStorage.vd_language=language;$('#language').value=language;
- const map={navPack:'navPack',navVault:'navVault',navActivity:'navActivity',navProfile:'navProfile',shopTitle:'shopTitle',vaultTitle:'vaultTitle',activityTitle:'activityTitle',profileTitle:'profileTitle'};
+ const map={navPack:'navPack',navVault:'navVault',navTransit:'navTransit',navWallet:'navWallet',navActivity:'navActivity',navProfile:'navProfile',shopTitle:'shopTitle',vaultTitle:'vaultTitle',activityTitle:'activityTitle',profileTitle:'profileTitle'};
  for(const [id,key] of Object.entries(map)){const el=$('#'+id);if(el)el.textContent=t(key)}
  $('#homeTitle').innerHTML=t('homeTitle');$('#loginTab').textContent=t('signIn');$('#registerTab').textContent=t('create');$('#logoutBtn').textContent=t('signOut');$('#saveProfile').textContent=t('saveProfile');$('#authSubmit').textContent=authMode==='login'?t('signIn'):t('create');
  renderStats();renderVault();
@@ -335,7 +364,7 @@ async function apiFetch(path,opts={}){
  const headers={...(opts.headers||{})};if(authToken)headers.authorization='Bearer '+authToken;
  return fetch(API+path,{...opts,headers});
 }
-function goPage(id){$$('.page').forEach(p=>p.classList.toggle('active',p.id===id));$$('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===id));sfx('nav');window.scrollTo({top:0,behavior:'smooth'})}
+function goPage(id){$('.page').forEach(p=>p.classList.toggle('active',p.id===id));$('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===id));sfx('nav');window.scrollTo({top:0,behavior:'smooth'});if(id==='wallet')loadWallet();if(id==='transit')loadTransit()}
 let soundEnabled=localStorage.vd_sound!=='off',audioCtx=null;
 function getAudio(){
   if(!soundEnabled)return null;
@@ -551,7 +580,7 @@ async function loadAccount(){
   if(!authToken){currentUser=null;renderAccount();return}
   try{
     const r=await apiFetch('/api/auth/me'),d=await r.json();if(!r.ok)throw new Error();
-    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await syncCloudVault();await syncTransactions();pollFulfillments();
+    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);pollFulfillments();
   }catch{authToken='';localStorage.removeItem('vd_auth_token');currentUser=null;renderAccount()}
 }
 function renderAccount(){
@@ -573,7 +602,7 @@ async function submitAuth(){
     if(!r.ok)throw new Error(d.error||'Sign in failed');
     authToken=d.token;localStorage.vd_auth_token=authToken;currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();
     for(const c of state.vault)if(!c.serverVaultId)await claimVaultCard(c);
-    await syncCloudVault();await syncTransactions();sfx('success');toast(authMode==='login'?'Signed in.':'Account created.');
+    await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);sfx('success');toast(authMode==='login'?'Signed in.':'Account created.');
   }catch(e){sfx('error');toast(String(e.message||e))}finally{$('#authSubmit').disabled=false}
 }
 async function saveDeliveryProfile(){
@@ -583,7 +612,7 @@ async function saveDeliveryProfile(){
   try{const r=await apiFetch('/api/profile',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),d=await r.json();if(!r.ok)throw new Error(d.error||'Could not save profile');currentUser=d.user;renderAccount();$('#profileSaved').textContent=d.shippingReady?'Delivery profile ready for Ship to Me.':'Saved. Complete the remaining address fields before shipping.';sfx('success');toast('Delivery profile saved.')}catch(e){sfx('error');toast(String(e.message||e))}finally{$('#saveProfile').disabled=false}
 }
 async function logout(){
-  try{await apiFetch('/api/auth/logout',{method:'POST'})}catch{}authToken='';currentUser=null;localStorage.removeItem('vd_auth_token');renderAccount();sfx('nav');toast('Signed out.');
+  try{await apiFetch('/api/auth/logout',{method:'POST'})}catch{}authToken='';currentUser=null;localStorage.removeItem('vd_auth_token');renderAccount();walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0};transitItems=[];renderWallet();renderTransit();sfx('nav');toast('Signed out.');
 }
 async function settle(a){
   if(!pending)return;sfx(a==='sell'?'sell':(a==='fulfill'?'ship':'keep'));const p=pending.p,c=pending.c,game=pending.game,bucket=pending.bucket;
@@ -642,7 +671,7 @@ async function requestShip(i){
     if(!r.ok){if(data?.code==='ADDRESS_REQUIRED'){goPage('profile');throw new Error(t('addressRequired'))}throw new Error(data?.error||'Fulfillment request failed')}
     c.fulfillment={id:data.item.id,status:data.item.status,provider:'ebay',environment:data.ebay?.environment||'setup',candidate:data.item.sourceCandidate||null,tracking:data.item.tracking||[]};
     state.activity.push({type:'fulfill',title:'Shipping requested: '+c.name,detail:'eBay fulfillment · '+String(data.item.status).replaceAll('_',' '),at:Date.now()});
-    save();renderVault();renderActivity();sfx('ship');toast(data.item.sourceCandidate?'Exact-card sourcing found a candidate.':'Shipping request queued.');
+    save();renderVault();renderActivity();await loadTransit(true);sfx('ship');toast(data.item.sourceCandidate?'Exact-card sourcing found a candidate.':'Shipping request queued.');
   }catch(e){buttons.forEach(b=>b.disabled=false);sfx('error');toast(String(e?.message||e))}
 }
 async function refreshFulfillment(c){
@@ -661,7 +690,79 @@ async function refreshFulfillment(c){
 let fulfillmentPollBusy=false;
 async function pollFulfillments(){
   if(fulfillmentPollBusy||!authToken)return;fulfillmentPollBusy=true;
-  try{for(const c of state.vault.filter(x=>x.fulfillment?.id))await refreshFulfillment(c);save();renderVault();renderActivity()}finally{fulfillmentPollBusy=false}
+  try{for(const c of state.vault.filter(x=>x.fulfillment?.id))await refreshFulfillment(c);save();renderVault();renderActivity();await loadTransit(true)}finally{fulfillmentPollBusy=false}
+}
+
+
+function walletMoney(cents){return money(Number(cents||0)/100)}
+async function loadWallet(){
+  if(!authToken||!currentUser){walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0};renderWallet();return}
+  try{
+    const r=await apiFetch('/api/wallet'),d=await r.json();if(!r.ok)throw new Error(d.error||'Wallet unavailable');
+    walletState=d.wallet||walletState;renderWallet();
+  }catch(e){$('#walletFundingState').textContent=String(e?.message||e);$('#walletFundingState').className='walletFundingState warn'}
+}
+function renderWallet(){
+  $('#walletBalance').textContent=walletMoney(walletState.balanceCents);
+  $('#walletCurrency').textContent=walletState.currency||'USD';
+  $('#walletUpdated').textContent=walletState.updatedAt?('Updated '+new Date(walletState.updatedAt).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})):'Not synced';
+  const rows=Array.isArray(walletState.ledger)?walletState.ledger:[];
+  $('#walletActivity').innerHTML=rows.length?rows.map(x=>{
+    const credit=Number(x.amountCents||0)>=0;
+    return '<div class="walletRow"><div class="walletRowIcon">'+(credit?'＋':'−')+'</div><div><strong class="stroke">'+esc(x.title||'Wallet activity')+'</strong><p>'+esc(x.detail||x.status||'')+' · '+new Date(x.createdAt||Date.now()).toLocaleString()+'</p></div><div class="walletAmount '+(credit?'credit':'')+'">'+(credit?'+':'−')+walletMoney(Math.abs(Number(x.amountCents||0)))+'</div></div>';
+  }).join(''):'<div class="walletEmpty">'+(authToken?'No wallet activity yet.':'Sign in to view and fund your VaultDrop wallet.')+'</div>';
+  $('#fundWalletBtn').disabled=!authToken;
+}
+async function requestWalletTopup(){
+  if(!authToken||!currentUser){goPage('profile');toast('Sign in before adding funds.');return}
+  const amount=Number($('#fundAmount').value||0);$('#fundWalletBtn').disabled=true;$('#walletFundingState').className='walletFundingState';$('#walletFundingState').textContent='Preparing payment…';
+  try{
+    const r=await apiFetch('/api/wallet/topup/quote',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({amount})}),d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Could not prepare top-up');
+    if(d.wallet)walletState=d.wallet;renderWallet();
+    if(d.topup?.checkoutUrl){location.href=d.topup.checkoutUrl;return}
+    $('#walletFundingState').textContent=d.message||'Payment checkout is not connected yet. No charge was made.';
+    $('#walletFundingState').className='walletFundingState warn';sfx('ui');
+  }catch(e){$('#walletFundingState').textContent=String(e?.message||e);$('#walletFundingState').className='walletFundingState warn';sfx('error')}
+  finally{$('#fundWalletBtn').disabled=false}
+}
+function transitImage(card){
+  if(!card?.image)return '';
+  return card.imageMode==='tcgdex'?card.image+'/high.webp':card.image;
+}
+function transitTrackMeta(item){
+  for(const row of (item.tracking||[])){
+    const sd=row?.shippingDetail||{};
+    const nested=Array.isArray(sd.shipmentTrackingDetails)?sd.shipmentTrackingDetails[0]:null;
+    const number=sd.trackingNumber||nested?.trackingNumber||sd.shipmentTrackingNumber||'';
+    const carrier=sd.shippingCarrierCode||nested?.shippingCarrierCode||sd.carrierCode||'';
+    const eta=sd.maxEstimatedDeliveryDate||sd.minEstimatedDeliveryDate||sd.deliveryDate||'';
+    if(number||carrier||eta)return{number:String(number||''),carrier:String(carrier||''),eta:String(eta||'')};
+  }
+  return{number:'',carrier:'',eta:''};
+}
+const TRANSIT_STEPS=['SOURCING','FOUND','PURCHASED','SHIPPED','DELIVERED'];
+function transitStep(status){
+  const s=String(status||'').toLowerCase();
+  if(s==='delivered')return 4;if(s==='shipped')return 3;if(s==='purchased'||s==='checkout_ready')return 2;if(s==='source_found')return 1;return 0;
+}
+async function loadTransit(silent=false){
+  if(!authToken||!currentUser){transitItems=[];renderTransit();return}
+  try{
+    const r=await apiFetch('/api/transit'),d=await r.json();if(!r.ok)throw new Error(d.error||'Transit unavailable');
+    transitItems=Array.isArray(d.items)?d.items:[];renderTransit();
+  }catch(e){if(!silent)toast(String(e?.message||e))}
+}
+function renderTransit(){
+  const active=transitItems.filter(x=>!['delivered','cancelled'].includes(String(x.status||'').toLowerCase()));
+  $('#transitCount').textContent=String(active.length);
+  if(!authToken){$('#transitList').innerHTML='<div class="empty">Sign in to see cards being shipped to you.</div>';return}
+  if(!transitItems.length){$('#transitList').innerHTML='<div class="empty">Nothing is in transit yet. Use <strong>Ship to Me</strong> from your Vault when you want a physical card delivered.</div>';return}
+  $('#transitList').innerHTML=transitItems.map(item=>{
+    const step=transitStep(item.status),progress=Math.round(step/(TRANSIT_STEPS.length-1)*100),tm=transitTrackMeta(item),card=item.card||{},status=String(item.status||'requested').replaceAll('_',' ').toUpperCase();
+    const seller=item.sourceCandidate?.seller?.username||'—',order=item.purchaseOrderId||'—',eta=tm.eta?(new Date(tm.eta).toString()==='Invalid Date'?tm.eta:new Date(tm.eta).toLocaleDateString()):'—';
+    return '<article class="transitCard"><div class="transitImage">'+(transitImage(card)?'<img src="'+esc(transitImage(card))+'" alt="'+esc(card.name||'Card')+'">':'')+'</div><div><div class="transitTop"><div><div class="ey">'+esc(card.game==='onepiece'?'ONE PIECE':'POKÉMON')+' · '+esc(card.setName||'')+'</div><h3 class="stroke">'+esc(card.name||'Card')+'</h3><p>#'+esc(card.localId||'—')+(item.sourceCandidate?.total?' · sourced at '+money(item.sourceCandidate.total):'')+'</p></div><div class="transitStatus '+(step>=3?'shipped ':'')+(step===4?'delivered':'')+'">'+esc(status)+'</div></div><div class="transitProgress"><div class="transitTrack"><i style="width:'+progress+'%"></i></div><div class="transitSteps">'+TRANSIT_STEPS.map((x,i)=>'<span class="'+(i<=step?'done':'')+'">'+x+'</span>').join('')+'</div></div><div class="transitDetails"><div class="transitDetail"><span>TRACKING</span><strong class="trackingNumber">'+esc(tm.number||'Not assigned yet')+'</strong></div><div class="transitDetail"><span>CARRIER / ETA</span><strong>'+esc((tm.carrier||'Pending')+(eta!=='—'?' · '+eta:''))+'</strong></div><div class="transitDetail"><span>ORDER / SELLER</span><strong>'+esc(order)+' · '+esc(seller)+'</strong></div></div></div></article>';
+  }).join('');
 }
 
 function renderActivity(){
@@ -678,6 +779,9 @@ $$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();sfx('nav'
 $$('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
 $('#language').onchange=()=>{sfx('nav');language=$('#language').value;applyLanguage();if(currentUser)saveDeliveryProfile()};
 $('#soundBtn').onclick=()=>setSound(!soundEnabled);
+$('[data-fund]').forEach(b=>b.onclick=()=>{$('[data-fund]').forEach(x=>x.classList.toggle('active',x===b));$('#fundAmount').value=b.dataset.fund;sfx('ui')});
+$('#fundAmount').oninput=()=>$('[data-fund]').forEach(x=>x.classList.toggle('active',Number(x.dataset.fund)===Number($('#fundAmount').value)));
+$('#fundWalletBtn').onclick=requestWalletTopup;
 document.addEventListener('pointerdown',e=>{if(e.target.closest('button')&&e.target.id!=='soundBtn')sfx('ui')},{passive:true});
 $('#loginTab').onclick=()=>setAuthMode('login');$('#registerTab').onclick=()=>setAuthMode('register');$('#authSubmit').onclick=submitAuth;$('#logoutBtn').onclick=logout;$('#saveProfile').onclick=saveDeliveryProfile;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installBtn').style.display='inline-flex';$('#installStatus').textContent='Installable app ready'});
@@ -687,6 +791,6 @@ if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serv
 setInterval(pollFulfillments,15000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();applyLanguage();renderStats();renderVault();renderActivity();renderPack();loadAccount();
+$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();renderPack();loadAccount();
 </script>
 </body></html>
