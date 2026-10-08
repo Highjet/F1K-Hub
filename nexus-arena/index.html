@@ -1070,7 +1070,7 @@ const NX_WORLD_COLORS={
 function artUrls(c){
  const art=c.art?.painting||"Majestic Griffin";
  const root='https://raw.githubusercontent.com/wtactics/art/master/WT/'+encodeURIComponent(art)+'/'+encodeURIComponent(art);
- const high=root+'.png',fallback=root+'_150.png';
+ const high=art==='Knight'?('https://raw.githubusercontent.com/wtactics/art/master/WT/Knight/knight.png'):root+'.png',fallback=root+'_150.png';
  return {art,high,fallback,optimized:'https://images.weserv.nl/?url='+encodeURIComponent(high)+'&w=680&output=webp&q=87'};
 }
 function sceneSvg(c){
