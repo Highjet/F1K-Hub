@@ -947,17 +947,17 @@ swipeStage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];swipeX=
 swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-swipeX,dy=t.clientY-swipeY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.15){if(dx<0)$('#next').click();else $('#prev').click()}},{passive:true});$('#openPack').onclick=()=>openPack(idx);$('#revealPack').onclick=startRevealWait;$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#sell').onclick=()=>settle('sell');$('#vaultGrid').onclick=e=>{const ship=e.target.closest('[data-ship-index]');if(ship){requestShip(Number(ship.dataset.shipIndex));return}const sell=e.target.closest('[data-sell-index]');if(sell)sellFromVault(Number(sell.dataset.sellIndex))};$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
 function selectGame(game,{silent=false,force=false}={}){
   currentGame=game==='onepiece'?'onepiece':'pokemon';document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';
-  $('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));if(!silent)sfx('nav');renderPack(force);
+  $$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));if(!silent)sfx('nav');renderPack(force);
 }
-$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();selectGame(b.dataset.game)});
+$$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();selectGame(b.dataset.game)});
 $$('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
 $('#language').onchange=()=>{sfx('nav');language=$('#language').value;applyLanguage();if(currentUser)saveDeliveryProfile()};
 $('#soundBtn').onclick=()=>setSound(!soundEnabled);
 document.addEventListener('pointerdown',e=>{if(e.target.closest('button')&&e.target.id!=='soundBtn')sfx('ui')},{passive:true});
 $('#shippingBackBtn').onclick=()=>goPage('vault');$('#shippingPayBtn').onclick=confirmShippingPayment;
 $('#loginTab').onclick=()=>setAuthMode('login');$('#registerTab').onclick=()=>setAuthMode('register');$('#authSubmit').onclick=submitAuth;$('#logoutBtn').onclick=logout;$('#saveProfile').onclick=saveDeliveryProfile;
-$('[data-fund]').forEach(b=>b.onclick=()=>{$('[data-fund]').forEach(x=>x.classList.toggle('active',x===b));$('#fundAmount').value=b.dataset.fund;renderWallet()});
-$('#fundAmount').addEventListener('input',()=>{$('[data-fund]').forEach(x=>x.classList.toggle('active',Number(x.dataset.fund)===Number($('#fundAmount').value)));renderWallet()});
+$$('[data-fund]').forEach(b=>b.onclick=()=>{$$('[data-fund]').forEach(x=>x.classList.toggle('active',x===b));$('#fundAmount').value=b.dataset.fund;renderWallet()});
+$('#fundAmount').addEventListener('input',()=>{$$('[data-fund]').forEach(x=>x.classList.toggle('active',Number(x.dataset.fund)===Number($('#fundAmount').value)));renderWallet()});
 $('#fundWalletBtn').onclick=requestWalletTopup;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installBtn').style.display='inline-flex';$('#installStatus').textContent='Installable app ready'});
 $('#installBtn').onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('#installBtn').style.display='none'};
@@ -966,7 +966,7 @@ if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serv
 setInterval(pollFulfillments,15000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');try{localStorage.removeItem('vd_pool_cache_v1')}catch{}renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();selectGame('pokemon',{silent:true,force:true});loadAccount();
+$$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');try{localStorage.removeItem('vd_pool_cache_v1')}catch{}renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();selectGame('pokemon',{silent:true,force:true});loadAccount();
 
 </script>
 </body></html>
