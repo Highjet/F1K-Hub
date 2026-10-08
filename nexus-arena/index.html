@@ -854,36 +854,104 @@ const ART_LIBRARY=[
  "Orc Shaman","Orc Drummer","Orc Forge","Smith","Ghazw",
  "Poison Ivy","Botanist","Sequoia Saplings","Dryads Flute","Centaur Hunter"
 ];
+
+const NX_WORLD_COLORS={
+ Nova:{deep:'#0c2255',mid:'#366db1',light:'#c5e9ff',glow:'#fff2a7',earth:'#294e81',border:'#e6c88b',metal:'#f8e9b8',dust:'#b8f1ff'},
+ Void:{deep:'#090c24',mid:'#48306e',light:'#9774c2',glow:'#ff6be1',earth:'#302254',border:'#a881f1',metal:'#dfcafb',dust:'#e6a2ff'},
+ Forge:{deep:'#160c18',mid:'#71341e',light:'#e98136',glow:'#ffc15c',earth:'#3c2322',border:'#d6a76c',metal:'#eed5a0',dust:'#ff9a5e'},
+ Grove:{deep:'#071d1e',mid:'#225c45',light:'#73bd7a',glow:'#dcf68e',earth:'#203c2d',border:'#a4d7a0',metal:'#e1efc0',dust:'#c8ffb7'}
+};
 function artUrls(c){
- const id=Number(c.id.slice(1))-1,art=ART_LIBRARY[id]||"Majestic Griffin";
- const base='https://raw.githubusercontent.com/wtactics/art/master/WT/'+encodeURIComponent(art)+'/'+encodeURIComponent(art);
- const fallback=base+'_150.png';
- const high=base+'.png';
- const optimized='https://images.weserv.nl/?url='+encodeURIComponent(high)+'&w=640&output=webp&q=85';
- return {art,optimized,fallback,high};
+ const art=c.art?.painting||"Majestic Griffin";
+ const root='https://raw.githubusercontent.com/wtactics/art/master/WT/'+encodeURIComponent(art)+'/'+encodeURIComponent(art);
+ const high=root+'.png',fallback=root+'_150.png';
+ return {art,high,fallback,optimized:'https://images.weserv.nl/?url='+encodeURIComponent(high)+'&w=680&output=webp&q=87'};
+}
+function sceneSvg(c){
+ const m=c.art||{scene:'sky-cliff',focusX:50,focusY:40},p=NX_WORLD_COLORS[c.faction],id='nxs'+c.id;
+ const n=Number(c.id.substring(1));
+ const skyline=(c.faction==='Nova'
+ ?'<path d="M0 368 L72 300 103 338 182 238 224 306 305 224 358 308 400 270 400 540H0Z" fill="'+p.earth+'" opacity=".52"/>'+
+  '<path d="M-30 385 Q68 327 146 370 Q250 285 430 363L430 542H-30Z" fill="#bce3f1" opacity=".24"/>'
+ :c.faction==='Void'
+ ?'<path d="M0 376 L65 291 108 341 185 213 245 323 301 247 400 337 400 540H0Z" fill="#0d1129" opacity=".86"/>'+
+  '<path d="M15 348 L30 205 47 247 62 310M340 370L365 212 383 253" stroke="#aa85ff" stroke-width="7" opacity=".35" fill="none"/>'
+ :c.faction==='Forge'
+ ?'<path d="M0 356 L64 270 127 343 202 235 249 308 321 220 400 343 400 540H0Z" fill="#271922" opacity=".93"/>'+
+  '<path d="M0 405 Q80 379 137 434 T286 426 T420 411 L420 542H0Z" fill="#a33e1b" opacity=".66"/>'
+ :'<path d="M0 364 Q70 262 135 339 Q185 261 254 338 Q334 264 410 338 L410 540H0Z" fill="#0e3e2f" opacity=".78"/>'+
+  '<path d="M0 420 Q85 375 192 428 Q289 378 420 415L420 540H0Z" fill="#174a39" opacity=".65"/>'
+ );
+ let architecture='';
+ const type=m.scene;
+ if(c.faction==='Nova'){
+  if(/temple|gate|sanctum|observatory|bridge/.test(type)){
+   architecture='<g fill="#dbe9e9" stroke="#f8e6b4" stroke-width="3" opacity=".72"><path d="M15 408V258L30 220 45 258V408Z"/><path d="M348 410V240L365 195 380 240V410Z"/><path d="M110 356V188L132 147 156 188V356Z"/><path d="M244 354V165L268 129 286 165V354Z"/></g><path d="M-10 380L410 348" stroke="#fff0cb" stroke-width="10" opacity=".32"/>';
+  }else{
+   architecture='<g stroke="#fff6c2" fill="none" opacity=".6"><ellipse cx="200" cy="230" rx="155" ry="36" stroke-width="5"/><path d="M90 210L90 340 M320 187L320 350" stroke-width="4"/></g>';
+  }
+ }else if(c.faction==='Void'){
+  architecture='<g fill="#19132c" stroke="#9a60db" stroke-width="3" opacity=".65"><path d="M5 390L20 226 36 221 51 390Z"/><path d="M312 388L332 201 348 177 363 388Z"/><path d="M70 385L114 252 137 321 163 383Z"/></g>'+
+  '<path d="M47 175 L80 192 61 228 93 258 63 314" fill="none" stroke="#df83ff" stroke-width="5" opacity=".65"/>';
+ }else if(c.faction==='Forge'){
+  architecture='<g fill="#17121b" stroke="#9c633b" stroke-width="3"><path d="M10 387L10 183 55 178 55 387Z"/><path d="M339 387V160L389 156 389 387Z"/><path d="M85 380V232L119 188 155 232V380Z"/></g>'+
+  '<path d="M0 480Q106 444 183 492T400 463" fill="none" stroke="#ffa351" stroke-width="15" opacity=".64"/>';
+ }else {
+  architecture='<g fill="none" stroke="#153a2e" stroke-width="39" stroke-linecap="round"><path d="M25 450Q50 250 12 87"/><path d="M385 460Q346 245 394 69"/><path d="M92 460Q70 358 99 304"/></g>'+
+  '<g fill="#568b54" opacity=".77"><circle cx="5" cy="118" r="77"/><circle cx="380" cy="116" r="85"/><circle cx="47" cy="65" r="57"/><circle cx="341" cy="58" r="67"/></g>'+
+  '<path d="M28 475Q160 423 211 475T390 473" stroke="#8acf9a" fill="none" stroke-width="13" opacity=".5"/>';
+ }
+ const glyph=c.faction==='Nova'?'✧':c.faction==='Void'?'☾':c.faction==='Forge'?'◆':'❀';
+ let custom='';
+ if(/storm|rift|abyss|crucible|volcano|slag|forge/.test(type)){
+  custom='<path d="M33 145L80 218 51 221 99 313M345 115L304 208 335 197 285 281" fill="none" stroke="'+p.glow+'" stroke-width="6" opacity=".5"/>';
+ }else if(/grove|garden|blossom|forest|root|shrine|moon/.test(type)){
+  custom='<g fill="'+p.glow+'" opacity=".4"><circle cx="55" cy="208" r="4"/><circle cx="118" cy="111" r="3"/><circle cx="332" cy="184" r="5"/><circle cx="271" cy="98" r="3"/></g>';
+ }else if(/sky|sun|observatory/.test(type)){
+  custom='<g fill="none" stroke="'+p.glow+'" opacity=".38"><circle cx="205" cy="178" r="87" stroke-width="3"/><circle cx="205" cy="178" r="110" stroke-width="1"/></g>';
+ }
+ const pts=Array.from({length:19},(_,i)=>{
+   const x=(n*71+i*103)%400,y=(i*43+n*31)%540,r=1+(i%3);
+   return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+p.dust+'" opacity="'+(0.17+(i%5)*.1).toFixed(2)+'"/>';
+ }).join('');
+ return '<svg class="nx-scene-svg" viewBox="0 0 400 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">'+
+ '<defs><linearGradient id="'+id+'sky" x1="0" x2=".2" y1="0" y2="1"><stop stop-color="'+p.light+'"/><stop offset=".37" stop-color="'+p.mid+'"/><stop offset="1" stop-color="'+p.deep+'"/></linearGradient>'+
+ '<radialGradient id="'+id+'sun"><stop stop-color="'+p.glow+'" stop-opacity=".7"/><stop offset=".5" stop-color="'+p.glow+'" stop-opacity=".17"/><stop offset="1" stop-color="'+p.glow+'" stop-opacity="0"/></radialGradient></defs>'+
+ '<rect width="400" height="540" fill="url(#'+id+'sky)"/>'+
+ '<circle cx="'+(160+n%9*8)+'" cy="155" r="185" fill="url(#'+id+'sun)"/>'+
+ '<path d="M0 330Q90 277 178 329T400 311V540H0Z" fill="'+p.mid+'" opacity=".16"/>'+
+ skyline+architecture+custom+pts+
+ '<path d="M-10 495Q106 466 202 498T410 477V540H-10Z" fill="'+p.deep+'" opacity=".45"/>'+
+ '</svg>';
 }
 function imageArt(c,mode='card'){
- const a=artUrls(c);
- const eager=mode==='battle'||mode==='hero'?'eager':'lazy';
- const highPriority=mode==='battle'?'high':'auto';
- return '<span class="paintedArt">'+creatureArt(c)+
- '<img class="creaturePainting" loading="'+eager+'" fetchpriority="'+highPriority+'" decoding="async" src="'+a.optimized+'" alt="'+c.name+' fantasy illustration" '+
- 'onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src=\''+a.fallback+'\'}else{this.style.display=\'none\'}">'+
- '</span>';
+ const a=artUrls(c),m=c.art||{},eager=mode==='battle'||mode==='hero';
+ const style='--nx-focus-x:'+(m.focusX??50)+'%;--nx-focus-y:'+(m.focusY??43)+'%;';
+ return '<span class="nx-art-stack" style="'+style+'"><span class="nx-environment">'+sceneSvg(c)+'</span>'+
+ '<span class="nx-painted-underlay">'+creatureArt(c)+'</span>'+
+ '<img class="nx-painted-creature" loading="'+(eager?'eager':'lazy')+'" decoding="async" fetchpriority="'+(mode==='battle'?'high':'auto')+'" src="'+a.optimized+'" alt="'+c.name+' fantasy illustration" '+
+ 'onerror="if(!this.dataset.retry){this.dataset.retry=1;this.src=\''+a.fallback+'\'}else{this.style.display=\'none\'}">'+
+ '<span class="nx-color-atmosphere"></span></span>';
 }
-
+function nxCornerMarks(){
+ return '<span class="nx-corner nx-corner-tl"></span><span class="nx-corner nx-corner-tr"></span><span class="nx-corner nx-corner-bl"></span><span class="nx-corner nx-corner-br"></span>';
+}
 function cardHtml(c,opts={}){
  const own=state.owned[c.id],selected=state.squad.includes(c.id),r=c.rarity.toLowerCase();
- const mode=opts.mode||'card',hero=mode==='hero'?' heroPainting':'';
- const glyph={Nova:'✧',Void:'☾',Forge:'◆',Grove:'❀'}[c.faction]||'✦';
- return '<article class="tcg collectible rarity-'+r+(opts.selected&&selected?' selected':'')+hero+'" data-card="'+c.id+'" style="'+artVars(c)+'">'+
-  '<div class="faceHeader"><span class="faceRarityIcon">'+glyph+'</span><div class="faceHeaderName"><strong>'+c.name+'</strong><small>'+c.faction.toUpperCase()+' · '+c.role.toUpperCase()+'</small></div>'+
-  '<span class="faceHP"><b>'+c.hp+'</b><small>HP</small></span></div>'+
-  '<div class="faceArtwork">'+imageArt(c,mode)+'<div class="faceGlint"></div>'+
-  '<div class="faceArtLabel"><span>✦ '+c.rarity.toUpperCase()+'</span><span>FIRST FRACTURE</span></div></div>'+
-  '<div class="faceInfo"><div class="abilityFace"><span class="abilityIcon">'+glyph+'</span><span class="abilityCopy"><strong>'+c.ultName+'</strong><small>'+c.ultText+'</small></span><b>'+c.atk*3+'</b></div>'+
-  '<div class="faceStats"><span><small>ATK</small><b>'+c.atk+'</b></span><span><small>SPEED</small><b>'+c.speed+'</b></span><span><small>OWNED</small><b>'+(own?.count||0)+'</b></span><span class="faceSerial">'+c.id.toUpperCase()+'</span></div></div>'+
-  (opts.selected&&selected?'<button type="button" class="squadPosition '+(state.squad.indexOf(c.id)<3?'starting':'reserve')+'" data-promote="'+c.id+'">'+(state.squad.indexOf(c.id)<3?'★ STARTER':'↑ SET STARTER')+'</button>':'')+
+ const mode=opts.mode||'card',glyph=c.art?.rune||'✦';
+ return '<article class="tcg collectible nx-card rarity-'+r+' faction-'+c.faction.toLowerCase()+
+ (opts.selected&&selected?' selected':'')+(mode==='hero'?' heroPainting':'')+'" data-card="'+c.id+'" style="'+artVars(c)+'">'+
+ '<div class="nx-frame">'+nxCornerMarks()+
+ '<div class="nx-canvas">'+imageArt(c,mode)+'<div class="nx-art-shade"></div>'+
+ '<div class="nx-nameplate"><span class="nx-rune">'+glyph+'</span><div class="nx-title"><strong>'+c.name+'</strong><small>'+c.faction.toUpperCase()+' · '+c.role.toUpperCase()+'</small></div>'+
+ '<div class="nx-hp"><b>'+c.hp+'</b><small>HP</small></div></div>'+
+ '<div class="nx-edition"><span>'+c.rarity.toUpperCase()+'</span><span>FIRST FRACTURE</span></div></div>'+
+ '<div class="nx-ability-strip"><div class="nx-ability-mark">'+glyph+'</div><div class="nx-ability-copy"><strong>'+c.ultName+'</strong><small>'+c.ultText+'</small></div><b>'+c.atk*3+'</b></div>'+
+ '<div class="nx-footer"><div class="nx-stat-gem nx-atk"><small>ATK</small><b>'+c.atk+'</b></div>'+
+ '<div class="nx-footer-center"><span>SPD <strong>'+c.speed+'</strong></span><span class="nx-catalog">'+c.id.toUpperCase()+'</span></div>'+
+ '<div class="nx-stat-gem nx-def"><small>DEF</small><b>'+Math.round(c.hp/10)+'</b></div></div>'+
+ '</div>'+
+ (opts.selected&&selected?'<button type="button" class="squadPosition '+(state.squad.indexOf(c.id)<3?'starting':'reserve')+'" data-promote="'+c.id+'">'+(state.squad.indexOf(c.id)<3?'★ STARTER':'↑ SET STARTER')+'</button>':'')+
  '</article>';
 }
 function renderTop(){
@@ -1077,17 +1145,22 @@ function renderBattleTop(){
  $('#playerAlive').textContent=battle?countAlive(battle.player):6;$('#enemyAlive').textContent=battle?countAlive(battle.enemy):6;
 }
 
+
 function fighterHtml(u,i,enemy=false){
  if(!u)return '<div class="fighter dead"></div>';
- const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy,role=u.card.role;
- return '<div class="fighter rarity-'+u.card.rarity.toLowerCase()+' '+(u.dead?'dead ':'')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-uid="'+u.uid+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'">'+
- '<div class="fighterFace">'+imageArt(u.card,'battle')+'<div class="fighterVignette"></div>'+
- '<div class="fighterTitle"><span>'+u.card.name+'</span><b>'+Math.ceil(u.hp)+' HP</b></div>'+
- '<div class="fighterRole">'+u.card.faction.toUpperCase()+' · '+role.toUpperCase()+'</div>'+
- '<span class="fightSelection">'+(enemy?'◎ TARGET':'✦ ACTIVE')+'</span></div>'+
+ const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy,c=u.card,role=c.role;
+ return '<div class="fighter nx-fighter rarity-'+c.rarity.toLowerCase()+' faction-'+c.faction.toLowerCase()+' '+(u.dead?'dead ':'')+
+ (enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+
+ '" data-uid="'+u.uid+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(c)+'">'+
+ '<div class="nx-battle-frame">'+nxCornerMarks()+
+ '<div class="nx-battle-canvas">'+imageArt(c,'battle')+'<div class="nx-art-shade"></div>'+
+ '<div class="nx-battle-name"><span>'+c.name+'</span><b>'+Math.ceil(u.hp)+' HP</b></div>'+
+ '<div class="nx-battle-caption"><span>'+c.faction.toUpperCase()+' · '+role.toUpperCase()+'</span><b>'+c.rarity.toUpperCase()+'</b></div></div>'+
  '<div class="fighterReadout"><div class="hpbar"><i style="width:'+hp+'%"></i></div>'+
  '<div class="energybar"><i style="width:'+en+'%"></i></div>'+
- '<div class="fighterStats"><span>ATK '+u.card.atk+'</span><span>ENERGY '+Math.round(en)+'%</span></div></div></div>';
+ '<div class="fighterStats"><span>ATK '+c.atk+'</span><span>ENERGY '+Math.round(en)+'%</span></div>'+
+ '<div class="nx-battle-select">'+(enemy?'◎ FOCUS':'✦ ACTIVE')+'</div></div>'+
+ '</div></div>';
 }
 function patchField(id,units,enemy){
  const field=document.getElementById(id);if(!field)return;
@@ -1100,7 +1173,7 @@ function patchField(id,units,enemy){
   el.classList.toggle('focused',enemy&&focusEnemy===i);
   const hp=el.querySelector('.hpbar i');if(hp)hp.style.width=Math.max(0,100*u.hp/u.maxHp)+'%';
   const en=el.querySelector('.energybar i');if(en)en.style.width=u.energy+'%';
-  const label=el.querySelector('.fighterTitle b');if(label)label.textContent=Math.ceil(u.hp)+' HP';
+  const label=el.querySelector('.nx-battle-name b');if(label)label.textContent=Math.ceil(u.hp)+' HP';
   const stat=el.querySelector('.fighterStats span:last-child');if(stat)stat.textContent='ENERGY '+Math.round(u.energy)+'%';
   el.onclick=enemy?()=>{focusEnemy=i;if(battle)battle.log='Focus target: '+u.card.name;renderBattle()}:()=>{selectedPlayer=i;renderBattle()};
  });
