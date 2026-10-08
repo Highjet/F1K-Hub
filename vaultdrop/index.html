@@ -305,11 +305,13 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
       <div class="walletMeta"><span id="walletCurrency">USD</span><span id="walletUpdated">Not synced</span></div><div class="walletMeta" style="margin-top:10px"><span>LEGACY PREVIEW CREDIT</span><strong id="walletPreviewBalance" style="font-size:12px">$0.00</strong></div>
     </div>
     <div class="walletFunding">
-      <div class="ey">HOW IT WORKS</div><h3 class="stroke">Sell a card. Get full market value in credit.</h3>
-      <p>Eligible paid-pack cards sell back for 100% of their current displayed VaultDrop market value. Credit is applied to future pack purchases before any remaining amount is charged.</p>
-      <div class="accountState good">NON-WITHDRAWABLE · NON-TRANSFERABLE · NOT REDEEMABLE FOR CASH</div>
-      <div id="walletFundingState" class="walletFundingState">Paid-pack cards can be sold back for VaultDrop Store Credit. Legacy Preview Credit remains separate and cannot reduce a live purchase.</div>
-      <div style="display:none" aria-hidden="true"><button data-fund="10"></button><button data-fund="25"></button><button data-fund="50"></button><button data-fund="100"></button><input id="fundAmount" value="25"><button id="fundWalletBtn"></button></div>
+      <div class="ey">ADD FUNDS</div><h3 class="stroke">Load your VaultDrop Credit.</h3>
+      <p>Add store credit securely through Stripe, then use that balance toward future pack purchases. Paid-pack card sellbacks also continue to add credit here.</p>
+      <div class="fundPresets"><button data-fund="10">$10</button><button data-fund="25" class="active">$25</button><button data-fund="50">$50</button><button data-fund="100">$100</button></div>
+      <div class="fundCustom"><span>$</span><input id="fundAmount" type="number" min="5" max="1000" step="1" value="25" inputmode="decimal" aria-label="Amount to add"></div>
+      <button id="fundWalletBtn" class="accountBtn" style="margin-top:12px">ADD $25 CREDIT</button>
+      <div class="accountState good" style="margin-top:12px">NON-WITHDRAWABLE · NON-TRANSFERABLE · NOT REDEEMABLE FOR CASH</div>
+      <div id="walletFundingState" class="walletFundingState">Payments are processed by Stripe. Credit is added only after VaultDrop verifies the payment.</div>
     </div>
   </div>
   <div class="walletHistoryHead"><div><div class="ey">CREDIT ACTIVITY</div><h3 class="stroke">Credit history</h3></div></div>
@@ -681,7 +683,7 @@ async function loadAccount(){
   if(!authToken){currentUser=null;renderAccount();return}
   try{
     const r=await apiFetch('/api/auth/me'),d=await r.json();if(!r.ok)throw new Error();
-    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);pollFulfillments();await resumePurchaseFromUrl();
+    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);pollFulfillments();await resumeWalletTopupFromUrl();await resumePurchaseFromUrl();
   }catch{authToken='';localStorage.removeItem('vd_auth_token');currentUser=null;renderAccount()}
 }
 function renderAccount(){
@@ -703,7 +705,7 @@ async function submitAuth(){
     if(!r.ok)throw new Error(d.error||'Sign in failed');
     authToken=d.token;localStorage.vd_auth_token=authToken;currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();
     for(const c of state.vault)if(!c.serverVaultId)await claimVaultCard(c);
-    await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);await resumePurchaseFromUrl();sfx('success');toast(authMode==='login'?'Signed in.':'Account created.');
+    await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);await resumeWalletTopupFromUrl();await resumePurchaseFromUrl();sfx('success');toast(authMode==='login'?'Signed in.':'Account created.');
   }catch(e){sfx('error');toast(String(e.message||e))}finally{$('#authSubmit').disabled=false}
 }
 async function saveDeliveryProfile(){
@@ -821,19 +823,45 @@ function renderWallet(){
     return '<div class="walletRow"><div class="walletRowIcon">'+(credit?'＋':'−')+'</div><div><strong class="stroke">'+esc(x.title||'Wallet activity')+'</strong><p>'+esc((x.preview?'PREVIEW · ':'')+(x.detail||x.status||''))+' · '+new Date(x.createdAt||Date.now()).toLocaleString()+'</p></div><div class="walletAmount '+(credit?'credit':'')+'">'+(credit?'+':'−')+walletMoney(Math.abs(Number(x.amountCents||0)))+'</div></div>';
   }).join(''):'<div class="walletEmpty">'+(authToken?'No VaultDrop Credit activity yet.':'Sign in to view your VaultDrop Credit.')+'</div>';
   $('#fundWalletBtn').disabled=!authToken;
+  const amount=Math.max(0,Number($('#fundAmount').value||0));
+  $('#fundWalletBtn').textContent='ADD '+money(amount)+' CREDIT';
 }
 async function requestWalletTopup(){
   if(!authToken||!currentUser){goPage('profile');toast('Sign in before adding funds.');return}
-  const amount=Number($('#fundAmount').value||0);$('#fundWalletBtn').disabled=true;$('#walletFundingState').className='walletFundingState';$('#walletFundingState').textContent='Preparing payment…';
+  const amount=Number($('#fundAmount').value||0);
+  if(!Number.isFinite(amount)||amount<5||amount>1000){toast('Choose an amount from $5 to $1,000.');return}
+  $('#fundWalletBtn').disabled=true;$('#walletFundingState').className='walletFundingState';$('#walletFundingState').textContent='Preparing secure Stripe Checkout…';
   try{
-    const r=await apiFetch('/api/wallet/topup/quote',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({amount})}),d=await r.json();
+    const r=await apiFetch('/api/wallet/topups/create',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({amount,requestId:crypto.randomUUID()})}),d=await r.json();
     if(!r.ok)throw new Error(d.error||'Could not prepare top-up');
     if(d.wallet)walletState=d.wallet;renderWallet();
     if(d.topup?.checkoutUrl){location.href=d.topup.checkoutUrl;return}
-    $('#walletFundingState').textContent=d.message||'Payment checkout is not connected yet. No charge was made.';
-    $('#walletFundingState').className='walletFundingState warn';sfx('ui');
+    if(d.topup?.status==='credited'){await loadWallet();$('#walletFundingState').textContent='Funds added successfully.';$('#walletFundingState').className='walletFundingState good';return}
+    throw new Error('Stripe Checkout did not return a payment link.');
   }catch(e){$('#walletFundingState').textContent=String(e?.message||e);$('#walletFundingState').className='walletFundingState warn';sfx('error')}
-  finally{$('#fundWalletBtn').disabled=false}
+  finally{$('#fundWalletBtn').disabled=!authToken;renderWallet()}
+}
+async function resumeWalletTopupFromUrl(){
+  if(!authToken||!currentUser)return;
+  const q=new URLSearchParams(location.search),topupId=q.get('topup');if(!topupId)return;
+  goPage('wallet');
+  try{
+    const r=await apiFetch('/api/wallet/topups/'+encodeURIComponent(topupId)),d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Could not verify added funds');
+    if(d.wallet)walletState=d.wallet;renderWallet();
+    if(d.topup?.status==='credited'){
+      history.replaceState({},'',location.pathname);
+      $('#walletFundingState').textContent=walletMoney(d.topup.amountCents)+' was added to your VaultDrop Credit.';
+      $('#walletFundingState').className='walletFundingState good';sfx('success');toast('Funds added successfully.');
+    }else if(q.get('wallet_topup')==='cancel'){
+      history.replaceState({},'',location.pathname);
+      $('#walletFundingState').textContent='Checkout canceled. No funds were added.';
+      $('#walletFundingState').className='walletFundingState warn';
+    }else{
+      $('#walletFundingState').textContent='Payment is still confirming. Your credit will appear only after Stripe verifies it.';
+      $('#walletFundingState').className='walletFundingState';
+    }
+  }catch(e){$('#walletFundingState').textContent=String(e?.message||e);$('#walletFundingState').className='walletFundingState warn'}
 }
 function transitImage(card){
   if(!card?.image)return '';
@@ -890,6 +918,9 @@ $('#language').onchange=()=>{sfx('nav');language=$('#language').value;applyLangu
 $('#soundBtn').onclick=()=>setSound(!soundEnabled);
 document.addEventListener('pointerdown',e=>{if(e.target.closest('button')&&e.target.id!=='soundBtn')sfx('ui')},{passive:true});
 $('#loginTab').onclick=()=>setAuthMode('login');$('#registerTab').onclick=()=>setAuthMode('register');$('#authSubmit').onclick=submitAuth;$('#logoutBtn').onclick=logout;$('#saveProfile').onclick=saveDeliveryProfile;
+$('[data-fund]').forEach(b=>b.onclick=()=>{$('[data-fund]').forEach(x=>x.classList.toggle('active',x===b));$('#fundAmount').value=b.dataset.fund;renderWallet()});
+$('#fundAmount').addEventListener('input',()=>{$('[data-fund]').forEach(x=>x.classList.toggle('active',Number(x.dataset.fund)===Number($('#fundAmount').value)));renderWallet()});
+$('#fundWalletBtn').onclick=requestWalletTopup;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installBtn').style.display='inline-flex';$('#installStatus').textContent='Installable app ready'});
 $('#installBtn').onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('#installBtn').style.display='none'};
 $('#notifyBtn').onclick=async()=>{if(!('Notification'in window)){toast('Notifications are not supported on this device.');return}const p=await Notification.requestPermission();$('#notifyBtn').textContent=p==='granted'?'NOTIFICATIONS ON':'ENABLE NOTIFICATIONS';toast(p==='granted'?'Fulfillment notifications enabled.':'Notification permission not enabled.')};
