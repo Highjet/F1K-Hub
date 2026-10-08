@@ -34,6 +34,81 @@ main{padding:24px}.page{display:none}.page.active{display:block}
 @keyframes shine{0%,55%{transform:translateX(-130%)}75%,100%{transform:translateX(130%)}}@keyframes pulse{50%{transform:scale(1.03)}}@keyframes packFloat{to{transform:translateY(-12px) rotate(1deg)}}@keyframes pop{from{opacity:0;transform:translateY(25px) scale(.92)}to{opacity:1;transform:none}}
 @media(max-width:900px){.hero,.marketGrid{grid-template-columns:1fr}.packGrid,.albumGrid,.storeGrid{grid-template-columns:1fr}.side{grid-template-columns:repeat(5,minmax(105px,1fr));overflow:auto}.battlefield{padding:12px}.arenaTop{grid-template-columns:1fr auto 1fr}.currency .pill:nth-child(2){display:none}}
 @media(max-width:720px){body{padding-bottom:74px}header{height:62px;padding:0 12px}.brand{font-size:11px}header nav{display:none}main{padding:14px}.heroCard{padding:20px;min-height:240px}.quickGrid{grid-template-columns:1fr 1fr}.cardGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tcg{min-height:245px}.tcgArt{height:130px}.revealCards{grid-template-columns:repeat(2,1fr)}.bottomNav{position:fixed;z-index:60;bottom:0;left:0;right:0;height:66px;background:rgba(7,9,16,.94);backdrop-filter:blur(16px);border-top:1px solid #1c2230;display:grid;grid-template-columns:repeat(5,1fr)}.bottomNav button{border:0;background:transparent;color:#707b90;font-size:8px;font-weight:950}.bottomNav button.active{color:#fff}.fighter{min-width:105px;min-height:165px}.fighterArt{height:72px}.battlefield{min-height:505px}.battleMid{align-items:flex-start;flex-direction:column}.battleLog{max-width:100%;text-align:left}.arenaControls{grid-template-columns:1fr}.actionStack{justify-content:space-between}.ultimate{flex:1}}
+
+/* NEXUS ALIVE UI — prestige foil collectibles and a 3-on-3 arena */
+:root{--accent:#a18cff;--cyan:#64d9ff;--line:#394866;--bg:#040816}
+body{background:radial-gradient(ellipse at 50% 0%,#273b7a 0%,#0e1431 26%,#060a17 64%,#03050b 100%);background-attachment:fixed}
+header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rgba(12,12,38,.95));border-bottom:1px solid rgba(155,196,255,.36);box-shadow:0 0 45px rgba(58,116,231,.12)}
+.brand{background:linear-gradient(90deg,#ffe3a1,#fff,#7bd8ff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px rgba(110,195,255,.3))}
+.brandMark{border:1px solid #fce9a0;box-shadow:0 0 0 3px #1b274d,0 0 20px rgba(255,220,126,.35)}
+.heroCard,.panel{border-color:#374c70;background:radial-gradient(circle at 75% 15%,rgba(106,140,236,.24),transparent 30%),linear-gradient(160deg,#15234b,#090d22 70%);box-shadow:0 28px 60px rgba(0,0,0,.37),inset 0 1px 0 rgba(255,255,255,.1)}
+.heroCard{background:radial-gradient(circle at 75% 35%,rgba(92,194,255,.25),transparent 35%),radial-gradient(circle at 23% 4%,rgba(246,194,111,.15),transparent 43%),linear-gradient(145deg,#273964,#10132c 62%,#070d1b)}
+.hero h1{background:linear-gradient(160deg,#fce4a1,#fff 35%,#77d9ff 85%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 8px 22px rgba(50,112,240,.35))}
+.btn.primary{background:linear-gradient(130deg,#fff0ac,#ffba5a 35%,#7fd6ff 100%);color:#151624;box-shadow:0 6px 26px rgba(250,190,94,.2)}
+.btn{border-color:#495e81;background:linear-gradient(165deg,#243356,#111a30);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.quick,.album,.storeItem{background:linear-gradient(145deg,#192747,#0d1429);border-color:#3b4c69}
+.cardGrid{grid-template-columns:repeat(auto-fill,minmax(204px,1fr));gap:18px}
+.tcg{isolation:isolate;min-height:350px;padding:6px;border:2px solid #657fbb;border-radius:17px;overflow:hidden;background:linear-gradient(135deg,#7585bc,#d2e6fb 10%,#1a2b50 34%,#9abdf3 75%,#223c64);box-shadow:inset 0 0 0 2px rgba(255,255,255,.3),0 18px 30px rgba(0,0,0,.45),0 0 19px rgba(77,143,244,.14);cursor:pointer}
+.tcg::before,.fighter::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(115deg,transparent 16%,rgba(255,255,255,.12) 34%,transparent 48%,rgba(255,255,255,.08) 62%,transparent 77%);background-size:260% 100%;animation:foilMove 7s linear infinite;mix-blend-mode:screen}
+.tcg::after{content:"";position:absolute;inset:5px;border:1px solid rgba(255,255,255,.47);border-radius:12px;pointer-events:none}
+.tcg.rarity-rare{border-color:#7edbff;box-shadow:0 0 24px rgba(81,190,255,.27),0 16px 24px #0007}
+.tcg.rarity-epic{border-color:#ba8aff;box-shadow:0 0 27px rgba(165,105,255,.32),0 16px 24px #0007}
+.tcg.rarity-legendary,.tcg.rarity-mythic{border-color:#ffe59d;background:linear-gradient(135deg,#9f6820,#fff0a7 20%,#60401a 53%,#ffe69a 85%);box-shadow:0 0 28px rgba(255,186,68,.37),0 16px 30px #0009}
+.tcg.rarity-mythic{box-shadow:0 0 33px rgba(218,128,255,.35),0 0 10px #fcd98a,0 16px 30px #0009}
+.tcgHead{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:5px;padding:8px 10px 9px;background:linear-gradient(90deg,#111c37,#273453 62%,#11192d);border-radius:9px 9px 0 0;font-size:10px;font-weight:1000;letter-spacing:.07em;min-height:31px}
+.cardHp{font-weight:1000;color:#fff2b2;white-space:nowrap}.cardFaction{font-size:9px;color:#e4eafa}
+.tcgArt{height:174px;border-radius:1px;position:relative;overflow:hidden;background:#0c1736;border-top:1px solid #8ba8d9;border-bottom:2px solid #b7d2fb;box-shadow:inset 0 0 30px #0006}
+.creatureSvg{display:block;width:100%;height:100%;object-fit:cover;filter:contrast(1.13) saturate(1.2)}
+.creatureFigure{filter:drop-shadow(0 12px 7px rgba(0,0,0,.65));transform-origin:50% 63%;animation:creatureBreath 3.6s ease-in-out infinite alternate}
+.cardWatermark{position:absolute;right:8px;bottom:6px;font-size:8px;font-weight:1000;color:#fff9;text-shadow:0 1px 3px #000}
+.tcgBody{padding:10px 8px 7px;position:relative;z-index:1;background:linear-gradient(180deg,#e9efff,#b9c9de 18%,#d9e4fb 42%,#8e9eb6);color:#14253f;min-height:132px}
+.tcgName{font-size:16px;letter-spacing:-.03em;color:#0e1830;text-shadow:0 1px #fff8}.tcgMeta{font-weight:800;color:#415673;font-size:9px}
+.abilityLine{display:flex;align-items:center;gap:6px;margin-top:9px;font-weight:950;font-size:11px;border-top:1px solid #7c92ba6b;padding-top:7px}.abilityLine strong{margin-left:auto;font-size:14px}.abilityOrb{width:19px;height:19px;display:grid;place-items:center;color:#f8de8f;border-radius:50%;border:2px solid #c98a33;background:#283650}
+.abilityHint{font-size:9px;color:#33486a;height:22px;margin:3px 0 7px;line-height:1.2;overflow:hidden}
+.tcg .statline{color:#385578;font-size:9px;margin-top:5px}.tcg .statline b{color:#122140}
+.tcgBottom{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-top:8px;padding-top:6px;border-top:1px solid #536c8c7a;font-size:8px;letter-spacing:.05em;font-weight:1000;color:#425778}
+.tcg.selected{outline:3px solid #fff6ad;outline-offset:2px}
+.tcg:hover{transform:translateY(-8px) rotate(-.5deg)}
+.arenaShell{min-height:calc(100vh - 120px)}
+.arenaTop{position:relative;z-index:4;background:linear-gradient(100deg,#111d38db,#0c1640a8,#241a42dd);border:1px solid #63749c;border-radius:18px;padding:12px 18px;box-shadow:0 9px 26px #0009}
+.avatar{background:linear-gradient(135deg,#edd083,#4c5e95 55%,#152747);border:2px solid #f1dd9f;color:#080f25;box-shadow:0 0 14px #bdae646b}
+.timer{color:#fff0a5;text-shadow:0 0 16px rgba(255,204,97,.5)}
+.battlefield{isolation:isolate;position:relative;grid-template-rows:1fr auto 1fr;min-height:660px;padding:26px 30px;overflow:hidden;background:linear-gradient(180deg,rgba(11,35,72,.2),rgba(16,33,56,.2) 48%,rgba(11,12,27,.4)),linear-gradient(180deg,#2c5eac,#6a8bb3 37%,#29364f 67%,#101c37);border:2px solid #627dae;border-radius:26px;box-shadow:0 18px 55px #0009,inset 0 0 70px rgba(62,186,248,.18)}
+.arenaHorizon{position:absolute;inset:0;pointer-events:none;z-index:-1;overflow:hidden;background:radial-gradient(ellipse at 50% 6%,#b5ecffb0,transparent 29%),linear-gradient(180deg,#5a91cc 0%,#b2dafa 24%,#647eb4 42%,#1f316c 50%,#11182f 100%)}
+.skySun{position:absolute;width:260px;height:260px;left:calc(50% - 130px);top:-90px;border-radius:50%;background:radial-gradient(circle,#fffbe1,#d7f9ff 28%,#69b7ff 55%,transparent 70%);filter:blur(3px)}
+.skyRays{position:absolute;left:48%;top:-80px;width:12px;height:90%;background:linear-gradient(180deg,#fff,#7bdbff77,transparent);box-shadow:0 0 40px 16px #a1e6ff88,0 0 95px 40px #74b9ff77;filter:blur(2px);animation:skyPulse 6s ease-in-out infinite}
+.floatingCastle{position:absolute;width:55%;height:180px;left:23%;top:4%;filter:drop-shadow(0 16px 9px #182c4b88)}
+.castleDeck{position:absolute;bottom:2px;width:100%;height:40px;background:linear-gradient(#f4dfb4,#808cab 40%,#1f3563 80%);clip-path:polygon(0 45%,10% 30%,16% 0,80% 0,92% 35%,100% 45%,83% 100%,19% 100%);box-shadow:0 0 10px #fff}
+.spire{position:absolute;bottom:38px;width:23%;left:38%;height:100px;background:linear-gradient(90deg,#4d689c,#fff0c8,#8395bb);clip-path:polygon(50% 0,69% 42%,69% 95%,100% 100%,0 100%,31% 95%,31% 42%);border-bottom:10px solid #f4e4b3}
+.spire.s1{left:12%;bottom:25px;height:78px}.spire.s2{left:40%;bottom:34px;height:138px}.spire.s3{left:68%;bottom:25px;height:83px}
+.waterfall{position:absolute;top:27%;width:15%;height:78%;background:repeating-linear-gradient(91deg,transparent 0,rgba(255,255,255,.45) 3px,#83cafa55 8px,transparent 16px);opacity:.68;mask-image:linear-gradient(180deg,transparent,#fff 15%,#fff 80%,transparent);animation:waterRun 2.5s linear infinite}.waterfall.w1{left:0}.waterfall.w2{left:43%;opacity:.32}.waterfall.w3{right:0}
+.sparkCloud{position:absolute;inset:0;background-image:radial-gradient(circle at 8% 12%,#fff9 1px,transparent 3px),radial-gradient(circle at 58% 17%,#fff 1px,transparent 2px),radial-gradient(circle at 78% 55%,#a6f7ff 2px,transparent 3px),radial-gradient(circle at 26% 68%,#d4bcff 2px,transparent 3px);background-size:140px 150px,220px 130px,290px 310px,170px 190px;animation:sparksDrift 14s linear infinite}
+.battlefield .side{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,200px));justify-content:center;gap:22px}
+.battlefield .side::after{content:"";position:absolute;left:3%;right:3%;bottom:-4px;height:26px;border:2px solid #c9d9fa80;border-radius:50%;background:radial-gradient(ellipse at 50% 50%,#88c4ffbb,#1e3c7e77 50%,transparent 75%);filter:blur(7px);z-index:-1}
+.fighter{min-height:239px;width:100%;border:3px solid #79b9ed;border-radius:14px;padding:5px;background:linear-gradient(140deg,#385b95,#ceeaf9 30%,#111b44 60%,#74b6f3);box-shadow:0 7px 0 #152847,0 20px 30px #0009,0 0 18px rgba(48,131,255,.5);cursor:pointer;overflow:hidden}
+#enemyField .fighter{border-color:#d48fc7;box-shadow:0 7px 0 #5f193b,0 20px 30px #000a,0 0 16px #fb567960}
+.fighter.rarity-legendary,.fighter.rarity-mythic{border-color:#ffe0a3;box-shadow:0 7px 0 #533712,0 20px 30px #000a,0 0 25px #ffc65f6e}
+.fighter.selected{outline:3px solid #f4ef9b;outline-offset:5px;transform:translateY(-10px);box-shadow:0 0 30px #fff0a4,0 13px 24px #000}
+.fighter.focused{outline:3px solid #ff5b89;outline-offset:4px;transform:translateY(4px)}
+.fighterArt{height:146px;overflow:hidden;border-radius:6px;display:block;background:#131936;border:1px solid #9ecffa}
+.fighterTitle{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:6px 6px 8px;background:linear-gradient(100deg,#111d3c,#273e6b);font-size:10px;font-weight:950;white-space:nowrap}
+.fighterTitle span{overflow:hidden;text-overflow:ellipsis}.fighterTitle b{font-size:10px;color:#ffdc9c}
+.fighterFooter{display:flex;justify-content:space-between;padding:8px 6px 2px;gap:5px;font-size:8px;font-weight:950;color:#e4eeff}.fighterFooter span:last-child{color:#fed88a}
+.fighter .hpbar{height:7px;border:1px solid #0e122c;margin:5px 6px 0}.fighter .energybar{margin:4px 6px 0}.fighterStats{padding:3px 5px;font-size:8px;color:#edf4ff}
+.battleMid{position:relative;z-index:2;background:linear-gradient(90deg,rgba(4,13,39,.86),rgba(36,49,97,.65),rgba(4,13,39,.85));border:1px solid #7e98c6;border-radius:14px;padding:13px 17px;margin:8px 0;box-shadow:0 0 40px #1f5db58a;backdrop-filter:blur(7px)}
+.battleLog{color:#f4edc9;font-weight:850;max-width:60%}
+.benchStrip{align-items:center;padding:9px 3px;gap:12px}
+.benchChip{border:2px solid #8294bf;background:radial-gradient(circle at 50% 0%,#3d5688,#101c36 80%);min-width:135px;min-height:82px;box-shadow:0 11px 22px #0005}
+.benchChip b{font-size:11px}.benchChip span{font-size:9px;color:#c9d6f5}
+.ultimate{background:linear-gradient(125deg,#f4d078,#fcefb2 30%,#71cfff 90%);box-shadow:0 0 20px #f8bf7780;color:#121b2f}
+.pack{box-shadow:inset 0 0 0 2px #a7b4e455,0 26px 70px #0009,0 0 30px #589af444;border:2px solid #7d97b2;transition:transform .23s,box-shadow .23s}.pack:hover{transform:translateY(-8px);box-shadow:0 35px 60px #0009,0 0 35px #80d7ff6c}.packLogo{background:linear-gradient(130deg,#ffe69e,#fff 40%,#86cfff);color:transparent;background-clip:text;filter:drop-shadow(0 5px 12px #000c);font-size:80px}
+.overlay{background:radial-gradient(circle at 50% 50%,rgba(94,61,181,.4),rgba(3,5,13,.95) 67%);backdrop-filter:blur(18px)}
+.revealPack{border:4px solid #edddaf;box-shadow:0 0 45px #bca6ff90,0 25px 50px #000;letter-spacing:-.15em}
+@keyframes creatureBreath{to{transform:translateY(-6px) scale(1.015)}}@keyframes skyPulse{50%{opacity:.6;transform:scaleX(1.8)}}@keyframes waterRun{to{background-position:0 160px}}@keyframes sparksDrift{to{background-position:80px 220px,100px -130px,-110px 100px,40px 70px}}@keyframes foilMove{to{background-position:260% 0}}
+@media(max-width:900px){.battlefield{min-height:595px;padding:18px 10px}.battlefield .side{gap:9px;grid-template-columns:repeat(3,minmax(0,1fr))}.fighter{min-height:210px}.fighterArt{height:125px}.floatingCastle{width:75%;left:13%}}
+@media(max-width:720px){.cardGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.tcg{min-height:310px}.tcgArt{height:145px}.tcgHead{padding:7px;font-size:8px}.tcgName{font-size:14px}.tcgBody{min-height:132px}.battlefield{min-height:522px;padding:13px 6px}.battlefield .side{gap:5px;overflow:visible}.fighter{min-width:0;min-height:169px;padding:3px;border-width:2px}.fighterArt{height:91px}.fighterTitle{font-size:8px;padding:3px 2px 5px}.fighterTitle b{font-size:7px}.fighterFooter{font-size:6px;padding:4px 2px 2px}.fighterStats{font-size:6px}.battleMid{padding:8px;margin:8px 0}.battleLog{font-size:9px;max-width:100%}.arenaTop{padding:8px}.avatar{width:38px;height:38px;font-size:10px}.combatant b{font-size:10px}.floatingCastle{height:115px}.spire.s2{height:100px}.waterfall{top:15%}.arenaControls{gap:6px}.benchChip{min-width:105px;min-height:72px}.formationBtns button{padding:6px}.hero h1{font-size:clamp(36px,10vw,75px)}}
+@media(prefers-reduced-motion:reduce){.creatureFigure,.sparkCloud,.skyRays,.waterfall,.tcg::before,.fighter::before{animation:none}}
+
 </style>
 </head>
 <body>
@@ -73,6 +148,12 @@ main{padding:24px}.page{display:none}.page.active{display:block}
       <div class="combatant enemy"><div><b id="enemyName">RIVAL-07</b><div class="battleScore"><span id="enemyAlive">6</span> remaining</div></div><div class="avatar">CPU</div></div>
     </div>
     <div class="battlefield">
+      <div class="arenaHorizon" aria-hidden="true">
+       <div class="skySun"></div><div class="skyRays"></div>
+       <div class="floatingCastle"><div class="spire s1"></div><div class="spire s2"></div><div class="spire s3"></div><div class="castleDeck"></div></div>
+       <div class="waterfall w1"></div><div class="waterfall w2"></div><div class="waterfall w3"></div>
+       <div class="sparkCloud"></div>
+      </div>
       <div class="side" id="enemyField"></div>
       <div class="battleMid">
         <div class="formationBtns"><button data-formation="assault">ASSAULT</button><button data-formation="balanced" class="active">BALANCED</button><button data-formation="bulwark">BULWARK</button></div>
@@ -185,9 +266,72 @@ function toast(x){const t=$('#toast');t.textContent=x;t.classList.add('show');se
 function cardById(id){return CARD_DEFS.find(c=>c.id===id)}
 function artVars(c){const f=FACTIONS[c.faction];return '--art1:'+f.c1+';--art2:'+f.c2}
 function fighterVars(c){const f=FACTIONS[c.faction];return '--c1:'+f.c1+';--c2:'+f.c2}
+
+function creatureArt(c){
+ const f=FACTIONS[c.faction],n=Number(c.id.slice(1)),g='ar'+c.id;
+ const glows=Array.from({length:17},(_,i)=>{
+  const x=17+(n*29+i*47)%326,y=12+(i*67+n*13)%332,r=1+(i+n)%3;
+  return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+(i%3?'#fff':f.c1)+'" opacity="'+(.24+(i%4)*.15)+'"><animate attributeName="opacity" values=".14;.85;.14" dur="'+(2+i%4)+'s" repeatCount="indefinite"/></circle>'
+ }).join('');
+ const wing=(color,flip=1)=>'<g transform="translate(180 170) scale('+flip+' 1) translate(-180 -170)"><path d="M170 226 C97 208 70 139 26 68 C78 90 130 86 165 142 L171 215Z" fill="'+color+'" opacity=".72" stroke="#e7eeff" stroke-width="2"/><path d="M151 174 L32 93 M155 193 L44 143 M163 210 L67 203" fill="none" stroke="#ffffff" stroke-width="3" opacity=".48"/></g>';
+ let creature='';
+ if(c.faction==='Nova'){
+  creature=wing('#fff9cf',1)+wing('#ecfaff',-1)+
+  '<path d="M145 170 Q122 205 142 265 L181 309 L220 264 Q238 201 215 169Z" fill="url(#'+g+'metal)" stroke="#ffe6a7" stroke-width="5"/>'+
+  '<path d="M147 168 Q119 114 155 103 Q180 73 206 104 Q243 120 213 170 L181 188Z" fill="url(#'+g+'body)" stroke="#fff2c2" stroke-width="5"/>'+
+  '<path d="M158 104 L135 56 L172 86 L183 39 L196 85 L237 53 L213 112" fill="#f8d985" stroke="#fff9ce" stroke-width="3"/>'+
+  '<path d="M155 147 Q181 125 206 147 L193 161 L167 161Z" fill="#111629"/>'+
+  '<path d="M168 145 L176 145 M190 145 L198 145" stroke="#54e3ff" stroke-width="5" stroke-linecap="round"/>'+
+  '<path d="M181 187 L155 263 L181 240 L206 263Z" fill="#84dbff" opacity=".86"/>';
+ } else if(c.faction==='Void'){
+  creature='<path d="M50 298 Q40 210 110 220 Q50 169 92 120 Q127 88 189 116 Q235 148 219 213 Q286 190 307 288" fill="none" stroke="url(#'+g+'body)" stroke-width="46" stroke-linecap="round"/>'+
+  '<path d="M114 147 L70 55 L138 106 L182 47 L208 120 L281 75 L242 165Z" fill="url(#'+g+'body)" stroke="#ca97ff" stroke-width="4"/>'+
+  '<path d="M95 156 Q178 103 247 156 L212 232 L148 229Z" fill="#231440" stroke="#9e70ff" stroke-width="5"/>'+
+  '<path d="M109 173 Q142 151 166 171 L144 183Z M197 172 Q222 154 251 172 L222 188Z" fill="#ff8aff"/>'+
+  '<path d="M149 218 L178 262 L207 217 L197 271 L181 287 L165 271Z" fill="#351b62" stroke="#b97bff" stroke-width="4"/>'+
+  '<path d="M82 237 L39 197 L64 260 L34 288 M270 234 L310 192 L292 258 L329 286" fill="none" stroke="#7b53cc" stroke-width="13" stroke-linecap="round"/>';
+ } else if(c.faction==='Forge'){
+  creature='<path d="M100 105 L48 75 L66 170 L115 191 L139 285 L185 316 L229 283 L252 186 L299 160 L314 64 L252 111 L220 88 L182 109 L142 85Z" fill="url(#'+g+'metal)" stroke="#ffc08a" stroke-width="5"/>'+
+  '<path d="M119 124 L75 117 L84 194 L144 201 L152 251 L181 273 L211 250 L220 201 L271 192 L284 117 L241 125 L219 143 L179 137 L143 143Z" fill="url(#'+g+'body)" stroke="#ff8b3e" stroke-width="5"/>'+
+  '<path d="M145 163 L169 173 L164 191 L129 180Z M189 174 L215 164 L230 181 L196 192Z" fill="#ffed87"/>'+
+  '<path d="M172 195 L153 240 L180 224 L208 240 L189 194" fill="#ff7831"/>'+
+  '<path d="M77 124 L54 40 L117 96 M269 121 L304 42 L236 96" fill="none" stroke="#ff6a2c" stroke-width="16" stroke-linecap="round"/>'+
+  '<path d="M84 225 L46 300 M268 225 L316 300" stroke="#ffc17c" stroke-width="21" stroke-linecap="round"/>';
+ } else {
+  creature='<path d="M172 314 Q119 283 123 213 Q91 175 134 132 L173 143 L211 127 Q255 173 221 215 Q234 280 172 314Z" fill="url(#'+g+'body)" stroke="#a6ffcf" stroke-width="5"/>'+
+  '<path d="M145 141 C89 131 105 88 69 48 M148 151 C91 147 66 109 37 117 M210 144 C263 136 258 91 291 48 M208 151 C259 161 288 114 319 116" fill="none" stroke="#99e7aa" stroke-width="15" stroke-linecap="round"/>'+
+  '<path d="M114 155 C80 105 74 91 76 68 M245 158 C283 117 280 83 281 63" fill="none" stroke="#4eab64" stroke-width="20" stroke-linecap="round"/>'+
+  '<path d="M144 160 Q172 144 205 160 L194 184 L155 184Z" fill="#1b4030"/>'+
+  '<path d="M150 168 L166 168 M183 168 L200 168" stroke="#caff78" stroke-width="6" stroke-linecap="round"/>'+
+  '<path d="M172 188 L151 233 L172 221 L191 234Z" fill="#64fbb1"/>'+
+  '<path d="M106 238 L70 277 M237 238 L272 277" stroke="#72bd7f" stroke-width="18" stroke-linecap="round"/>';
+ }
+ return '<svg class="creatureSvg" viewBox="0 0 360 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+c.name+' original '+c.faction+' creature">'+
+ '<defs><radialGradient id="'+g+'sky" cx="53%" cy="25%" r="75%"><stop stop-color="'+f.c1+'"/><stop offset=".42" stop-color="'+f.c2+'"/><stop offset="1" stop-color="#070d1c"/></radialGradient>'+
+ '<linearGradient id="'+g+'body" x1="0" x2="1" y1="0" y2="1"><stop stop-color="'+f.c1+'"/><stop offset=".49" stop-color="'+f.c2+'"/><stop offset="1" stop-color="#0d172a"/></linearGradient>'+
+ '<linearGradient id="'+g+'metal" x1="0" x2="1"><stop stop-color="#fbf5d3"/><stop offset=".3" stop-color="'+f.c1+'"/><stop offset=".7" stop-color="'+f.c2+'"/><stop offset="1" stop-color="#0b1020"/></linearGradient>'+
+ '<radialGradient id="'+g+'orb"><stop stop-color="#ffffff" stop-opacity=".75"/><stop offset=".25" stop-color="'+f.c1+'" stop-opacity=".25"/><stop offset="1" stop-color="'+f.c2+'" stop-opacity="0"/></radialGradient></defs>'+
+ '<rect width="360" height="380" fill="url(#'+g+'sky)"/>'+
+ '<circle cx="180" cy="150" r="151" fill="url(#'+g+'orb)"/>'+
+ '<path d="M0 328 L0 253 L58 204 L83 256 L140 207 L171 263 L227 199 L278 267 L315 233 L360 261 L360 380Z" fill="#070f23" opacity=".53"/>'+
+ '<path d="M0 345 L53 310 L98 352 L151 300 L202 357 L268 294 L317 326 L360 292 L360 380 L0 380Z" fill="#0e2033" opacity=".78"/>'+
+ '<ellipse cx="182" cy="334" rx="130" ry="19" fill="'+f.c1+'" opacity=".22"/>'+
+ '<g class="creatureFigure">'+creature+'</g>'+glows+
+ '<path d="M0 345 Q180 312 360 347" stroke="'+f.c1+'" stroke-width="2" fill="none" opacity=".7"/>'+
+ '</svg>';
+}
 function cardHtml(c,opts={}){
  const own=state.owned[c.id],selected=state.squad.includes(c.id);
- return '<article class="tcg '+(opts.selected&&selected?'selected':'')+'" data-card="'+c.id+'" style="'+artVars(c)+'"><div class="tcgArt"><span class="rarity">'+c.rarity.toUpperCase()+'</span><span class="variant">'+(own?.variants?.[0]||'LOCKED')+'</span><span class="tcgSil">'+c.symbol+'</span></div><div class="tcgBody"><div class="tcgName">'+c.name+'</div><div class="tcgMeta">'+c.faction.toUpperCase()+' // '+c.id.toUpperCase()+'</div><div class="statline"><span>HP <b>'+c.hp+'</b></span><span>ATK <b>'+c.atk+'</b></span><span>SPD <b>'+c.speed+'</b></span></div><span class="role">'+ROLES[c.role]+' '+c.role.toUpperCase()+'</span></div></article>';
+ const rarityClass='rarity-'+c.rarity.toLowerCase();
+ return '<article class="tcg '+rarityClass+' '+(opts.selected&&selected?'selected':'')+'" data-card="'+c.id+'" style="'+artVars(c)+'">'+
+ '<div class="tcgHead"><span class="cardFaction">'+c.faction.toUpperCase()+' / '+c.rarity.toUpperCase()+'</span><span class="cardHp">HP '+c.hp+'</span></div>'+
+ '<div class="tcgArt">'+creatureArt(c)+'<span class="cardWatermark">'+c.id+'</span></div>'+
+ '<div class="tcgBody"><div class="tcgName">'+c.name+'</div><div class="tcgMeta">'+c.role.toUpperCase()+' · FIRST CONTACT</div>'+
+ '<div class="abilityLine"><span class="abilityOrb">✦</span><span>'+c.ultName+'</span><strong>'+c.atk*3+'</strong></div>'+
+ '<div class="abilityHint">'+c.ultText+'</div>'+
+ '<div class="statline"><span>ATK <b>'+c.atk+'</b></span><span>SPD <b>'+c.speed+'</b></span><span>OWNED <b>'+(own?.count||0)+'</b></span></div>'+
+ '<div class="tcgBottom"><span>'+c.rarity.toUpperCase()+(own?.variants?.[0]&&own.variants[0]!=='Base'?' · '+own.variants[0]:'')+'</span><span>NEXUS // '+c.id.toUpperCase()+'</span></div>'+
+ '</div></article>';
 }
 function renderTop(){
  $('#coinsTop').textContent=state.coins.toLocaleString();$('#gemsTop').textContent=state.gems.toLocaleString();
@@ -335,8 +479,15 @@ function renderBattleTop(){
  $('#playerAlive').textContent=battle?countAlive(battle.player):6;$('#enemyAlive').textContent=battle?countAlive(battle.enemy):6;
 }
 function fighterHtml(u,i,enemy=false){
- if(!u)return '<div class="fighter dead"></div>';const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy;
- return '<div class="fighter '+(u.dead?'dead ':'')+(enemy?'selectable ':'selectable ')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'"><div class="fighterArt">'+u.card.symbol+'</div><div class="fighterName">'+u.card.name+'</div><div class="hpbar"><i style="width:'+hp+'%"></i></div><div class="energybar"><i style="width:'+en+'%"></i></div><div class="fighterStats"><span>'+u.card.role.toUpperCase()+'</span><span>'+Math.ceil(u.hp)+' HP</span></div></div>';
+ if(!u)return '<div class="fighter dead"></div>';
+ const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy,role=u.card.role,rarity='rarity-'+u.card.rarity.toLowerCase();
+ return '<div class="fighter '+rarity+' '+(u.dead?'dead ':'')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'">'+
+ '<div class="fighterTitle"><span>'+u.card.name+'</span><b>'+Math.ceil(u.hp)+' HP</b></div>'+
+ '<div class="fighterArt">'+creatureArt(u.card)+'</div>'+
+ '<div class="fighterFooter"><span>'+role.toUpperCase()+'</span><span>'+u.card.ultName+'</span></div>'+
+ '<div class="hpbar"><i style="width:'+hp+'%"></i></div>'+
+ '<div class="energybar"><i style="width:'+en+'%"></i></div>'+
+ '<div class="fighterStats"><span>ATK '+u.card.atk+'</span><span>ENERGY '+Math.round(en)+'%</span></div></div>';
 }
 function renderBattle(){
  renderBattleTop();
