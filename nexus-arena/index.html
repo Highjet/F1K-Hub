@@ -616,6 +616,204 @@ main{padding:22px clamp(12px,2vw,34px)}
 @media(prefers-reduced-motion:reduce){.tcg.collectible,.faceArtwork .creaturePainting{transition:none}}
 
 .benchPreview{opacity:.7;cursor:default;box-shadow:none}.benchChip:focus-visible,.arenaCommandBar button:focus-visible,.fighter:focus-visible{outline:2px solid #f2d9a2;outline-offset:2px}.benchChip .benchGlyph{background:#22324e}.benchChip .benchGlyph:has(img[style*="none"]){background:linear-gradient(135deg,#364b74,#172541)}
+
+/* === NEXUS TCG II / 40-card full-art gemstone system === */
+:root{--nx-f:'Rajdhani',system-ui,sans-serif;--nx-title:'Cinzel',Georgia,serif}
+.nx-card,.nx-fighter{--rarity-light:#bccddc;--rarity-main:#607389;--rarity-dark:#233149;--faction-glow:#82cbed}
+.nx-card.rarity-common,.nx-fighter.rarity-common{--rarity-light:#bbc8d4;--rarity-main:#8499b0;--rarity-dark:#334356}
+.nx-card.rarity-rare,.nx-fighter.rarity-rare{--rarity-light:#b5edff;--rarity-main:#67a9e0;--rarity-dark:#19518a}
+.nx-card.rarity-epic,.nx-fighter.rarity-epic{--rarity-light:#e0c5ff;--rarity-main:#a67cdb;--rarity-dark:#4b2a78}
+.nx-card.rarity-legendary,.nx-fighter.rarity-legendary{--rarity-light:#fff1b4;--rarity-main:#c69d4c;--rarity-dark:#694721}
+.nx-card.rarity-mythic,.nx-fighter.rarity-mythic{--rarity-light:#f0e2ff;--rarity-main:#b5a7ed;--rarity-dark:#594a97}
+.nx-card.faction-nova,.nx-fighter.faction-nova{--faction-glow:#8edaff}
+.nx-card.faction-void,.nx-fighter.faction-void{--faction-glow:#bd90ff}
+.nx-card.faction-forge,.nx-fighter.faction-forge{--faction-glow:#ffab6c}
+.nx-card.faction-grove,.nx-fighter.faction-grove{--faction-glow:#a2eca1}
+.tcg.collectible.nx-card{
+ display:block;position:relative;isolation:isolate;
+ width:100%;min-height:0!important;height:auto!important;
+ aspect-ratio:63 / 88;padding:0!important;margin:0;
+ border:0!important;border-radius:13px!important;
+ background:none!important;overflow:visible!important;
+ box-shadow:0 12px 21px #0008,0 2px 1px #fff3!important;
+ animation:none!important;
+ transform-style:flat;
+}
+.nx-card .nx-frame{
+ position:absolute;inset:0;z-index:1;
+ display:grid;grid-template-rows:minmax(0,1fr) auto auto;
+ gap:0;overflow:hidden;padding:6px;
+ border:2px solid var(--rarity-light);border-radius:13px;
+ background:linear-gradient(125deg,var(--rarity-light),var(--rarity-dark) 13%,#11192d 52%,var(--rarity-main) 80%,var(--rarity-light));
+ box-shadow:inset 0 1px 0 #fff6,inset 0 0 0 3px #090f20,inset 0 0 11px var(--rarity-main);
+}
+.nx-card .nx-frame::after,.nx-fighter .nx-battle-frame::after{
+ content:"";pointer-events:none;position:absolute;inset:4px;
+ border:1px solid #ffe7b64f;border-radius:8px;z-index:5;mix-blend-mode:screen;
+}
+.nx-card.rarity-mythic .nx-frame::before,.nx-card.rarity-legendary .nx-frame::before{
+ content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+ background:linear-gradient(110deg,transparent 21%,#fff6 39%,transparent 52%,#ffe3a321 76%,transparent 88%);
+ background-size:320% 100%;opacity:.52;animation:foilMove 11s linear infinite;
+}
+.nx-corner{position:absolute;width:16px;height:16px;z-index:9;pointer-events:none;
+ background:linear-gradient(135deg,var(--rarity-light),var(--rarity-main) 70%,var(--rarity-dark));
+ clip-path:polygon(0 0,100% 0,100% 25%,38% 25%,25% 40%,25% 100%,0 100%)}
+.nx-corner-tl{top:0;left:0}
+.nx-corner-tr{top:0;right:0;transform:scaleX(-1)}
+.nx-corner-bl{bottom:0;left:0;transform:scaleY(-1)}
+.nx-corner-br{bottom:0;right:0;transform:scale(-1)}
+.nx-card .nx-canvas{position:relative;min-height:0;overflow:hidden;background:var(--rarity-dark);border-radius:7px 7px 0 0;border:1px solid #ffffff75}
+.nx-art-stack{display:block;position:absolute;inset:0;overflow:hidden;isolation:isolate;background:#132746}
+.nx-environment,.nx-painted-underlay,.nx-color-atmosphere{position:absolute;inset:0;display:block;overflow:hidden}
+.nx-environment .nx-scene-svg{width:100%;height:100%;display:block;filter:saturate(1.12) contrast(1.08)}
+.nx-painted-underlay{opacity:.14;mix-blend-mode:soft-light}
+.nx-painted-underlay .creatureSvg{width:100%;height:100%}
+.nx-painted-creature{position:absolute;inset:-1%;height:102%;width:102%;z-index:2;object-fit:cover;
+ object-position:var(--nx-focus-x,50%) var(--nx-focus-y,43%);
+ -webkit-mask-image:radial-gradient(ellipse 90% 81% at var(--nx-focus-x,50%) var(--nx-focus-y,43%),#000 0 43%,#000e 64%,#0009 83%,transparent 100%);
+ mask-image:radial-gradient(ellipse 90% 81% at var(--nx-focus-x,50%) var(--nx-focus-y,43%),#000 0 43%,#000e 64%,#0009 83%,transparent 100%);
+ filter:saturate(1.17) contrast(1.09);
+ transition:transform .28s ease-out;
+}
+.nx-card:hover .nx-painted-creature{transform:scale(1.035)}
+.nx-color-atmosphere{pointer-events:none;z-index:3;opacity:.34;
+ background:radial-gradient(ellipse at 48% 37%,transparent 25%,var(--faction-glow) 94%);
+ mix-blend-mode:screen}
+.nx-art-shade{position:absolute;inset:0;z-index:4;pointer-events:none;
+ background:linear-gradient(180deg,#050d25e8 0%,#0512285c 15%,transparent 33%,transparent 59%,#060d2390 88%,#050c1ce8 100%);
+}
+.nx-nameplate{position:absolute;z-index:7;left:7px;right:7px;top:7px;height:34px;
+ display:flex;align-items:center;gap:5px;overflow:hidden;
+ background:linear-gradient(105deg,#101b37e8,#202c51bd 47%,#0e162dec);
+ border:1px solid var(--rarity-light);border-radius:4px 7px 5px 4px;
+ box-shadow:0 2px 5px #0009,inset 0 1px #ffffff29}
+.nx-rune{flex:0 0 27px;display:grid;place-items:center;height:100%;
+ background:linear-gradient(145deg,var(--rarity-main),var(--rarity-dark));border-right:1px solid var(--rarity-light);
+ color:var(--rarity-light);text-shadow:0 0 7px var(--rarity-main);font-size:16px}
+.nx-title{min-width:0;flex:1;display:grid;align-content:center;gap:1px}
+.nx-title strong{font:800 11px var(--nx-title);letter-spacing:-.015em;color:#fff4d7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px #000}
+.nx-title small{font:800 8px var(--nx-f);letter-spacing:.07em;color:#c3d5e8;white-space:nowrap}
+.nx-hp{align-self:stretch;display:grid;align-content:center;justify-items:center;flex:0 0 35px;
+ border-left:1px solid var(--rarity-light);background:#0a152bcd}
+.nx-hp b{font:900 16px var(--nx-f);line-height:.9;color:#ffedb5}
+.nx-hp small{font:900 8px var(--nx-f);color:#c5d7e9;letter-spacing:.07em}
+.nx-edition{position:absolute;z-index:8;bottom:6px;left:10px;right:10px;
+ display:flex;align-items:center;justify-content:space-between;gap:5px;
+ color:#fff5dc;text-shadow:0 1px 3px #000b;font:900 8px var(--nx-f);letter-spacing:.12em}
+.nx-edition span:first-child{background:#101a2aba;padding:2px 6px;border:1px solid var(--rarity-main);border-radius:5px}
+.nx-edition span:last-child{opacity:.86}
+.nx-ability-strip{display:flex;align-items:center;min-width:0;gap:7px;
+ min-height:43px;padding:5px 6px;
+ background:linear-gradient(180deg,#142544,#0b162d);
+ border-top:1px solid var(--rarity-light);
+ color:#fff5dc}
+.nx-ability-mark{flex:0 0 23px;width:23px;height:23px;display:grid;place-items:center;
+ border:1px solid var(--rarity-light);border-radius:50%;background:var(--rarity-dark);
+ color:var(--rarity-light);font-size:13px}
+.nx-ability-copy{display:grid;align-content:center;gap:2px;min-width:0;flex:1}
+.nx-ability-copy strong{color:#fff5dd;font:900 12px var(--nx-f);line-height:1}
+.nx-ability-copy small{color:#b9c7d9;font:600 9px var(--nx-f);line-height:1.13;max-height:22px;overflow:hidden}
+.nx-ability-strip>b{font:900 17px var(--nx-f);color:var(--rarity-light)}
+.nx-footer{position:relative;display:flex;justify-content:space-between;align-items:center;
+ height:41px;min-height:41px;padding:0 5px;
+ background:linear-gradient(110deg,#121a2d,#253351 47%,#121a2d);
+ border-top:1px solid #8ba3c68a;box-shadow:inset 0 3px 5px #0003}
+.nx-stat-gem{position:relative;z-index:2;width:39px;height:37px;display:grid;align-content:center;justify-items:center;
+ clip-path:polygon(50% 0,87% 22%,100% 50%,88% 84%,50% 100%,12% 84%,0 50%,13% 22%);
+ background:linear-gradient(145deg,var(--rarity-light),var(--rarity-main) 45%,#111a35 65%,var(--rarity-main));
+ color:#fffbea;text-shadow:0 1px 2px #000b}
+.nx-stat-gem::before{content:"";position:absolute;inset:3px;z-index:-1;
+ background:linear-gradient(135deg,#283c64,#101929 80%);
+ clip-path:inherit}
+.nx-stat-gem small{font:800 7px var(--nx-f);letter-spacing:.07em;line-height:1.2;color:#d7e5ff}
+.nx-stat-gem b{font:900 17px var(--nx-f);line-height:.85}
+.nx-atk b{color:#ffe0bd}.nx-def b{color:#b9edff}
+.nx-footer-center{display:grid;justify-items:center;gap:1px;color:#c8d5e9;font:800 10px var(--nx-f);letter-spacing:.05em}
+.nx-footer-center strong{color:#fff1cb;font-size:12px}
+.nx-catalog{font-size:8px;color:#869cb7}
+.nx-card:hover .nx-frame{border-color:var(--rarity-light);box-shadow:inset 0 1px #fff8,inset 0 0 11px var(--rarity-main),0 0 14px var(--faction-glow)}
+/* Matching compact portraits: same artwork, env & frame */
+.battlefield .fighter.nx-fighter{padding:0!important;min-height:0!important;overflow:hidden!important;
+ background:transparent!important;border:0!important;border-radius:8px!important;
+ box-shadow:0 9px 20px #000a!important;aspect-ratio:3/4.15; position:relative}
+
+.nx-fighter .nx-battle-frame{display:flex;position:absolute;inset:0;padding:4px;
+ flex-direction:column;overflow:hidden;border-radius:8px;border:2px solid var(--rarity-main);
+ background:linear-gradient(135deg,var(--rarity-light),#111c32 18%,var(--rarity-dark) 70%,var(--rarity-light))}
+.nx-fighter .nx-battle-canvas{position:relative;min-height:0;flex:1;
+ border-radius:4px 4px 0 0;overflow:hidden;background:var(--rarity-dark);border:1px solid #d3dbf64a}
+.nx-fighter .nx-battle-name{position:absolute;top:5px;left:5px;right:5px;height:26px;z-index:8;
+ display:flex;align-items:center;justify-content:space-between;gap:2px;padding:3px 5px;
+ background:linear-gradient(90deg,#111b35f0,#26365bcf);border:1px solid var(--rarity-light);
+ border-radius:4px;font:900 10px var(--nx-f);color:#fff0d6}
+.nx-battle-name span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nx-battle-name b{flex:0 0 auto;font-size:10px;color:#fff1bd}
+.nx-fighter .nx-battle-caption{position:absolute;left:5px;right:5px;bottom:4px;z-index:7;
+ display:flex;align-items:center;justify-content:space-between;gap:3px;
+ font:900 8px var(--nx-f);letter-spacing:.04em;color:#f5ebd9;text-shadow:0 1px 3px #000}
+.nx-battle-caption b{color:var(--rarity-light)}
+.nx-fighter .fighterReadout{padding:6px 5px 5px;background:linear-gradient(140deg,#1b2a46,#10192f)!important;border-radius:0;
+ box-shadow:inset 0 1px #ffffff2b}
+.nx-fighter .hpbar{height:7px!important;margin:0!important;background:#23354b!important;box-shadow:inset 0 1px 3px #000b}
+.nx-fighter .hpbar i{height:100%;background:linear-gradient(90deg,#7acd9f,#cfffd0)}
+.nx-fighter .energybar{height:4px!important;margin:4px 0 0!important}
+.nx-fighter .fighterStats{display:flex;justify-content:space-between;
+ padding:5px 1px 0!important;font:800 9px var(--nx-f)!important;color:#cdd6e8!important}
+.nx-fighter .fighterStats span:last-child{color:#9fc8f1}
+.nx-battle-select{display:none}
+.nx-fighter.selected .nx-battle-select,.nx-fighter.focused .nx-battle-select{display:block;position:absolute;inset:auto 0 -1px;
+ z-index:10;background:#b79052;padding:2px;color:#081124;text-align:center;font:900 8px var(--nx-f)}
+.nx-fighter.focused .nx-battle-select{background:#db688c;color:#200e24}
+.battlefield .fighter.nx-fighter.selected{outline:3px solid #f6e09f;outline-offset:1px;
+ transform:translateY(-5px);box-shadow:0 12px 22px #000b,0 0 15px #ffe5a580!important}
+.battlefield .fighter.nx-fighter.focused{outline:3px solid #f080a6;outline-offset:1px}
+.nx-fighter .nx-color-atmosphere{opacity:.30}
+.nx-fighter .nx-painted-creature{filter:saturate(1.18) contrast(1.06)}
+.benchGlyph .nx-art-stack{position:relative;height:100%;width:100%}
+.benchGlyph .nx-art-stack .nx-environment{inset:0}
+.benchGlyph .nx-art-shade,.benchGlyph .nx-color-atmosphere{opacity:.1}
+.inspectCardHost .nx-card{height:auto!important;max-width:340px}
+.inspectCardHost .nx-card .nx-title strong{font-size:14px}
+@media(max-width:900px){.battlefield .fighter.nx-fighter{aspect-ratio:3/4.2}}
+@media(max-width:720px){
+ .nx-card .nx-frame{padding:4px;border-width:1px}
+ .nx-corner{width:12px;height:12px}
+ .nx-nameplate{left:5px;right:5px;top:5px;height:26px}
+ .nx-rune{flex-basis:21px;font-size:12px}
+ .nx-title strong{font-size:8px}
+ .nx-title small{font-size:6px;letter-spacing:0}
+ .nx-hp{flex-basis:29px}
+ .nx-hp b{font-size:13px}.nx-hp small{font-size:6px}
+ .nx-edition{left:6px;right:6px;bottom:4px;font-size:6px}
+ .nx-edition span:last-child{font-size:6px}
+ .nx-ability-strip{min-height:33px;padding:3px;gap:4px}
+ .nx-ability-mark{width:17px;height:17px;flex-basis:17px;font-size:9px}
+ .nx-ability-copy strong{font-size:9px}
+ .nx-ability-copy small{font-size:7px;max-height:14px}
+ .nx-ability-strip>b{font-size:12px}
+ .nx-footer{height:29px;min-height:29px;padding:0 2px}
+ .nx-stat-gem{width:28px;height:28px}
+ .nx-stat-gem small{font-size:5px}.nx-stat-gem b{font-size:12px}
+ .nx-footer-center{font-size:8px}.nx-footer-center strong{font-size:9px}
+ .nx-catalog{font-size:6px}
+ .battlefield .fighter.nx-fighter{min-height:0!important;aspect-ratio:3/4.2}
+ .nx-fighter .nx-battle-frame{padding:2px;border-width:1px}
+ .nx-fighter .nx-battle-name{left:2px;right:2px;top:2px;height:19px;padding:2px;
+ font-size:7px;border-width:1px}
+ .nx-fighter .nx-battle-name b{font-size:7px}
+ .nx-fighter .nx-battle-caption{font-size:6px;left:2px;right:2px}
+ .nx-fighter .fighterReadout{padding:3px 2px 2px}
+ .nx-fighter .hpbar{height:5px!important}
+ .nx-fighter .energybar{height:3px!important;margin-top:2px!important}
+ .nx-fighter .fighterStats{font-size:6px!important;padding:2px 0 0!important}
+ .nx-fighter .nx-corner{width:8px;height:8px}
+ .nx-fighter .nx-battle-select{font-size:6px}
+ .heroCard3d .nx-card{height:auto!important}
+ .heroCard3d .nx-ability-copy small{display:none}
+ .inspectCardHost .nx-card{width:250px!important}
+}
+
 </style>
 </head>
 <body>
