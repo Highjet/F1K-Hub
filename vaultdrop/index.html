@@ -947,7 +947,7 @@ swipeStage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];swipeX=
 swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-swipeX,dy=t.clientY-swipeY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.15){if(dx<0)$('#next').click();else $('#prev').click()}},{passive:true});$('#openPack').onclick=()=>openPack(idx);$('#revealPack').onclick=startRevealWait;$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#sell').onclick=()=>settle('sell');$('#vaultGrid').onclick=e=>{const ship=e.target.closest('[data-ship-index]');if(ship){requestShip(Number(ship.dataset.shipIndex));return}const sell=e.target.closest('[data-sell-index]');if(sell)sellFromVault(Number(sell.dataset.sellIndex))};$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
 function selectGame(game,{silent=false,force=false}={}){
   currentGame=game==='onepiece'?'onepiece':'pokemon';document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';
-  $$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));if(!silent)sfx('nav');renderPack(force);
+  $document.querySelectorAll('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));if(!silent)sfx('nav');renderPack(force);
 }
 $$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();selectGame(b.dataset.game)});
 $$('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
