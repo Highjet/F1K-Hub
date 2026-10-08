@@ -346,7 +346,7 @@ main{padding:22px clamp(12px,2vw,34px)}
 
 <section id="collection" class="page">
   <div class="sectionHead"><div><div class="eyebrow">THE GRAND ARCHIVE</div><h2>YOUR COLLECTION</h2><p>Variants share gameplay stats. Rarity is collection prestige, not raw power.</p></div><div id="collectionCount" class="counter"></div></div>
-  <div class="cardGrid" id="collectionGrid"></div>
+  <div class="cardGrid" id="collectionGrid"></div><div class="artRights">Artwork: WTactics / Arcmage artists · CC BY-SA 4.0 · <a href="https://github.com/wtactics/art" target="_blank" rel="noopener">Illustration source &amp; artist credits</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">License</a>. Game card names and abilities are NEXUS originals.</div>
 </section>
 
 <section id="squad" class="page">
@@ -377,6 +377,11 @@ main{padding:22px clamp(12px,2vw,34px)}
 <div class="bottomNav"><button data-page="home" class="active">HOME</button><button data-page="arena">ARENA</button><button data-page="packs">PACKS</button><button data-page="collection">CARDS</button><button data-page="squad">SQUAD</button></div>
 
 <div class="overlay" id="packOverlay"><div class="reveal"><div id="revealStage"></div><div class="revealCards" id="revealCards"></div><div style="margin-top:18px"><button class="btn primary" id="closeReveal">ADD TO COLLECTION</button></div></div></div>
+<div class="cardInspect" id="cardInspect" role="dialog" aria-modal="true" aria-label="Card details">
+ <div class="inspectBackdrop" id="inspectBackdrop"></div>
+ <div class="inspectPanel"><button class="inspectClose" id="inspectClose" aria-label="Close card detail">×</button>
+ <div class="inspectCardHost" id="inspectCardHost"></div>
+ <div class="inspectData" id="inspectData"></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -489,18 +494,51 @@ function creatureArt(c){
  '<path d="M0 345 Q180 312 360 347" stroke="'+f.c1+'" stroke-width="2" fill="none" opacity=".7"/>'+
  '</svg>';
 }
+
+/*
+Illustration source: WTactics/Arcmage original paintings, CC BY-SA 4.0.
+https://github.com/wtactics/art ; credit artist(s) identified in its README.
+The NEXUS card layout is independently designed. Art remains licensed CC BY-SA 4.0.
+*/
+const ART_LIBRARY=[
+ "Majestic Griffin","Mounted Eagle","Falconer","Guardians Fall","Flying Fortress",
+ "Hydra","Wight","Dark Mana Breather","Raven","Forgiving Vampire",
+ "Cyclops","Dragon Bath","Female Fire Mage","Fire Wizard Female","Orc Battle Frenzy",
+ "Ancestral Spirit Tree","Wild Warg","Satyr","Nourished Flower","Early Spring",
+ "Elven Justice","Elven Trackers","Female Elf Caster","Druid","Knight",
+ "Spider Woman","Medusa","Vulture Assassin","Shapeshift","Hydra Hatchling",
+ "Orc Shaman","Orc Drummer","Orc Forge","Smith","Ghazw",
+ "Poison Ivy","Botanist","Sequoia Saplings","Dryads Flute","Centaur Hunter"
+];
+function artUrls(c){
+ const id=Number(c.id.slice(1))-1,art=ART_LIBRARY[id]||"Majestic Griffin";
+ const base='https://raw.githubusercontent.com/wtactics/art/master/WT/'+encodeURIComponent(art)+'/'+encodeURIComponent(art);
+ const fallback=base+'_150.png';
+ const high=base+'.png';
+ const optimized='https://images.weserv.nl/?url='+encodeURIComponent(high)+'&w=600&h=740&fit=cover&output=webp&q=82';
+ return {art,optimized,fallback,high};
+}
+function imageArt(c,mode='card'){
+ const a=artUrls(c);
+ const eager=mode==='battle'||mode==='hero'?'eager':'lazy';
+ const highPriority=mode==='battle'?'high':'auto';
+ return '<span class="paintedArt">'+creatureArt(c)+
+ '<img class="creaturePainting" loading="'+eager+'" fetchpriority="'+highPriority+'" decoding="async" src="'+a.optimized+'" alt="'+c.name+' fantasy illustration" '+
+ 'onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src=\''+a.fallback+'\'}else{this.style.display=\'none\'}">'+
+ '</span>';
+}
 function cardHtml(c,opts={}){
- const own=state.owned[c.id],selected=state.squad.includes(c.id);
- const rarityClass='rarity-'+c.rarity.toLowerCase();
- return '<article class="tcg '+rarityClass+' '+(opts.selected&&selected?'selected':'')+'" data-card="'+c.id+'" style="'+artVars(c)+'">'+
- '<div class="tcgHead"><span class="cardFaction">'+c.faction.toUpperCase()+' / '+c.rarity.toUpperCase()+'</span><span class="cardHp">HP '+c.hp+'</span></div>'+
- '<div class="tcgArt">'+creatureArt(c)+'<span class="cardWatermark">'+c.id+'</span></div>'+
- '<div class="tcgBody"><div class="tcgName">'+c.name+'</div><div class="tcgMeta">'+c.role.toUpperCase()+' · FIRST CONTACT</div>'+
- '<div class="abilityLine"><span class="abilityOrb">✦</span><span>'+c.ultName+'</span><strong>'+c.atk*3+'</strong></div>'+
- '<div class="abilityHint">'+c.ultText+'</div>'+
- '<div class="statline"><span>ATK <b>'+c.atk+'</b></span><span>SPD <b>'+c.speed+'</b></span><span>OWNED <b>'+(own?.count||0)+'</b></span></div>'+
- '<div class="tcgBottom"><span>'+c.rarity.toUpperCase()+(own?.variants?.[0]&&own.variants[0]!=='Base'?' · '+own.variants[0]:'')+'</span><span>NEXUS // '+c.id.toUpperCase()+'</span></div>'+
- '</div>'+(opts.selected&&selected?'<button type="button" class="squadPosition '+(state.squad.indexOf(c.id)<3?'starting':'reserve')+'" data-promote="'+c.id+'">'+(state.squad.indexOf(c.id)<3?'★ STARTER':'↑ SET STARTER')+'</button>':'')+'</article>';
+ const own=state.owned[c.id],selected=state.squad.includes(c.id),r=c.rarity.toLowerCase();
+ const mode=opts.mode||'card',mini=mode==='hero'?' heroPainting':'';
+ return '<article class="tcg collectible rarity-'+r+(opts.selected&&selected?' selected':'')+mini+'" data-card="'+c.id+'" style="'+artVars(c)+'">'+
+ '<div class="faceArtwork">'+imageArt(c,mode)+
+ '<div class="faceGlint"></div><div class="faceTop"><span class="elementTag">'+c.faction.toUpperCase()+'</span><span class="faceHP">'+c.hp+' <small>HP</small></span></div>'+
+ '<div class="faceTitle"><div class="faceName">'+c.name+'</div><div class="faceSubtitle">'+c.role.toUpperCase()+' · '+c.rarity.toUpperCase()+'</div></div></div>'+
+ '<div class="faceInfo"><div class="abilityFace"><span class="abilityIcon">'+({Nova:'✧',Void:'☾',Forge:'◆',Grove:'❀'}[c.faction]||'✦')+'</span><span class="abilityCopy"><strong>'+c.ultName+'</strong><small>'+c.ultText+'</small></span><b>'+c.atk*3+'</b></div>'+
+ '<div class="faceStats"><span>ATK <b>'+c.atk+'</b></span><span>SPD <b>'+c.speed+'</b></span><span>OWNED <b>'+(own?.count||0)+'</b></span></div>'+
+ '<div class="faceFooter"><span>✦ '+c.rarity.toUpperCase()+'</span><span>NX · '+c.id.toUpperCase()+'</span></div></div>'+
+ (opts.selected&&selected?'<button type="button" class="squadPosition '+(state.squad.indexOf(c.id)<3?'starting':'reserve')+'" data-promote="'+c.id+'">'+(state.squad.indexOf(c.id)<3?'★ STARTER':'↑ SET STARTER')+'</button>':'')+
+ '</article>';
 }
 function renderTop(){
  $('#coinsTop').textContent=state.coins.toLocaleString();$('#gemsTop').textContent=state.gems.toLocaleString();
@@ -694,16 +732,15 @@ function renderBattleTop(){
 }
 function fighterHtml(u,i,enemy=false){
  if(!u)return '<div class="fighter dead"></div>';
- const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy,role=u.card.role,rarity='rarity-'+u.card.rarity.toLowerCase();
- return '<div class="fighter '+rarity+' '+(u.dead?'dead ':'')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-uid="'+u.uid+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'">'+
+ const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy,role=u.card.role;
+ return '<div class="fighter rarity-'+u.card.rarity.toLowerCase()+' '+(u.dead?'dead ':'')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-uid="'+u.uid+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'">'+
+ '<div class="fighterFace">'+imageArt(u.card,'battle')+'<div class="fighterVignette"></div>'+
  '<div class="fighterTitle"><span>'+u.card.name+'</span><b>'+Math.ceil(u.hp)+' HP</b></div>'+
- '<div class="fighterArt">'+creatureArt(u.card)+'</div>'+
- '<div class="fighterFooter"><span>'+role.toUpperCase()+'</span><span>'+u.card.ultName+'</span></div>'+
- '<div class="hpbar"><i style="width:'+hp+'%"></i></div>'+
+ '<div class="fighterRole">'+u.card.faction.toUpperCase()+' · '+role.toUpperCase()+'</div></div>'+
+ '<div class="fighterReadout"><div class="hpbar"><i style="width:'+hp+'%"></i></div>'+
  '<div class="energybar"><i style="width:'+en+'%"></i></div>'+
- '<div class="fighterStats"><span>ATK '+u.card.atk+'</span><span>ENERGY '+Math.round(en)+'%</span></div></div>';
+ '<div class="fighterStats"><span>ATK '+u.card.atk+'</span><span>ENERGY '+Math.round(en)+'%</span></div></div></div>';
 }
-
 function patchField(id,units,enemy){
  const field=document.getElementById(id);if(!field)return;
  const sig=units.map(u=>u?.uid||'empty').join('|');
@@ -783,6 +820,29 @@ function initCinematicControls(){
  };
  ['collectionGrid','squadGrid','recentPulls','revealCards'].forEach(id=>attachTilt(document.getElementById(id)));
 }
+
+
+function inspectCard(id){
+ const c=cardById(id);if(!c)return;
+ const a=artUrls(c);
+ document.getElementById('inspectCardHost').innerHTML=cardHtml(c,{mode:'hero'});
+ document.getElementById('inspectData').innerHTML='<span class="eyebrow">THE FIRST FRACTURE · COLLECTIBLE '+c.id.toUpperCase()+'</span>'+
+ '<h2>'+c.name+'</h2><p>'+c.faction+' · '+c.role+' · '+c.rarity+'</p>'+
+ '<div class="inspectAbility"><strong>'+c.ultName+'</strong><p>'+c.ultText+'</p></div>'+
+ '<div class="inspectNumber"><span>HP <b>'+c.hp+'</b></span><span>ATK <b>'+c.atk+'</b></span><span>SPEED <b>'+c.speed+'</b></span></div>'+
+ '<div class="inspectAttribution">Illustration: <a href="https://github.com/wtactics/art/tree/master/WT/'+encodeURIComponent(a.art)+'" target="_blank" rel="noopener">'+a.art+' · WTactics / Arcmage</a><br>CC BY-SA 4.0 · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">License and terms</a></div>';
+ document.getElementById('cardInspect').classList.add('show');
+}
+function closeInspect(){document.getElementById('cardInspect').classList.remove('show')}
+document.getElementById('inspectBackdrop').onclick=closeInspect;
+document.getElementById('inspectClose').onclick=closeInspect;
+document.getElementById('collectionGrid').addEventListener('click',e=>{
+ const card=e.target.closest('[data-card]');if(card)inspectCard(card.dataset.card);
+});
+document.getElementById('recentPulls').addEventListener('click',e=>{
+ const card=e.target.closest('[data-card]');if(card)inspectCard(card.dataset.card);
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInspect()});
 
 </script>
 </body>
