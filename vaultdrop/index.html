@@ -274,8 +274,6 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
   .transitSteps{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
 }
 
-
-.stripeSetupOverlay{position:fixed;inset:0;z-index:99999;background:rgba(3,5,9,.92);backdrop-filter:blur(18px);display:none;place-items:center;padding:22px}.stripeSetupOverlay.show{display:grid}.stripeSetupCard{width:min(560px,100%);background:linear-gradient(180deg,#131722,#0b0e14);border:1px solid rgba(255,255,255,.12);border-radius:24px;padding:24px;box-shadow:0 30px 100px #000b}.stripeSetupCard h2{margin:0 0 8px;font-size:28px}.stripeSetupCard p{color:#aab2c2;line-height:1.55}.stripeSetupStep{padding:14px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:#090c12;margin-top:12px}.stripeSetupStep strong{display:block;margin-bottom:5px}.stripeSetupCode{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#cfd6ff;background:#080a0f;border:1px solid rgba(255,255,255,.08);border-radius:9px;padding:9px 10px;margin-top:8px;word-break:break-all}.stripeSetupBtns{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.stripeSetupBtns a,.stripeSetupDone{height:44px;border-radius:11px;display:grid;place-items:center;text-decoration:none;font-weight:900}.stripeSetupBtns a{background:#f3f5f8;color:#090a0d}.stripeSetupBtns a.secondary{background:#151a24;color:#fff;border:1px solid rgba(255,255,255,.11)}.stripeSetupDone{width:100%;border:0;background:#222939;color:#fff;margin-top:12px;cursor:pointer}@media(max-width:620px){.stripeSetupBtns{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -372,17 +370,6 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
 </main>
 <div id="overlay" class="overlay"><div class="reveal"><button id="close" class="close">×</button><div id="revealPack" class="rPack"><div class="packBrand stroke">VAULTDROP</div><div class="rSeal stroke">VD</div><div id="revealPackName" class="rName stroke"></div><div id="revealHint" class="ey stroke">TAP TO REVEAL</div><div id="revealCountdown" class="revealCountdown stroke"></div><div id="revealProgress" class="revealProgress"><i></i></div></div><div class="result"><img id="resultImg"><div><div id="resultSet" class="ey"></div><h2 id="resultName" class="stroke"></h2><div id="resultMarket" class="market stroke"></div><div class="actions revealActions"><button id="keep" class="primary stroke">KEEP IN VAULT</button><button id="sell" class="stroke">SELL BACK <span id="sellVal"></span></button></div><div id="resultFine" class="fine">Paid pull · this card is eligible for VaultDrop Store Credit or physical fulfillment.</div></div></div></div></div>
 <div id="modal" class="modal"><div id="detail" class="detail"></div></div><div id="toast" class="toast"></div>
-
-<div id="stripeSetupOverlay" class="stripeSetupOverlay" aria-modal="true" role="dialog">
-  <div class="stripeSetupCard">
-    <div class="ey">ONE-TIME LIVE PAYMENT SETUP</div>
-    <h2>Connect Stripe to VaultDrop</h2>
-    <p>Your secret key should never be pasted into VaultDrop itself. Use these two secure pages once, then come back here.</p>
-    <div class="stripeSetupStep"><strong>1. Copy your Stripe live Secret key</strong><div class="stripeSetupBtns"><a href="https://dashboard.stripe.com/apikeys" target="_blank" rel="noopener">OPEN STRIPE API KEYS</a></div></div>
-    <div class="stripeSetupStep"><strong>2. Paste it into the VaultDrop backend variable</strong><div class="stripeSetupCode">STRIPE_SECRET_KEY</div><div class="stripeSetupBtns"><a class="secondary" href="https://railway.com/dashboard" target="_blank" rel="noopener">OPEN RAILWAY</a></div><p style="margin:8px 0 0;font-size:11px">Open <b>VaultDrop → vaultdrop-fulfillment-api → Variables</b>, create <b>STRIPE_SECRET_KEY</b>, paste the <b>sk_live_…</b> value, and save.</p></div>
-    <button id="stripeSetupDone" class="stripeSetupDone">I'VE CONNECTED STRIPE</button>
-  </div>
-</div>
 <script>
 const API='https://vaultdrop-fulfillment-api-production.up.railway.app';
 const PACKS=[
@@ -909,11 +896,6 @@ $('#notifyBtn').onclick=async()=>{if(!('Notification'in window)){toast('Notifica
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 setInterval(pollFulfillments,15000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
-
-const stripeSetupOverlay=document.getElementById('stripeSetupOverlay');
-const stripeSetupDone=document.getElementById('stripeSetupDone');
-if(!localStorage.vd_stripe_setup_seen){stripeSetupOverlay?.classList.add('show')}
-stripeSetupDone?.addEventListener('click',()=>{localStorage.vd_stripe_setup_seen='1';stripeSetupOverlay?.classList.remove('show');toast('Stripe setup screen dismissed.');});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
 $$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();renderPack();loadAccount();
 </script>
