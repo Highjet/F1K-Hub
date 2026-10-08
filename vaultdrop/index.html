@@ -398,9 +398,10 @@ const money=n=>new Intl.NumberFormat(LOCALES[language]||'en-US',{style:'currency
 const esc=s=>String(s||'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const img=(c,size='high')=>c&&c.image?(c.imageMode==='direct'?c.image:c.image+'/'+size+'.webp'):'';
 let idx=0,pending=null,currentGame='pokemon',revealTimer=null,renderSeq=0,installPrompt=null;const cache=new Map(),lastGoodPools=new Map(),preloadedGames=new Set();document.body.dataset.game=currentGame;
-const POOL_CACHE_KEY='vd_pool_cache_v1',POOL_CACHE_MAX_AGE=24*60*60*1000;
+const POOL_CACHE_KEY='vd_pool_cache_v2',POOL_CACHE_MAX_AGE=24*60*60*1000;
+function validPoolData(d){return Boolean(d&&Array.isArray(d.cards)&&d.cards.length&&d.buckets&&Array.isArray(d.buckets.grail?.cards))}
 let persistedPools=(()=>{try{return JSON.parse(localStorage.getItem(POOL_CACHE_KEY)||'{}')}catch{return {}}})();
-for(const [k,v] of Object.entries(persistedPools)){if(v&&Date.now()-Number(v.at||0)<POOL_CACHE_MAX_AGE&&v.data)cache.set(k,v.data)}
+for(const [k,v] of Object.entries(persistedPools)){if(v&&Date.now()-Number(v.at||0)<POOL_CACHE_MAX_AGE&&validPoolData(v.data))cache.set(k,v.data)}
 function persistPool(key,data){
   try{
     persistedPools[key]={at:Date.now(),data};
@@ -414,12 +415,13 @@ function preloadCurrentGame(){
   if('requestIdleCallback'in window)requestIdleCallback(()=>runner(),{timeout:1500});else setTimeout(runner,600);
 }
 async function fetchPoolForGame(game,i){
-  const key=game+':'+i;if(cache.has(key))return cache.get(key);
+  const key=game+':'+i;
+  if(cache.has(key)){const hit=cache.get(key);if(validPoolData(hit))return hit;cache.delete(key);delete persistedPools[key];try{localStorage.setItem(POOL_CACHE_KEY,JSON.stringify(persistedPools))}catch{}}
   const p=PACKS[i],controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
   try{
     const r=await fetch(API+'/api/pool?game='+encodeURIComponent(game)+'&price='+encodeURIComponent(p.price),{signal:controller.signal});
     if(!r.ok)throw new Error('Card feed '+r.status);const data=await r.json();
-    if(!data||!Array.isArray(data.cards)||!data.cards.length)throw new Error('No cards returned');
+    if(!validPoolData(data))throw new Error('Invalid card pool returned');
     cache.set(key,data);persistPool(key,data);return data;
   }finally{clearTimeout(timer)}
 }
@@ -960,6 +962,6 @@ if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serv
 setInterval(pollFulfillments,15000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();renderPack(false);setTimeout(()=>{if(!$('#cards .card'))loadAndRender(idx,true)},1800);loadAccount();
+$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');try{localStorage.removeItem('vd_pool_cache_v1')}catch{}renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();renderPack(true);loadAccount();
 </script>
 </body></html>
