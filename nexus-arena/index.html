@@ -124,6 +124,9 @@ header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rg
 @keyframes damageRise{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}18%{opacity:1;transform:translate(-50%,-75%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-220%) scale(.95)}}
 @keyframes burstFlash{0%{opacity:0}22%{opacity:.85}100%{opacity:0}}
 @keyframes resultPop{from{opacity:0;transform:scale(.79)}to{opacity:1;transform:scale(1)}}
+
+.squadPosition{position:relative;z-index:5;display:block;width:calc(100% - 12px);margin:4px 6px 2px;border:1px solid #80bffe;color:#e1f3ff;border-radius:7px;background:linear-gradient(135deg,#172f58,#2a3f75);font-size:10px;font-weight:1000;padding:7px}
+.squadPosition.starting{border-color:#f8d68c;color:#fff1b5;background:linear-gradient(135deg,#715120,#241e24);cursor:default}
 </style>
 </head>
 <body>
@@ -196,7 +199,7 @@ header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rg
 </section>
 
 <section id="squad" class="page">
-  <div class="squadToolbar"><div><h2 style="margin:0">Build your 20</h2><p style="margin:5px 0 0;color:#7f899b;font-size:12px">Exactly 6 owned fighters enter battle: 3 active and 3 reserves.</p></div><div class="counter"><span id="squadCount">0</span> / 6</div></div>
+  <div class="squadToolbar"><div><h2 style="margin:0">Build your 20</h2><p style="margin:5px 0 0;color:#7f899b;font-size:12px">Choose six fighters. The first three start; the next three are reserves. Promote a reserve to change your starting lineup.</p></div><div class="counter"><span id="squadCount">0</span> / 6</div></div>
   <div class="cardGrid" id="squadGrid"></div>
 </section>
 
@@ -346,7 +349,7 @@ function cardHtml(c,opts={}){
  '<div class="abilityHint">'+c.ultText+'</div>'+
  '<div class="statline"><span>ATK <b>'+c.atk+'</b></span><span>SPD <b>'+c.speed+'</b></span><span>OWNED <b>'+(own?.count||0)+'</b></span></div>'+
  '<div class="tcgBottom"><span>'+c.rarity.toUpperCase()+(own?.variants?.[0]&&own.variants[0]!=='Base'?' · '+own.variants[0]:'')+'</span><span>NEXUS // '+c.id.toUpperCase()+'</span></div>'+
- '</div></article>';
+ '</div>'+(opts.selected&&selected?'<button type="button" class="squadPosition '+(state.squad.indexOf(c.id)<3?'starting':'reserve')+'" data-promote="'+c.id+'">'+(state.squad.indexOf(c.id)<3?'★ STARTER':'↑ SET STARTER')+'</button>':'')+'</article>';
 }
 function renderTop(){
  $('#coinsTop').textContent=state.coins.toLocaleString();$('#gemsTop').textContent=state.gems.toLocaleString();
@@ -400,6 +403,8 @@ function renderSquad(){
  $('#squadCount').textContent=state.squad.length;
  $('#squadGrid').innerHTML=CARD_DEFS.filter(c=>state.owned[c.id]).map(c=>cardHtml(c,{selected:true})).join('');
  $('#squadGrid').querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>toggleSquad(el.dataset.card));
+ $('#squadGrid').querySelectorAll('[data-promote]').forEach(b=>b.onclick=e=>{e.stopPropagation();const id=b.dataset.promote;const i=state.squad.indexOf(id);if(i<3)return;
+ state.squad.splice(i,1);state.squad.splice(2,0,id);save();renderSquad();toast(cardById(id).name+' enters the starting trio.');});
 }
 function toggleSquad(id){
  const i=state.squad.indexOf(id);if(i>=0){if(state.squad.length<=3){toast('Keep at least 3 fighters.');return}state.squad.splice(i,1)}
