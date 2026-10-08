@@ -945,7 +945,11 @@ let swipeX=0,swipeY=0;
 const swipeStage=$('.stageCore');
 swipeStage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];swipeX=t.clientX;swipeY=t.clientY},{passive:true});
 swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-swipeX,dy=t.clientY-swipeY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.15){if(dx<0)$('#next').click();else $('#prev').click()}},{passive:true});$('#openPack').onclick=()=>openPack(idx);$('#revealPack').onclick=startRevealWait;$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#sell').onclick=()=>settle('sell');$('#vaultGrid').onclick=e=>{const ship=e.target.closest('[data-ship-index]');if(ship){requestShip(Number(ship.dataset.shipIndex));return}const sell=e.target.closest('[data-sell-index]');if(sell)sellFromVault(Number(sell.dataset.sellIndex))};$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
-$$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();sfx('nav');currentGame=b.dataset.game;document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x===b));renderPack()});
+function selectGame(game,{silent=false,force=false}={}){
+  currentGame=game==='onepiece'?'onepiece':'pokemon';document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';
+  $('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));if(!silent)sfx('nav');renderPack(force);
+}
+$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();selectGame(b.dataset.game)});
 $$('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
 $('#language').onchange=()=>{sfx('nav');language=$('#language').value;applyLanguage();if(currentUser)saveDeliveryProfile()};
 $('#soundBtn').onclick=()=>setSound(!soundEnabled);
@@ -962,6 +966,7 @@ if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serv
 setInterval(pollFulfillments,15000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');try{localStorage.removeItem('vd_pool_cache_v1')}catch{}renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();renderPack(true);loadAccount();
+$$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');try{localStorage.removeItem('vd_pool_cache_v1')}catch{}renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();selectGame('pokemon',{silent:true,force:true});loadAccount();
+window.addEventListener('load',()=>{let tries=0;const ensurePackCards=()=>{if($('#cards .card'))return;if(++tries>8)return;selectGame(currentGame,{silent:true,force:true});setTimeout(ensurePackCards,900)};setTimeout(ensurePackCards,250)});
 </script>
 </body></html>
