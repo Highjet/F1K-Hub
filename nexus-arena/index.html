@@ -821,6 +821,18 @@ main{padding:22px clamp(12px,2vw,34px)}
 .nx-card .squadPosition{position:absolute;z-index:12;bottom:2px;left:5px;right:5px;width:auto;margin:0;opacity:.95}
 .nx-card:has(.squadPosition) .nx-frame{bottom:25px}
 .nx-card:has(.squadPosition){padding-bottom:25px!important}
+
+.nx-sealed{cursor:default!important}
+.nx-sealed .nx-frame{filter:saturate(.64)}
+.nx-sealed .nx-canvas{background:#132038}
+.nx-sealed .nx-environment{filter:blur(2px) brightness(.5) saturate(.5)}
+.nx-seal{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;
+ background:radial-gradient(ellipse at 50% 54%,#151f35b6,#060b1af2 90%);color:#a7b6ce;
+ font:900 12px 'Rajdhani',system-ui,sans-serif;letter-spacing:.1em}
+.nx-seal-sigil{font:700 48px 'Cinzel',Georgia,serif;color:#d8d8e588;text-shadow:0 0 20px #7b82d688}
+.nx-seal small{font-size:9px;color:#849ab8;letter-spacing:.25em}
+.nx-sealed:hover{transform:none!important;box-shadow:0 12px 21px #0008!important}
+
 </style>
 </head>
 <body>
@@ -1198,9 +1210,20 @@ function openPack(id){
 }
 $('#closeReveal').onclick=()=>{$('#packOverlay').classList.remove('show');renderPacks();renderCollection()};
 
+
+function sealedCardHtml(c){
+ const r=c.rarity.toLowerCase();
+ return '<article class="tcg collectible nx-card nx-sealed rarity-'+r+' faction-'+c.faction.toLowerCase()+'" data-sealed="'+c.id+'" aria-label="Undiscovered '+c.faction+' collectible">'+
+ '<div class="nx-frame">'+nxCornerMarks()+
+ '<div class="nx-canvas"><div class="nx-environment">'+sceneSvg(c)+'</div>'+
+ '<div class="nx-seal"><span class="nx-seal-sigil">✦</span><span>UNDISCOVERED</span><small>'+c.faction.toUpperCase()+'</small></div></div>'+
+ '<div class="nx-ability-strip"><div class="nx-ability-mark">?</div><div class="nx-ability-copy"><strong>SEALED CARD</strong><small>Discover this card in a pack.</small></div></div>'+
+ '<div class="nx-footer"><div class="nx-stat-gem nx-atk"><b>?</b></div><div class="nx-footer-center"><span>'+c.faction.toUpperCase()+'</span><span class="nx-catalog">'+c.id.toUpperCase()+'</span></div><div class="nx-stat-gem nx-def"><b>?</b></div></div></div></article>';
+}
 function renderCollection(){
- const owned=CARD_DEFS.filter(c=>state.owned[c.id]);$('#collectionCount').textContent=owned.length+' / '+CARD_DEFS.length+' UNIQUE';
- $('#collectionGrid').innerHTML=CARD_DEFS.map(c=>state.owned[c.id]?cardHtml(c):'<article class="tcg" style="opacity:.32"><div class="tcgArt" style="'+artVars(c)+';filter:grayscale(1)"><span class="rarity">UNKNOWN</span><span class="tcgSil">?</span></div><div class="tcgBody"><div class="tcgName">UNDISCOVERED</div><div class="tcgMeta">'+c.faction.toUpperCase()+'</div></div></article>').join('');
+ const owned=CARD_DEFS.filter(c=>state.owned[c.id]);
+ $('#collectionCount').textContent=owned.length+' / '+CARD_DEFS.length+' UNIQUE';
+ $('#collectionGrid').innerHTML=CARD_DEFS.map(c=>state.owned[c.id]?cardHtml(c):sealedCardHtml(c)).join('');
 }
 function renderSquad(){
  $('#squadCount').textContent=state.squad.length;
