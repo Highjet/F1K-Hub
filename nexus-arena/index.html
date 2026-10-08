@@ -405,6 +405,216 @@ main{padding:22px clamp(12px,2vw,34px)}
 }
 @media(prefers-reduced-motion:reduce){.faceGlint,.creaturePainting{animation:none;transition:none}}
 
+
+/* NEXUS Collection Finish — quieter, gallery-quality card faces */
+:root{--cream:#f8ebcd;--deep:#101a2c;--mutedGold:#cdb480}
+.cardGrid{align-items:start}
+.tcg.collectible{
+ display:flex;flex-direction:column;
+ min-height:342px;
+ border-radius:11px;
+ padding:4px;
+ border:2px solid #9baeca;
+ background:linear-gradient(138deg,#bfcddd,#344662 10%,#182743 68%,#acb8cc);
+ box-shadow:0 2px 1px #ffffff12 inset,0 13px 26px #0007;
+ overflow:hidden;
+ transition:transform .22s ease,box-shadow .22s ease;
+}
+.tcg.collectible.rarity-common{border-color:#8d9aab;background:linear-gradient(142deg,#9bafc1,#263951 22%,#152540 78%,#95a5b9)}
+.tcg.collectible.rarity-rare{border-color:#76b2cc;background:linear-gradient(142deg,#a5dbef,#183d5e 20%,#122844 76%,#83bddb)}
+.tcg.collectible.rarity-epic{border-color:#a991d0;background:linear-gradient(142deg,#d1b8e8,#3a275d 19%,#1e233e 76%,#b7a0d9)}
+.tcg.collectible.rarity-legendary{border-color:#e1c78b;background:linear-gradient(142deg,#f2ddac,#6e5736 19%,#292943 76%,#d3b274)}
+.tcg.collectible.rarity-mythic{border-color:#d6c0e4;background:linear-gradient(142deg,#d5e5ee,#5d437f 19%,#172842 76%,#cbb2ed)}
+.tcg.collectible::before{display:none}
+.tcg.collectible::after{inset:2px;border:1px solid #ffffff35;box-shadow:none;border-radius:8px}
+.tcg.collectible:hover{box-shadow:0 18px 28px #0009,0 0 0 1px var(--card-metal)}
+.faceHeader{
+ position:relative;z-index:2;
+ flex:0 0 38px;
+ display:flex;align-items:center;gap:8px;
+ padding:5px 8px;background:linear-gradient(110deg,#12233d,#273650 60%,#17243c);
+ border-radius:5px 5px 0 0;border-bottom:1px solid #ffffff4a;color:#fff3de;
+}
+.faceRarityIcon{display:grid;place-items:center;width:23px;height:23px;flex:0 0 23px;border-radius:50%;border:1px solid #e9d7b18c;background:#32435e;color:#f2dcac;font-size:13px}
+.rarity-rare .faceRarityIcon{color:#b3ebfc;border-color:#a2e7ff7a}
+.rarity-epic .faceRarityIcon{color:#d8beff;border-color:#bd9cfb}
+.rarity-mythic .faceRarityIcon,.rarity-legendary .faceRarityIcon{color:#ffe6a4;border-color:#e2c07a}
+.faceHeaderName{min-width:0;flex:1;display:flex;align-items:flex-start;flex-direction:column;justify-content:center;gap:3px}
+.faceHeaderName strong{font:700 12px var(--display);letter-spacing:-.02em;line-height:1.13;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:#fff7e6}
+.faceHeaderName small{font:800 8px var(--hud);line-height:1;letter-spacing:.075em;color:#c3d1e4}
+.faceHP{flex:0 0 auto;display:flex;align-items:baseline;gap:3px;padding:3px 6px;border:1px solid #e0cfa066;border-radius:5px;background:#071426cc;color:#fff1c5}
+.faceHP b{font:900 16px var(--hud);font-variant-numeric:tabular-nums}.faceHP small{font:800 9px var(--hud);color:#e7cf9e}
+.tcg.collectible .faceArtwork{
+ flex:1 1 auto;min-height:218px;height:218px;position:relative;overflow:hidden;
+ border-radius:0;background:#10182b;box-shadow:none;border:0;
+}
+.faceArtwork .paintedArt>.creatureSvg{opacity:.76}
+.faceArtwork .creaturePainting{object-fit:cover;object-position:center 36%;transform:scale(1);filter:contrast(1.055) saturate(1.10)}
+.tcg.collectible:hover .faceArtwork .creaturePainting{transform:scale(1.03)}
+.faceArtwork::after{background:linear-gradient(180deg,#06102145 0%,transparent 18%,transparent 76%,#07152a8a 100%)}
+.faceArtLabel{position:absolute;left:7px;right:7px;bottom:6px;z-index:4;display:flex;justify-content:space-between;gap:5px;text-shadow:0 1px 4px #000;font:800 9px var(--hud);color:#f9f1df;letter-spacing:.06em}
+.faceArtLabel span:first-child{padding:3px 6px;border-radius:3px;background:#111b2b8a;border:1px solid #eee0ba63}
+.faceArtLabel span:last-child{align-self:center;color:#dce8f5b8;font-size:8px}
+.tcg.collectible .faceInfo{
+ flex:0 0 85px;min-height:85px;padding:7px 9px 5px;
+ background:linear-gradient(165deg,#1c2a44,#101c32 64%,#0e1c33);
+ color:#ebf2ff;border-radius:0 0 4px 4px;box-shadow:inset 0 1px #ffffff2e;
+}
+.tcg.collectible .abilityFace{min-height:43px;gap:8px;padding-bottom:7px}
+.tcg.collectible .abilityIcon{width:27px;height:27px;flex:0 0 27px;border:1px solid #b7cbe177;background:#273954;color:#f3d3a0;font-size:15px}
+.tcg.collectible .abilityCopy strong{font:900 12px var(--hud);color:#f3f2f4;letter-spacing:.01em;line-height:1.12}
+.tcg.collectible .abilityCopy small{font:600 9px var(--hud);color:#aabbd1;line-height:1.2;max-height:22px;overflow:hidden}
+.tcg.collectible .abilityFace>b{font:900 17px var(--hud);color:#ffe0a1}
+.tcg.collectible .faceStats{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:4px;align-items:center;border-top:1px solid #8396ae49;padding:5px 0 1px;color:#aabbcf;font:800 9px var(--hud)}
+.tcg.collectible .faceStats>span{display:flex;align-items:baseline;gap:4px;white-space:nowrap}
+.tcg.collectible .faceStats small{font-size:9px;color:#8099b5}
+.tcg.collectible .faceStats b{font-size:11px;color:#edf2f9}
+.tcg.collectible .faceStats .faceSerial{font:800 9px var(--hud);color:#9bb2cc;letter-spacing:.05em}
+.tcg.collectible .faceGlint{opacity:.23;animation-duration:13s}
+.tcg.collectible.rarity-common .faceGlint{display:none}
+.tcg.collectible.selected{outline-color:#e5d39f}
+.squadPosition{margin-top:5px;margin-bottom:0}
+.heroCard3d .tcg.collectible{min-height:310px;height:310px}
+.heroCard3d .tcg.collectible .faceHeader{flex-basis:34px;padding:4px 6px}
+.heroCard3d .tcg.collectible .faceArtwork{min-height:186px;height:186px}
+.heroCard3d .tcg.collectible .faceInfo{flex-basis:82px;min-height:82px;padding:5px 6px}
+.heroCard3d .faceHeaderName strong{font-size:11px}
+.heroCard3d .faceHeaderName small{font-size:7px}
+.heroCard3d .faceHP b{font-size:13px}
+.heroCard3d .tcg.collectible .abilityCopy small{display:none}
+.heroCard3d .tcg.collectible .abilityFace{min-height:35px}
+.heroCard3d .tcg.collectible .faceStats{grid-template-columns:repeat(3,1fr);gap:3px}
+.heroCard3d .faceStats .faceSerial{display:none}
+.heroCard0,.heroCard1{filter:brightness(.86) saturate(.88) drop-shadow(0 5px 14px #0a153a)}
+.heroCard2{filter:drop-shadow(0 10px 15px #060b20)}
+/* Battle cards use the same visual language in a compact format */
+.battlefield .fighter{
+ position:relative;min-height:222px;padding:3px;border-radius:8px;
+ border:1px solid #7c91ae;background:linear-gradient(#40516c,#101b32 14%,#17243d 93%,#b1bec9);
+ box-shadow:0 6px 17px #0009;transition:box-shadow .18s,transform .18s;
+}
+.battlefield .fighter::before{display:none}
+.battlefield #enemyField .fighter{border-color:#b98c9b;box-shadow:0 6px 17px #0009}
+.battlefield .fighter.selected{transform:translateY(-4px);outline:2px solid #ead495;outline-offset:1px;box-shadow:0 5px 15px #0008,0 0 0 4px #e5c88130}
+.battlefield .fighter.focused{outline:2px solid #ee87a0;outline-offset:1px;box-shadow:0 5px 15px #0008,0 0 0 4px #e67b9529}
+.battlefield .fighter .fighterFace{height:165px;background:#16223a;border-radius:5px 5px 0 0}
+.fighterFace .creaturePainting{object-fit:cover;object-position:center 36%;filter:contrast(1.04) saturate(1.08)}
+.fighterFace .fighterVignette{background:linear-gradient(180deg,#09101fcc,transparent 28%,transparent 61%,#071327ce)}
+.battlefield .fighter .fighterTitle{top:4px;left:4px;right:4px;padding:5px 6px;border-radius:4px;background:linear-gradient(100deg,#111c30dc,#273650ac);font:900 10px var(--hud)}
+.battlefield .fighter .fighterTitle b{font-size:10px;color:#f8e8c3}
+.battlefield .fighter .fighterRole{font:800 8px var(--hud);bottom:18px;left:6px;color:#dce4ee;letter-spacing:.08em}
+.battlefield .fighter .fightSelection{display:none;position:absolute;bottom:2px;left:5px;right:5px;z-index:5;text-align:center;font:900 8px var(--hud);letter-spacing:.09em;color:#f8e6b2}
+.battlefield .fighter.selected .fightSelection,.battlefield .fighter.focused .fightSelection{display:block}
+.battlefield .fighter.focused .fightSelection{color:#ffc5d1}
+.battlefield .fighter .fighterReadout{padding:5px 5px 4px;background:linear-gradient(#1b2941,#101b30)}
+.battlefield .fighter .hpbar{height:7px;margin:0;border:1px solid #6b869a;background:#101c2f;border-radius:8px}
+.battlefield .fighter .hpbar i{background:linear-gradient(90deg,#75d4a3,#b9f2c2)}
+.battlefield .fighter .energybar{height:4px;margin:5px 0 0;background:#1e324b;border-radius:8px}
+.battlefield .fighter .energybar i{background:linear-gradient(90deg,#477dbf,#88b8ff)}
+.battlefield .fighter .fighterStats{padding:4px 0 0;font:800 9px var(--hud);color:#bbc9dd}
+.battlefield .fighter .fighterStats span:last-child{color:#95b8e5}
+.arenaCommandBar{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:9px;padding:10px 12px;margin:0;border:1px solid #47638a;border-radius:10px;background:linear-gradient(135deg,#1c2c4b,#111d34)}
+.arenaCommandBar .btn,.arenaCommandBar .ultimate{min-width:116px;min-height:41px;padding:9px 16px;font:900 14px var(--hud);border-radius:7px}
+.arenaCommandBar .ultimate{background:linear-gradient(125deg,#e5c78c,#f5e6bf);color:#17243e;border:1px solid #f1deac}
+.arenaCommandBar .ultimate:disabled{opacity:.38;box-shadow:none}
+.arenaShell{gap:9px}
+.arenaControls{display:block;padding:11px 13px}
+.arenaControls .benchStrip{display:flex;gap:8px;align-items:stretch;flex-wrap:nowrap;padding:10px 0 3px;min-height:75px}
+.benchChip{display:flex;gap:8px;align-items:center;min-width:148px;flex:1;padding:5px;border-radius:7px;text-align:left;background:#172641;border:1px solid #4f6b8d}
+.benchChip .benchGlyph{width:39px;height:48px;flex:0 0 39px;border-radius:4px;background:#273750;display:grid;place-items:center;overflow:hidden}
+.benchChip .benchGlyph img{height:100%;width:100%;object-fit:cover}
+.benchChip b{font:900 12px var(--hud);color:#edf2f8}
+.benchChip span{font:700 10px var(--hud);color:#a7bbd3}
+.battlefield .battleMid{gap:8px;box-shadow:none;border-color:#7894b44a;background:#122440d8}
+.battlefield .battleLog{font-size:13px}
+.battlefield .fieldSideLabel{letter-spacing:.17em;font-size:11px}
+.battlefield .skyRays,.battlefield .arenaHorizon .sparkCloud{opacity:.2}
+.battlefield{border-color:#637a9a;box-shadow:0 16px 35px #0008}
+.worldHero{min-height:660px}
+.heroStage{height:329px}
+.heroGameMark{font-size:clamp(42px,7vw,83px)}
+.heroSecondary{border-color:#8197b4;background:linear-gradient(150deg,#223656,#131f38)}
+.homeSummary .quick{min-height:77px}
+.bottomNav button{font-family:var(--hud);letter-spacing:.03em;font-size:11px}
+@media(max-width:900px){
+ .arenaCommandBar .btn,.arenaCommandBar .ultimate{flex:1;min-width:0}
+ .battlefield .fighter .fighterFace{height:148px}
+ .battlefield .fighter{min-height:205px}
+}
+@media(max-width:720px){
+ .tcg.collectible{min-height:275px;padding:3px}
+ .tcg.collectible .faceHeader{flex-basis:30px;padding:3px 5px;gap:4px}
+ .tcg.collectible .faceRarityIcon{height:18px;width:18px;flex-basis:18px;font-size:10px}
+ .tcg.collectible .faceHeaderName strong{font-size:10px}
+ .tcg.collectible .faceHeaderName small{font-size:7px}
+ .tcg.collectible .faceHP{padding:2px 4px}
+ .tcg.collectible .faceHP b{font-size:12px}
+ .tcg.collectible .faceHP small{font-size:7px}
+ .tcg.collectible .faceArtwork{height:178px;min-height:178px}
+ .tcg.collectible .faceInfo{flex-basis:74px;min-height:74px;padding:5px 6px 4px}
+ .tcg.collectible .abilityFace{min-height:40px;gap:5px;padding-bottom:5px}
+ .tcg.collectible .abilityIcon{width:21px;height:21px;flex-basis:21px;font-size:11px}
+ .tcg.collectible .abilityCopy strong{font-size:10px}
+ .tcg.collectible .abilityCopy small{font-size:8px;max-height:18px}
+ .tcg.collectible .abilityFace>b{font-size:13px}
+ .tcg.collectible .faceStats{gap:3px;padding:4px 0 0}
+ .tcg.collectible .faceStats small{font-size:7px}
+ .tcg.collectible .faceStats b{font-size:10px}
+ .tcg.collectible .faceStats .faceSerial{display:none}
+ .faceArtLabel{font-size:8px;left:5px;right:5px}
+ .faceArtLabel span:last-child{font-size:7px}
+ .heroCard3d .tcg.collectible{height:265px;min-height:265px}
+ .heroCard3d .tcg.collectible .faceArtwork{min-height:158px;height:158px}
+ .heroCard3d .tcg.collectible .faceHeader{flex-basis:26px}
+ .heroCard3d .tcg.collectible .faceInfo{flex-basis:70px;min-height:70px}
+ .heroCard3d .tcg.collectible .abilityCopy small{display:none}
+ .heroCard3d .tcg.collectible .abilityFace{min-height:34px}
+ .heroCard3d .tcg.collectible .faceArtLabel span:last-child{display:none}
+ .heroStage{height:303px;margin-top:12px}
+ .worldHero{min-height:598px}
+ .heroGameMark{font-size:clamp(42px,11vw,73px)}
+ .heroContent{padding-top:17px}
+ .arenaShell{gap:6px}
+ .arenaCommandBar{gap:6px;padding:6px}
+ .arenaCommandBar .btn,.arenaCommandBar .ultimate{padding:7px 5px;min-height:36px;font-size:10px}
+ .battlefield{min-height:455px;padding:7px 5px;gap:3px}
+ .battlefield .fighter{min-height:145px;padding:2px}
+ .battlefield .fighter .fighterFace{height:104px}
+ .battlefield .fighter .fighterTitle{font-size:8px;padding:3px 3px;top:2px;left:2px;right:2px}
+ .battlefield .fighter .fighterTitle b{font-size:7px}
+ .battlefield .fighter .fighterRole{font-size:6px;bottom:15px;left:3px}
+ .battlefield .fighter .fightSelection{font-size:6px}
+ .battlefield .fighter .fighterReadout{padding:3px 2px 2px}
+ .battlefield .fighter .hpbar{height:5px}
+ .battlefield .fighter .energybar{height:3px;margin-top:3px}
+ .battlefield .fighter .fighterStats{font-size:7px;padding:3px 0 0}
+ .battlefield .fieldSideLabel{font-size:9px}
+ .battlefield .battleMid{padding:7px 5px;gap:4px}
+ .battlefield .battleLog{font-size:11px;max-width:100%}
+ .battlefield .formationBtns button{font-size:9px;padding:6px}
+ .battlefield .fieldRow{gap:3px}
+ .arenaControls{padding:7px 8px}
+ .arenaControls .benchStrip{min-height:59px;gap:4px}
+ .benchChip{min-width:0;flex:1;gap:4px;padding:4px}
+ .benchChip .benchGlyph{height:41px;width:27px;flex-basis:27px}
+ .benchChip b{font-size:9px}
+ .benchChip span{font-size:7px}
+ .arenaTop{padding:7px 5px}
+ .arenaTop .avatar{width:31px;height:31px;font-size:11px}
+ .arenaTop .combatant{gap:5px}
+ .arenaTop .combatant b{font-size:9px}
+ .matchHub .timer{font-size:18px}
+ .matchHub .battleRule{font-size:8px}
+ .bottomNav{height:60px}
+}
+@media(max-width:390px){
+ .tcg.collectible .faceArtwork{min-height:156px;height:156px}
+ .heroStage{height:283px}
+ .worldHero{min-height:585px}
+ .faceArtLabel span:last-child{display:none}
+}
+@media(prefers-reduced-motion:reduce){.tcg.collectible,.faceArtwork .creaturePainting{transition:none}}
+
 </style>
 </head>
 <body>
@@ -456,6 +666,7 @@ main{padding:22px clamp(12px,2vw,34px)}
       <div class="matchHub"><div class="battleRule">CELESTIAL CLASH · 3v3</div><div class="timer" id="battleTimer">03:00</div><div class="matchStar">✦ LAST SQUAD STANDING ✦</div></div>
       <div class="combatant enemy"><div><b id="enemyName">RIVAL-07</b><div class="battleScore"><span id="enemyAlive">6</span> remaining</div></div><div class="avatar">♛</div></div>
     </div>
+    <div class="actionStack arenaCommandBar"><button class="btn primary" id="battleStart">⚔ START BATTLE</button><button class="btn" id="clearFocus">◎ RESET TARGET</button><button class="ultimate" id="ultimateBtn" disabled>✦ ULTIMATE</button></div>
     <div class="battlefield">
       <div id="battleVfx" class="battleVfx" aria-hidden="true"></div><div class="arenaHorizon" aria-hidden="true">
        <div class="skySun"></div><div class="skyRays"></div>
@@ -472,7 +683,7 @@ main{padding:22px clamp(12px,2vw,34px)}
     </div>
     <div id="battleResult" class="battleResult" aria-live="polite"></div><div class="arenaControls">
       <div><div class="eyebrow">✦ THE RESERVES <span class="benchSub">SELECT A CHAMPION ABOVE, THEN TAP A RESERVE TO SWAP</span></div><div class="benchStrip" id="benchStrip"></div></div>
-      <div class="actionStack"><button class="btn primary" id="battleStart">⚔ START BATTLE</button><button class="btn" id="clearFocus">◎ RESET TARGET</button><button class="ultimate" id="ultimateBtn" disabled>✦ ULTIMATE</button></div>
+      
     </div>
   </div>
 </section>
@@ -655,7 +866,7 @@ function artUrls(c){
  const base='https://raw.githubusercontent.com/wtactics/art/master/WT/'+encodeURIComponent(art)+'/'+encodeURIComponent(art);
  const fallback=base+'_150.png';
  const high=base+'.png';
- const optimized='https://images.weserv.nl/?url='+encodeURIComponent(high)+'&w=600&h=740&fit=cover&output=webp&q=82';
+ const optimized='https://images.weserv.nl/?url='+encodeURIComponent(high)+'&w=640&output=webp&q=85';
  return {art,optimized,fallback,high};
 }
 function imageArt(c,mode='card'){
@@ -667,17 +878,19 @@ function imageArt(c,mode='card'){
  'onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src=\''+a.fallback+'\'}else{this.style.display=\'none\'}">'+
  '</span>';
 }
+
 function cardHtml(c,opts={}){
  const own=state.owned[c.id],selected=state.squad.includes(c.id),r=c.rarity.toLowerCase();
- const mode=opts.mode||'card',mini=mode==='hero'?' heroPainting':'';
- return '<article class="tcg collectible rarity-'+r+(opts.selected&&selected?' selected':'')+mini+'" data-card="'+c.id+'" style="'+artVars(c)+'">'+
- '<div class="faceArtwork">'+imageArt(c,mode)+
- '<div class="faceGlint"></div><div class="faceTop"><span class="elementTag">'+c.faction.toUpperCase()+'</span><span class="faceHP">'+c.hp+' <small>HP</small></span></div>'+
- '<div class="faceTitle"><div class="faceName">'+c.name+'</div><div class="faceSubtitle">'+c.role.toUpperCase()+' · '+c.rarity.toUpperCase()+'</div></div></div>'+
- '<div class="faceInfo"><div class="abilityFace"><span class="abilityIcon">'+({Nova:'✧',Void:'☾',Forge:'◆',Grove:'❀'}[c.faction]||'✦')+'</span><span class="abilityCopy"><strong>'+c.ultName+'</strong><small>'+c.ultText+'</small></span><b>'+c.atk*3+'</b></div>'+
- '<div class="faceStats"><span>ATK <b>'+c.atk+'</b></span><span>SPD <b>'+c.speed+'</b></span><span>OWNED <b>'+(own?.count||0)+'</b></span></div>'+
- '<div class="faceFooter"><span>✦ '+c.rarity.toUpperCase()+'</span><span>NX · '+c.id.toUpperCase()+'</span></div></div>'+
- (opts.selected&&selected?'<button type="button" class="squadPosition '+(state.squad.indexOf(c.id)<3?'starting':'reserve')+'" data-promote="'+c.id+'">'+(state.squad.indexOf(c.id)<3?'★ STARTER':'↑ SET STARTER')+'</button>':'')+
+ const mode=opts.mode||'card',hero=mode==='hero'?' heroPainting':'';
+ const glyph={Nova:'✧',Void:'☾',Forge:'◆',Grove:'❀'}[c.faction]||'✦';
+ return '<article class="tcg collectible rarity-'+r+(opts.selected&&selected?' selected':'')+hero+'" data-card="'+c.id+'" style="'+artVars(c)+'">'+
+  '<div class="faceHeader"><span class="faceRarityIcon">'+glyph+'</span><div class="faceHeaderName"><strong>'+c.name+'</strong><small>'+c.faction.toUpperCase()+' · '+c.role.toUpperCase()+'</small></div>'+
+  '<span class="faceHP"><b>'+c.hp+'</b><small>HP</small></span></div>'+
+  '<div class="faceArtwork">'+imageArt(c,mode)+'<div class="faceGlint"></div>'+
+  '<div class="faceArtLabel"><span>✦ '+c.rarity.toUpperCase()+'</span><span>FIRST FRACTURE</span></div></div>'+
+  '<div class="faceInfo"><div class="abilityFace"><span class="abilityIcon">'+glyph+'</span><span class="abilityCopy"><strong>'+c.ultName+'</strong><small>'+c.ultText+'</small></span><b>'+c.atk*3+'</b></div>'+
+  '<div class="faceStats"><span><small>ATK</small><b>'+c.atk+'</b></span><span><small>SPEED</small><b>'+c.speed+'</b></span><span><small>OWNED</small><b>'+(own?.count||0)+'</b></span><span class="faceSerial">'+c.id.toUpperCase()+'</span></div></div>'+
+  (opts.selected&&selected?'<button type="button" class="squadPosition '+(state.squad.indexOf(c.id)<3?'starting':'reserve')+'" data-promote="'+c.id+'">'+(state.squad.indexOf(c.id)<3?'★ STARTER':'↑ SET STARTER')+'</button>':'')+
  '</article>';
 }
 function renderTop(){
@@ -870,13 +1083,15 @@ function renderBattleTop(){
  $('#battleTimer').textContent=battle?String(Math.floor(battle.time/60)).padStart(2,'0')+':'+String(battle.time%60).padStart(2,'0'):'03:00';
  $('#playerAlive').textContent=battle?countAlive(battle.player):6;$('#enemyAlive').textContent=battle?countAlive(battle.enemy):6;
 }
+
 function fighterHtml(u,i,enemy=false){
  if(!u)return '<div class="fighter dead"></div>';
  const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy,role=u.card.role;
  return '<div class="fighter rarity-'+u.card.rarity.toLowerCase()+' '+(u.dead?'dead ':'')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-uid="'+u.uid+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'">'+
  '<div class="fighterFace">'+imageArt(u.card,'battle')+'<div class="fighterVignette"></div>'+
  '<div class="fighterTitle"><span>'+u.card.name+'</span><b>'+Math.ceil(u.hp)+' HP</b></div>'+
- '<div class="fighterRole">'+u.card.faction.toUpperCase()+' · '+role.toUpperCase()+'</div></div>'+
+ '<div class="fighterRole">'+u.card.faction.toUpperCase()+' · '+role.toUpperCase()+'</div>'+
+ '<span class="fightSelection">'+(enemy?'◎ TARGET':'✦ ACTIVE')+'</span></div>'+
  '<div class="fighterReadout"><div class="hpbar"><i style="width:'+hp+'%"></i></div>'+
  '<div class="energybar"><i style="width:'+en+'%"></i></div>'+
  '<div class="fighterStats"><span>ATK '+u.card.atk+'</span><span>ENERGY '+Math.round(en)+'%</span></div></div></div>';
@@ -933,7 +1148,7 @@ if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.ser
 
 function renderHeroStage(){
  const stage=document.getElementById('heroStage');if(!stage)return;
- const chosen=[CARD_DEFS[5],CARD_DEFS[10],CARD_DEFS[0]];
+ const chosen=[CARD_DEFS[5],CARD_DEFS[11],CARD_DEFS[0]];
  stage.innerHTML=chosen.map((c,i)=>'<div class="heroCard3d heroCard'+i+'">'+cardHtml(c,{mode:'hero'})+'</div>').join('')+'<div class="stageAura"></div><div class="stageDisc"><i></i></div>';
 }
 function initCinematicControls(){
