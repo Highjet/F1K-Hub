@@ -748,7 +748,7 @@ function swapBench(uid){
  const bi=battle.player.bench.findIndex(x=>x.uid===uid),current=battle.player.active[selectedPlayer];if(bi<0||!current||current.dead)return;
  const next=battle.player.bench[bi];battle.player.bench.splice(bi,1,current);battle.player.active[selectedPlayer]=next;battle.swapCd=6;battle.log='Swapped '+current.card.name+' → '+next.card.name;renderBattle();
 }
-$('#battleStart').onclick=startBattle;$('#ultimateBtn').onclick=useUltimate;$('#clearFocus').onclick=()=>{focusEnemy=null;if(battle)battle.log='Focus cleared.';renderBattle()};$document.querySelectorAll('[data-formation]').forEach(b=>b.onclick=()=>{if(!battle)return;battle.formation=b.dataset.formation;battle.log='Formation: '+b.dataset.formation.toUpperCase();renderBattle()});
+$('#battleStart').onclick=startBattle;$('#ultimateBtn').onclick=useUltimate;$('#clearFocus').onclick=()=>{focusEnemy=null;if(battle)battle.log='Focus cleared.';renderBattle()};document.querySelectorAll('[data-formation]').forEach(b=>b.onclick=()=>{if(!battle)return;battle.formation=b.dataset.formation;battle.log='Formation: '+b.dataset.formation.toUpperCase();renderBattle()});
 
 renderTop();renderMissions();renderPacks();renderCollection();renderSquad();renderRanked();renderMarket();renderStore();renderBattle();
 renderHeroStage();initCinematicControls();
