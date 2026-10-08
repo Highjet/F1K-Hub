@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080a10">
+<meta name="theme-color" content="#080a10">\n<link rel="manifest" href="./manifest.webmanifest">\n<link rel="icon" href="./icon.svg">
 <title>NEXUS // ARENA</title>
 <style>
 :root{--bg:#070910;--panel:#0d111a;--panel2:#111726;--line:#222a3c;--text:#f4f7fb;--muted:#8e98ab;--accent:#8d78ff;--cyan:#63dcff;--good:#6dffb0;--warn:#ffc96d;--bad:#ff718d;--shadow:0 24px 70px rgba(0,0,0,.38)}
@@ -355,6 +355,7 @@ function swapBench(uid){
 $('#battleStart').onclick=startBattle;$('#ultimateBtn').onclick=useUltimate;$('#clearFocus').onclick=()=>{focusEnemy=null;if(battle)battle.log='Focus cleared.';renderBattle()};$$('[data-formation]').forEach(b=>b.onclick=()=>{if(!battle)return;battle.formation=b.dataset.formation;battle.log='Formation: '+b.dataset.formation.toUpperCase();renderBattle()});
 
 renderTop();renderMissions();renderPacks();renderCollection();renderSquad();renderRanked();renderMarket();renderStore();renderBattle();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 </script>
 </body>
 </html>
