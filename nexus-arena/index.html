@@ -50,8 +50,8 @@ main{padding:24px}.page{display:none}.page.active{display:block}
   <div class="hero">
     <div class="heroCard">
       <div class="eyebrow">SEASON 01 // FIRST CONTACT</div>
-      <h1 class="stroke">BUILD 20.<br>FIELD 5.<br>OUTLAST ALL.</h1>
-      <p>Collect an original universe of fighters, build a 20-card roster, and command five at a time in fast team battles. Swap, focus, change formation and fire ultimates while your squad fights in real time.</p>
+      <h1 class="stroke">BUILD 6.<br>FIELD 3.<br>OUTLAST ALL.</h1>
+      <p>Collect an original universe of fighters, build a six-card battle squad, and command three at a time in fast team battles. Swap, focus, change formation and fire ultimates while your squad fights in real time.</p>
       <div class="ctaRow"><button class="btn primary" data-go="arena">ENTER ARENA</button><button class="btn" data-go="packs">OPEN PACKS</button></div>
     </div>
     <div class="quickGrid">
@@ -68,9 +68,9 @@ main{padding:24px}.page{display:none}.page.active{display:block}
 <section id="arena" class="page">
   <div class="arenaShell">
     <div class="arenaTop">
-      <div class="combatant"><div class="avatar">YOU</div><div><b>YOUR SQUAD</b><div class="battleScore"><span id="playerAlive">20</span> remaining</div></div></div>
+      <div class="combatant"><div class="avatar">YOU</div><div><b>YOUR SQUAD</b><div class="battleScore"><span id="playerAlive">6</span> remaining</div></div></div>
       <div class="timer" id="battleTimer">03:00</div>
-      <div class="combatant enemy"><div><b id="enemyName">RIVAL-07</b><div class="battleScore"><span id="enemyAlive">20</span> remaining</div></div><div class="avatar">CPU</div></div>
+      <div class="combatant enemy"><div><b id="enemyName">RIVAL-07</b><div class="battleScore"><span id="enemyAlive">6</span> remaining</div></div><div class="avatar">CPU</div></div>
     </div>
     <div class="battlefield">
       <div class="side" id="enemyField"></div>
@@ -100,7 +100,7 @@ main{padding:24px}.page{display:none}.page.active{display:block}
 </section>
 
 <section id="squad" class="page">
-  <div class="squadToolbar"><div><h2 style="margin:0">Build your 20</h2><p style="margin:5px 0 0;color:#7f899b;font-size:12px">Exactly 20 owned fighters enter ranked battles.</p></div><div class="counter"><span id="squadCount">0</span> / 20</div></div>
+  <div class="squadToolbar"><div><h2 style="margin:0">Build your 20</h2><p style="margin:5px 0 0;color:#7f899b;font-size:12px">Exactly 6 owned fighters enter battle: 3 active and 3 reserves.</p></div><div class="counter"><span id="squadCount">0</span> / 6</div></div>
   <div class="cardGrid" id="squadGrid"></div>
 </section>
 
@@ -173,10 +173,13 @@ const GEM_STORE=[['100 GEMS','$0.99',100],['550 GEMS','$4.99',550],['1,200 GEMS'
 const defaultState=()=>({
  coins:5000,gems:1200,rating:1000,wins:0,losses:0,battleTickets:3,
  owned:Object.fromEntries(CARD_DEFS.slice(0,20).map(c=>[c.id,{count:1,variants:['Base']}])),
- squad:CARD_DEFS.slice(0,20).map(c=>c.id),
+ squad:CARD_DEFS.slice(0,6).map(c=>c.id),
  recent:[],missions:{battle:0,pack:0,win:0},marketSeed:1
 });
 let state=(()=>{try{return {...defaultState(),...JSON.parse(localStorage.getItem('nexus_arena_v1')||'{}')}}catch{return defaultState()}})();
+if(!Array.isArray(state.squad))state.squad=[];
+state.squad=[...new Set(state.squad)].filter(id=>state.owned[id]&&CARD_DEFS.some(c=>c.id===id)).slice(0,6);
+for(const c of CARD_DEFS){if(state.squad.length>=6)break;if(state.owned[c.id]&&!state.squad.includes(c.id))state.squad.push(c.id)}
 function save(){localStorage.setItem('nexus_arena_v1',JSON.stringify(state));renderTop()}
 function toast(x){const t=$('#toast');t.textContent=x;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 function cardById(id){return CARD_DEFS.find(c=>c.id===id)}
@@ -240,8 +243,8 @@ function renderSquad(){
  $('#squadGrid').querySelectorAll('[data-card]').forEach(el=>el.onclick=()=>toggleSquad(el.dataset.card));
 }
 function toggleSquad(id){
- const i=state.squad.indexOf(id);if(i>=0){if(state.squad.length<=5){toast('Keep at least 5 fighters.');return}state.squad.splice(i,1)}
- else{if(state.squad.length>=20){toast('Your squad is already 20. Remove one first.');return}state.squad.push(id)}
+ const i=state.squad.indexOf(id);if(i>=0){if(state.squad.length<=3){toast('Keep at least 3 fighters.');return}state.squad.splice(i,1)}
+ else{if(state.squad.length>=6){toast('A battle squad holds 6 fighters. Remove one first.');return}state.squad.push(id)}
  save();renderSquad();
 }
 function renderRanked(){
@@ -264,15 +267,15 @@ function makeUnit(c,side){return {uid:side+'-'+c.id+'-'+Math.random().toString(3
 function buildSide(ids,side,boost=1){
  const units=ids.map(id=>makeUnit(cardById(id),side)).filter(x=>x.card);
  units.forEach(u=>{if(boost!==1){u.maxHp=Math.round(u.maxHp*boost);u.hp=u.maxHp;u.card={...u.card,atk:Math.round(u.card.atk*boost)}}});
- return {active:units.slice(0,5),bench:units.slice(5),grave:[],formation:'balanced'};
+ return {active:units.slice(0,3),bench:units.slice(3),grave:[],formation:'balanced'};
 }
 function enemyRoster(){
- const owned=state.squad.length>=20?state.squad:CARD_DEFS.slice(0,20).map(c=>c.id);
- const shuffled=[...CARD_DEFS].sort(()=>Math.random()-.5).slice(0,20).map(c=>c.id);
- return shuffled.length===20?shuffled:owned;
+ const owned=state.squad.length>=6?state.squad:CARD_DEFS.slice(0,6).map(c=>c.id);
+ const shuffled=[...CARD_DEFS].sort(()=>Math.random()-.5).slice(0,6).map(c=>c.id);
+ return shuffled.length===6?shuffled:owned;
 }
 function startBattle(){
- if(state.squad.length<20){toast('Build a full 20-card squad first.');goPage('squad');return}
+ if(state.squad.length!==6){toast('Choose exactly 6 fighters first.');goPage('squad');return}
  clearBattleIntervals();selectedPlayer=0;focusEnemy=null;
  battle={running:true,time:180,player:buildSide(state.squad,'p'),enemy:buildSide(enemyRoster(),'e',Math.max(.92,Math.min(1.22,1+(state.rating-1000)/6000))),formation:'balanced',enemyFormation:'balanced',log:'Battle started.',swapCd:0};
  state.missions.battle++;save();renderMissions();$('#battleStart').textContent='RESTART';renderBattle();
@@ -329,7 +332,7 @@ function endBattle(win){
 function renderBattleIdle(){if(!battle)renderBattle()}
 function renderBattleTop(){
  $('#battleTimer').textContent=battle?String(Math.floor(battle.time/60)).padStart(2,'0')+':'+String(battle.time%60).padStart(2,'0'):'03:00';
- $('#playerAlive').textContent=battle?countAlive(battle.player):20;$('#enemyAlive').textContent=battle?countAlive(battle.enemy):20;
+ $('#playerAlive').textContent=battle?countAlive(battle.player):6;$('#enemyAlive').textContent=battle?countAlive(battle.enemy):6;
 }
 function fighterHtml(u,i,enemy=false){
  if(!u)return '<div class="fighter dead"></div>';const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy;
@@ -338,8 +341,8 @@ function fighterHtml(u,i,enemy=false){
 function renderBattle(){
  renderBattleTop();
  if(!battle){
-  const starters=state.squad.slice(0,5).map(cardById).filter(Boolean).map(c=>makeUnit(c,'p'));$('#playerField').innerHTML=starters.map((u,i)=>fighterHtml(u,i,false)).join('');
-  const enemies=CARD_DEFS.slice(20,25).map(c=>makeUnit(c,'e'));$('#enemyField').innerHTML=enemies.map((u,i)=>fighterHtml(u,i,true)).join('');$('#benchStrip').innerHTML='<span style="color:#748096;font-size:10px">Start a battle to access your 15-card bench.</span>';$('#battleLog').textContent='Choose PLAY BATTLE to begin.';return
+  const starters=state.squad.slice(0,3).map(cardById).filter(Boolean).map(c=>makeUnit(c,'p'));$('#playerField').innerHTML=starters.map((u,i)=>fighterHtml(u,i,false)).join('');
+  const enemies=CARD_DEFS.slice(20,23).map(c=>makeUnit(c,'e'));$('#enemyField').innerHTML=enemies.map((u,i)=>fighterHtml(u,i,true)).join('');$('#benchStrip').innerHTML='<span style="color:#748096;font-size:10px">Start a battle to access your 3 reserves.</span>';$('#battleLog').textContent='Choose PLAY BATTLE to begin.';return
  }
  $('#playerField').innerHTML=battle.player.active.map((u,i)=>fighterHtml(u,i,false)).join('');$('#enemyField').innerHTML=battle.enemy.active.map((u,i)=>fighterHtml(u,i,true)).join('');
  $('#battleLog').textContent=battle.log;$('#benchStrip').innerHTML=battle.player.bench.filter(u=>!u.dead).map(u=>'<button class="benchChip" data-bench="'+u.uid+'"><b>'+u.card.name+'</b><span>'+u.card.role+' · '+Math.ceil(u.hp)+' HP</span></button>').join('')||'<span style="color:#748096;font-size:10px">No reserves remaining.</span>';
