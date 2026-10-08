@@ -274,9 +274,39 @@ header{height:auto;min-height:68px;padding:8px 10px;flex-wrap:wrap;gap:6px}.bran
   .transitSteps{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
 }
 
+.bootLoader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:
+radial-gradient(circle at 50% 35%,rgba(105,91,255,.15),transparent 30%),
+linear-gradient(180deg,#05070b 0%,#080b12 55%,#05070a 100%);transition:opacity .55s ease,visibility .55s ease}
+.bootLoader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.bootLoader::before{content:"";position:absolute;inset:-20%;background:
+radial-gradient(circle at 50% 50%,transparent 0 21%,rgba(118,102,255,.035) 22% 22.5%,transparent 23% 100%);
+animation:bootDrift 8s linear infinite}
+.bootCore{position:relative;width:min(420px,86vw);text-align:center;display:grid;justify-items:center}
+.bootOrbit{position:relative;width:164px;height:164px;display:grid;place-items:center;margin-bottom:26px}
+.bootOrbit::before,.bootOrbit::after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.13)}
+.bootOrbit::before{inset:0;border-top-color:#9b8cff;border-right-color:rgba(137,220,255,.7);animation:bootSpin 2.2s linear infinite}
+.bootOrbit::after{inset:18px;border-bottom-color:#fff;border-left-color:rgba(255,255,255,.22);animation:bootSpin 3.2s linear infinite reverse}
+.bootMark{width:94px;height:94px;border-radius:26px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.14);box-shadow:0 18px 70px rgba(67,55,180,.25),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(12px)}
+.bootMark img{width:48px;height:48px;filter:drop-shadow(0 0 18px rgba(153,139,255,.45))}
+.bootWord{font-size:21px;font-weight:950;letter-spacing:.34em;margin-left:.34em}
+.bootSub{margin-top:9px;font-size:9px;letter-spacing:.25em;color:#8f98aa;text-transform:uppercase}
+.bootRail{width:100%;height:3px;margin-top:28px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;position:relative}
+.bootRail i{position:absolute;inset:0 auto 0 0;width:42%;border-radius:inherit;background:linear-gradient(90deg,transparent,#9b8cff,#9de6ff,transparent);animation:bootSweep 1.35s ease-in-out infinite}
+.bootStatus{margin-top:12px;font-size:9px;letter-spacing:.18em;color:#778194;text-transform:uppercase}
+@keyframes bootSpin{to{transform:rotate(360deg)}}@keyframes bootSweep{0%{transform:translateX(-115%)}100%{transform:translateX(340%)}}@keyframes bootDrift{to{transform:rotate(360deg)}}
+@media(max-width:650px){.bootOrbit{width:142px;height:142px}.bootMark{width:82px;height:82px}.bootWord{font-size:18px}}
 </style>
 </head>
 <body>
+<div id="bootLoader" class="bootLoader" aria-label="Loading VaultDrop">
+  <div class="bootCore">
+    <div class="bootOrbit"><div class="bootMark"><img src="./icon.svg" alt=""></div></div>
+    <div class="bootWord stroke">VAULTDROP</div>
+    <div class="bootSub">Secure collectible vault</div>
+    <div class="bootRail"><i></i></div>
+    <div id="bootStatus" class="bootStatus">Connecting to the vault</div>
+  </div>
+</div>
 <header><div class="brand stroke"><img src="./icon.svg" alt="">VAULTDROP</div><div class="nav"><button id="navPack" class="active" data-page="home">Pack Shop</button><button id="navVault" data-page="vault">Vault</button><button id="navTransit" data-page="transit">Transit</button><button id="navWallet" data-page="wallet">Credit</button><button id="navActivity" data-page="activity">Activity</button><button id="navProfile" data-page="profile">Profile</button></div><div style="display:flex;align-items:center;gap:8px"><button id="soundBtn" class="soundBtn" type="button">SOUND ON</button><select id="language" class="langSelect" aria-label="Language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ja">日本語</option><option value="fr">FR</option><option value="de">DE</option><option value="ko">한국어</option><option value="zh-TW">繁中</option><option value="it">IT</option></select><div id="feedStatus" class="status">CARD FEED CONNECTING</div></div></header>
 <main>
 <section id="home" class="page active">
@@ -425,7 +455,9 @@ async function fetchPoolForGame(game,i){
     cache.set(key,data);persistPool(key,data);return data;
   }finally{clearTimeout(timer)}
 }
-let authToken=localStorage.vd_auth_token||'',currentUser=null,authMode='login',purchaseBusy=false,walletState={currency:'USD',balanceCents:0,previewBalanceCents:0,ledger:[],updatedAt:0},transitItems=[];
+let authToken=localStorage.vd_auth_token||'',currentUser=(()=>{try{return JSON.parse(localStorage.vd_user_cache||'null')}catch{return null}})(),authMode='login',purchaseBusy=false,walletState={currency:'USD',balanceCents:0,previewBalanceCents:0,ledger:[],updatedAt:0},transitItems=[];
+function cacheCurrentUser(){try{if(currentUser)localStorage.vd_user_cache=JSON.stringify(currentUser);else localStorage.removeItem('vd_user_cache')}catch{}}
+function clearLocalSession(){authToken='';currentUser=null;localStorage.removeItem('vd_auth_token');localStorage.removeItem('vd_user_cache')}
 const I18N={
 en:{navPack:'Pack Shop',navVault:'Vault',navTransit:'Transit',navWallet:'Credit',navActivity:'Activity',navProfile:'Profile',homeTitle:'Pick a pack.<br>Chase a grail.',shopTitle:'Open a pack',vaultTitle:'The Vault',activityTitle:'Activity',profileTitle:'Your VaultDrop account',ship:'SHIP TO ME',requested:'FULFILLMENT REQUESTED',signIn:'SIGN IN',create:'CREATE ACCOUNT',signOut:'SIGN OUT',saveProfile:'SAVE DELIVERY PROFILE',addressRequired:'Add your shipping address first.'},
 es:{navPack:'Packs',navVault:'Bóveda',navTransit:'En tránsito',navWallet:'Crédito',navActivity:'Actividad',navProfile:'Perfil',homeTitle:'Elige un pack.<br>Persigue un grail.',shopTitle:'Abre un pack',vaultTitle:'La Bóveda',activityTitle:'Actividad',profileTitle:'Tu cuenta VaultDrop',ship:'ENVIARME',requested:'ENVÍO SOLICITADO',signIn:'INICIAR SESIÓN',create:'CREAR CUENTA',signOut:'CERRAR SESIÓN',saveProfile:'GUARDAR DIRECCIÓN',addressRequired:'Añade primero tu dirección de envío.'},
@@ -695,11 +727,26 @@ async function loadEbayState(){
   }catch{$('#ebayState').textContent='eBay fulfillment status unavailable.'}
 }
 async function loadAccount(){
-  if(!authToken){currentUser=null;renderAccount();return}
+  if(!authToken){currentUser=null;cacheCurrentUser();renderAccount();return false}
   try{
-    const r=await apiFetch('/api/auth/me'),d=await r.json();if(!r.ok)throw new Error();
-    currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);await resumeShippingFromUrl();pollFulfillments();await resumeWalletTopupFromUrl();await resumePurchaseFromUrl();
-  }catch{authToken='';localStorage.removeItem('vd_auth_token');currentUser=null;renderAccount()}
+    const r=await apiFetch('/api/auth/me');
+    let d={};try{d=await r.json()}catch{}
+    if(r.status===401||r.status===403){clearLocalSession();renderAccount();return false}
+    if(!r.ok)throw new Error(d?.error||'Account check temporarily unavailable');
+    currentUser=d.user;cacheCurrentUser();
+    if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}
+    renderAccount();await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);await resumeShippingFromUrl();pollFulfillments();await resumeWalletTopupFromUrl();await resumePurchaseFromUrl();return true;
+  }catch(e){
+    // Keep the saved token/user on transient network or server failures.
+    if(currentUser)renderAccount();
+    console.warn('Session restore deferred',e);return false;
+  }
+}
+async function ensureSignedInUser(){
+  if(currentUser&&authToken)return true;
+  if(!authToken)return false;
+  await loadAccount();
+  return Boolean(currentUser&&authToken);
 }
 function renderAccount(){
   const signed=Boolean(currentUser&&authToken);$('#authBox').style.display=signed?'none':'block';$('#logoutBtn').style.display=signed?'block':'none';
@@ -718,7 +765,7 @@ async function submitAuth(){
   try{
     const r=await fetch(API+endpoint,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),d=await r.json();
     if(!r.ok)throw new Error(d.error||'Sign in failed');
-    authToken=d.token;localStorage.vd_auth_token=authToken;currentUser=d.user;if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();
+    authToken=d.token;localStorage.vd_auth_token=authToken;currentUser=d.user;cacheCurrentUser();if(LOCALES[currentUser?.profile?.language]){language=currentUser.profile.language;applyLanguage()}renderAccount();
     for(const c of state.vault)if(!c.serverVaultId)await claimVaultCard(c);
     await syncCloudVault();await syncTransactions();await loadWallet();await loadTransit(true);await resumeShippingFromUrl();await resumeWalletTopupFromUrl();await resumePurchaseFromUrl();sfx('success');toast(authMode==='login'?'Signed in.':'Account created.');
   }catch(e){sfx('error');toast(String(e.message||e))}finally{$('#authSubmit').disabled=false}
@@ -727,10 +774,10 @@ async function saveDeliveryProfile(){
   if(!authToken)return;
   const body={name:$('#profileName').value.trim(),phone:$('#profilePhone').value.trim(),language,shippingAddress:{addressLine1:$('#address1').value.trim(),addressLine2:$('#address2').value.trim(),city:$('#city').value.trim(),stateOrProvince:$('#region').value.trim(),postalCode:$('#postal').value.trim(),country:$('#country').value.trim().toUpperCase()}};
   $('#saveProfile').disabled=true;$('#profileSaved').textContent='';
-  try{const r=await apiFetch('/api/profile',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),d=await r.json();if(!r.ok)throw new Error(d.error||'Could not save profile');currentUser=d.user;renderAccount();$('#profileSaved').textContent=d.shippingReady?'Delivery profile ready for Ship to Me.':'Saved. Complete the remaining address fields before shipping.';sfx('success');toast('Delivery profile saved.')}catch(e){sfx('error');toast(String(e.message||e))}finally{$('#saveProfile').disabled=false}
+  try{const r=await apiFetch('/api/profile',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(body)}),d=await r.json();if(!r.ok)throw new Error(d.error||'Could not save profile');currentUser=d.user;cacheCurrentUser();renderAccount();$('#profileSaved').textContent=d.shippingReady?'Delivery profile ready for Ship to Me.':'Saved. Complete the remaining address fields before shipping.';sfx('success');toast('Delivery profile saved.')}catch(e){sfx('error');toast(String(e.message||e))}finally{$('#saveProfile').disabled=false}
 }
 async function logout(){
-  try{await apiFetch('/api/auth/logout',{method:'POST'})}catch{}authToken='';currentUser=null;localStorage.removeItem('vd_auth_token');renderAccount();walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0};transitItems=[];renderWallet();renderTransit();sfx('nav');toast('Signed out.');
+  try{await apiFetch('/api/auth/logout',{method:'POST'})}catch{}clearLocalSession();renderAccount();walletState={currency:'USD',balanceCents:0,ledger:[],updatedAt:0};transitItems=[];renderWallet();renderTransit();sfx('nav');toast('Signed out.');
 }
 async function settle(a){
   if(!pending)return;sfx(a==='sell'?'sell':(a==='fulfill'?'ship':'keep'));const p=pending.p,c=pending.c,game=pending.game,bucket=pending.bucket;
@@ -860,15 +907,19 @@ function renderWallet(){
   $('#fundWalletBtn').textContent='ADD '+money(amount)+' CREDIT';
 }
 async function requestWalletTopup(){
-  if(!authToken||!currentUser){goPage('profile');toast('Sign in before adding funds.');return}
+  if(!(await ensureSignedInUser())){goPage('profile');toast('Sign in before adding funds.');return}
   const amount=Number($('#fundAmount').value||0);
   if(!Number.isFinite(amount)||amount<5||amount>1000){toast('Choose an amount from $5 to $1,000.');return}
   $('#fundWalletBtn').disabled=true;$('#walletFundingState').className='walletFundingState';$('#walletFundingState').textContent='Preparing secure Stripe Checkout…';
   try{
-    const r=await apiFetch('/api/wallet/topups/create',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({amount,requestId:crypto.randomUUID()})}),d=await r.json();
-    if(!r.ok)throw new Error(d.error||'Could not prepare top-up');
+    const requestId=(crypto.randomUUID?crypto.randomUUID():(Date.now().toString(36)+Math.random().toString(36).slice(2)));
+    const r=await apiFetch('/api/wallet/topups/create',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({amount,requestId})});
+    let d={};try{d=await r.json()}catch{}
+    if(r.status===401||r.status===403){clearLocalSession();renderAccount();throw new Error('Your session expired. Sign in again to add funds.')}
+    if(!r.ok)throw new Error(d?.error||('Could not prepare top-up ('+r.status+')'));
     if(d.wallet)walletState=d.wallet;renderWallet();
-    if(d.topup?.checkoutUrl){location.href=d.topup.checkoutUrl;return}
+    const checkoutUrl=d.checkoutUrl||d.topup?.checkoutUrl;
+    if(checkoutUrl){window.location.assign(checkoutUrl);return}
     if(d.topup?.status==='credited'){await loadWallet();$('#walletFundingState').textContent='Funds added successfully.';$('#walletFundingState').className='walletFundingState good';return}
     throw new Error('Stripe Checkout did not return a payment link.');
   }catch(e){$('#walletFundingState').textContent=String(e?.message||e);$('#walletFundingState').className='walletFundingState warn';sfx('error')}
@@ -1006,6 +1057,13 @@ function bindVaultDropUI(){
   window.addEventListener('error',e=>{console.error('VaultDrop runtime error',e.error||e.message);setFeed(false,'APP ERROR')});
 }
 
+const bootStartedAt=performance.now();
+function setBootStatus(msg){const el=document.getElementById('bootStatus');if(el)el.textContent=msg}
+function hideBootLoader(){
+  const loader=document.getElementById('bootLoader');if(!loader)return;
+  const wait=Math.max(0,850-(performance.now()-bootStartedAt));
+  setTimeout(()=>{setBootStatus('Vault ready');setTimeout(()=>loader.classList.add('hide'),140)},wait);
+}
 function bootVaultDrop(){
   document.body.dataset.game='pokemon';
   currentGame='pokemon';
@@ -1026,9 +1084,11 @@ function bootVaultDrop(){
   try{renderActivity()}catch(e){console.error(e)}
 
   // Pack Shop is initialized synchronously so Bronze/tier text is visible immediately.
+  setBootStatus('Loading live card pools');
   try{renderPack(false)}catch(e){console.error('Pack Shop initial render failed',e);setFeed(false,'APP ERROR')}
 
-  loadAccount().catch(e=>console.error('Account startup failed',e));
+  setBootStatus(authToken?'Restoring your vault':'Preparing Pack Shop');
+  loadAccount().catch(e=>console.error('Account startup failed',e)).finally(hideBootLoader);
   setInterval(pollFulfillments,15000);
 
   if('serviceWorker'in navigator){
@@ -1037,5 +1097,6 @@ function bootVaultDrop(){
 }
 
 bootVaultDrop();
+setTimeout(hideBootLoader,5000);
 </script>
 </body></html>
