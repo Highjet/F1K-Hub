@@ -132,38 +132,51 @@ header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rg
 <body>
 <div class="app">
 <header>
-  <div class="brand"><div class="brandMark">NX</div><span>NEXUS // ARENA</span></div>
+  <div class="brand"><div class="brandMark"><span>✦</span></div><span><strong>NEXUS</strong><small>ARENA</small></span></div>
   <nav id="topNav">
     <button data-page="home" class="active">HOME</button><button data-page="arena">ARENA</button><button data-page="packs">PACKS</button><button data-page="collection">COLLECTION</button><button data-page="squad">SQUAD</button><button data-page="ranked">RANKED</button><button data-page="market">MARKET</button><button data-page="store">STORE</button>
   </nav>
   <div class="currency"><div class="pill"><i class="coinDot"></i><span id="coinsTop">0</span></div><div class="pill"><i class="gemDot"></i><span id="gemsTop">0</span></div></div>
 </header>
 <main>
+
 <section id="home" class="page active">
-  <div class="hero">
-    <div class="heroCard">
-      <div class="eyebrow">SEASON 01 // FIRST CONTACT</div>
-      <h1 class="stroke">BUILD 6.<br>FIELD 3.<br>OUTLAST ALL.</h1>
-      <p>Collect an original universe of fighters, build a six-card battle squad, and command three at a time in fast team battles. Swap, focus, change formation and fire ultimates while your squad fights in real time.</p>
-      <div class="ctaRow"><button class="btn primary" data-go="arena">ENTER ARENA</button><button class="btn" data-go="packs">OPEN PACKS</button></div>
+  <div class="worldHero" id="worldHero">
+    <div class="worldBackdrop" aria-hidden="true">
+      <div class="heavenGlow"></div><div class="heavenBeam"></div>
+      <div class="worldIsland islandLeft"></div><div class="worldIsland islandRight"></div>
+      <div class="worldTemple"><i></i><i></i><i></i><i></i><span></span></div>
+      <div class="worldFall fallLeft"></div><div class="worldFall fallCenter"></div><div class="worldFall fallRight"></div>
+      <div class="worldSparks"></div>
     </div>
-    <div class="quickGrid">
-      <div class="quick"><span>RANK</span><strong id="homeRank">BRONZE III</strong></div>
-      <div class="quick"><span>RATING</span><strong id="homeRating">1000</strong></div>
-      <div class="quick"><span>COLLECTION</span><strong id="homeCollection">0 / 40</strong></div>
-      <div class="quick"><span>SQUAD POWER</span><strong id="homePower">0</strong></div>
+    <div class="heroContent">
+      <div class="seasonTag"><span class="seasonOrb">✧</span> SEASON 01 <span class="tagDivider"></span> THE FIRST FRACTURE</div>
+      <div class="heroGameMark"><span class="heroNexus">NEXUS</span><span class="heroArena">A R E N A</span></div>
+      <p class="heroManifest">COLLECT THE IMPOSSIBLE <span>◆</span> COMMAND THE LEGENDARY</p>
+      <div class="heroStage" id="heroStage" aria-label="Featured collectible fighters"></div>
+      <div class="heroLinks">
+        <button class="heroPlay" data-go="arena"><span class="playSigil">⚔</span><span>ENTER THE ARENA<small>3 ACTIVE · 3 RESERVES</small></span><b>➜</b></button>
+        <button class="heroSecondary" data-go="packs">✧ OPEN PACKS</button>
+      </div>
     </div>
+    <div class="heroFootnote">✦ WORLDS COLLIDE <span>•</span> LEGENDS AWAKEN <span>•</span> EVERY CARD HAS A STORY ✦</div>
   </div>
-  <div class="sectionHead"><div><h2>Season objectives</h2><p>Everything feeds packs, collection progress and ranked play.</p></div></div>
+  <div class="quickGrid homeSummary">
+    <div class="quick"><span>YOUR RANK</span><strong id="homeRank">BRONZE III</strong></div>
+    <div class="quick"><span>SEASON RATING</span><strong id="homeRating">1000</strong></div>
+    <div class="quick"><span>YOUR COLLECTION</span><strong id="homeCollection">0 / 40</strong></div>
+    <div class="quick"><span>SQUAD POWER</span><strong id="homePower">0</strong></div>
+  </div>
+  <div class="sectionHead"><div><div class="eyebrow">SEASON JOURNEY</div><h2>THE PATH TO LEGEND</h2><p>Every battle and pack moves your collection forward.</p></div><button class="btn" data-go="ranked">VIEW RANKED ➜</button></div>
   <div class="albumGrid" id="missionGrid"></div>
 </section>
 
 <section id="arena" class="page">
   <div class="arenaShell">
     <div class="arenaTop">
-      <div class="combatant"><div class="avatar">YOU</div><div><b>YOUR SQUAD</b><div class="battleScore"><span id="playerAlive">6</span> remaining</div></div></div>
-      <div class="timer" id="battleTimer">03:00</div>
-      <div class="combatant enemy"><div><b id="enemyName">RIVAL-07</b><div class="battleScore"><span id="enemyAlive">6</span> remaining</div></div><div class="avatar">CPU</div></div>
+      <div class="combatant"><div class="avatar">♜</div><div><b>YOUR SQUAD</b><div class="battleScore"><span id="playerAlive">6</span> remaining</div></div></div>
+      <div class="matchHub"><div class="battleRule">CELESTIAL CLASH · 3v3</div><div class="timer" id="battleTimer">03:00</div><div class="matchStar">✦ LAST SQUAD STANDING ✦</div></div>
+      <div class="combatant enemy"><div><b id="enemyName">RIVAL-07</b><div class="battleScore"><span id="enemyAlive">6</span> remaining</div></div><div class="avatar">♛</div></div>
     </div>
     <div class="battlefield">
       <div id="battleVfx" class="battleVfx" aria-hidden="true"></div><div class="arenaHorizon" aria-hidden="true">
@@ -172,34 +185,34 @@ header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rg
        <div class="waterfall w1"></div><div class="waterfall w2"></div><div class="waterfall w3"></div>
        <div class="sparkCloud"></div>
       </div>
-      <div class="side" id="enemyField"></div>
+      <div class="fieldRow"><div class="fieldSideLabel enemyLabel">RIVAL'S CHAMPIONS <i></i></div><div class="side" id="enemyField"></div></div>
       <div class="battleMid">
         <div class="formationBtns"><button data-formation="assault">ASSAULT</button><button data-formation="balanced" class="active">BALANCED</button><button data-formation="bulwark">BULWARK</button></div>
-        <div class="battleLog" id="battleLog">Choose PLAY BATTLE to begin.</div>
+        <div class="battleLogWrap"><b>✦ BATTLE FEED</b><div class="battleLog" id="battleLog">Choose PLAY BATTLE to begin.</div></div>
       </div>
-      <div class="side" id="playerField"></div>
+      <div class="fieldRow"><div class="fieldSideLabel allyLabel">YOUR CHAMPIONS <i></i></div><div class="side" id="playerField"></div></div>
     </div>
     <div id="battleResult" class="battleResult" aria-live="polite"></div><div class="arenaControls">
-      <div><div class="eyebrow">BENCH // TAP TO SWAP WITH SELECTED FIGHTER</div><div class="benchStrip" id="benchStrip"></div></div>
-      <div class="actionStack"><button class="btn" id="battleStart">PLAY BATTLE</button><button class="btn" id="clearFocus">CLEAR FOCUS</button><button class="ultimate" id="ultimateBtn" disabled>ULTIMATE</button></div>
+      <div><div class="eyebrow">✦ THE RESERVES <span class="benchSub">SELECT A CHAMPION ABOVE, THEN TAP A RESERVE TO SWAP</span></div><div class="benchStrip" id="benchStrip"></div></div>
+      <div class="actionStack"><button class="btn primary" id="battleStart">⚔ START BATTLE</button><button class="btn" id="clearFocus">◎ RESET TARGET</button><button class="ultimate" id="ultimateBtn" disabled>✦ ULTIMATE</button></div>
     </div>
   </div>
 </section>
 
 <section id="packs" class="page">
-  <div class="sectionHead"><div><h2>Pack vault</h2><p>All pulls are fictional digital collectibles. Odds shown before purchase.</p></div></div>
+  <div class="sectionHead packHead"><div><div class="eyebrow">COLLECT THE IMPOSSIBLE</div><h2>THE ASTRAL PACK VAULT</h2><p>Discover fictional digital legends. Exact rarity odds are always shown before opening.</p></div></div>
   <div class="packGrid" id="packGrid"></div>
   <div class="sectionHead"><div><h2>Recent pulls</h2></div></div>
   <div class="cardGrid" id="recentPulls"></div>
 </section>
 
 <section id="collection" class="page">
-  <div class="sectionHead"><div><h2>Your collection</h2><p>Variants share gameplay stats. Rarity is collection prestige, not raw power.</p></div><div id="collectionCount" class="counter"></div></div>
+  <div class="sectionHead"><div><div class="eyebrow">THE GRAND ARCHIVE</div><h2>YOUR COLLECTION</h2><p>Variants share gameplay stats. Rarity is collection prestige, not raw power.</p></div><div id="collectionCount" class="counter"></div></div>
   <div class="cardGrid" id="collectionGrid"></div>
 </section>
 
 <section id="squad" class="page">
-  <div class="squadToolbar"><div><h2 style="margin:0">Build your 20</h2><p style="margin:5px 0 0;color:#7f899b;font-size:12px">Choose six fighters. The first three start; the next three are reserves. Promote a reserve to change your starting lineup.</p></div><div class="counter"><span id="squadCount">0</span> / 6</div></div>
+  <div class="squadToolbar"><div><div class="eyebrow">SQUAD CONFIGURATION</div><h2 style="margin:0">BUILD YOUR SIX</h2><p style="margin:5px 0 0;color:#7f899b;font-size:12px">Choose six fighters. The first three start; the next three are reserves. Promote a reserve to change your starting lineup.</p></div><div class="counter"><span id="squadCount">0</span> / 6</div></div>
   <div class="cardGrid" id="squadGrid"></div>
 </section>
 
@@ -566,7 +579,39 @@ function swapBench(uid){
 $('#battleStart').onclick=startBattle;$('#ultimateBtn').onclick=useUltimate;$('#clearFocus').onclick=()=>{focusEnemy=null;if(battle)battle.log='Focus cleared.';renderBattle()};$$('[data-formation]').forEach(b=>b.onclick=()=>{if(!battle)return;battle.formation=b.dataset.formation;battle.log='Formation: '+b.dataset.formation.toUpperCase();renderBattle()});
 
 renderTop();renderMissions();renderPacks();renderCollection();renderSquad();renderRanked();renderMarket();renderStore();renderBattle();
+renderHeroStage();initCinematicControls();
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+
+function renderHeroStage(){
+ const stage=document.getElementById('heroStage');if(!stage)return;
+ const chosen=[CARD_DEFS[5],CARD_DEFS[10],CARD_DEFS[0]];
+ stage.innerHTML=chosen.map((c,i)=>'<div class="heroCard3d heroCard'+i+'">'+cardHtml(c)+'</div>').join('')+'<div class="stageAura"></div><div class="stageDisc"><i></i></div>';
+}
+function initCinematicControls(){
+ const hero=document.getElementById('worldHero');
+ if(hero){
+  hero.addEventListener('pointermove',e=>{
+   if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+   const b=hero.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;
+   hero.style.setProperty('--px',(x*12).toFixed(2)+'px');hero.style.setProperty('--py',(y*8).toFixed(2)+'px');
+  });
+  hero.addEventListener('pointerleave',()=>{hero.style.setProperty('--px','0px');hero.style.setProperty('--py','0px')});
+ }
+ const attachTilt=container=>{
+  container?.addEventListener('pointermove',e=>{
+   const card=e.target.closest('.tcg');if(!card||e.pointerType==='touch')return;
+   const b=card.getBoundingClientRect();
+   const x=((e.clientX-b.left)/b.width-.5)*14,y=((e.clientY-b.top)/b.height-.5)*-12;
+   card.style.setProperty('--tilt-x',y+'deg');card.style.setProperty('--tilt-y',x+'deg');
+   card.style.setProperty('--shine-x',((e.clientX-b.left)/b.width*100)+'%');
+  });
+  container?.addEventListener('pointerout',e=>{
+   const card=e.target.closest('.tcg');if(card&&!card.contains(e.relatedTarget)){card.style.setProperty('--tilt-x','0deg');card.style.setProperty('--tilt-y','0deg');}
+  })
+ };
+ ['collectionGrid','squadGrid','recentPulls','revealCards'].forEach(id=>attachTilt(document.getElementById(id)));
+}
+
 </script>
 </body>
 </html>
