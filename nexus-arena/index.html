@@ -535,7 +535,7 @@ function renderPacks(){
  '<div class="packOdds">'+Object.entries(p.odds).map(([k,v])=>'<span>'+k.toUpperCase()+' <b>'+v+'%</b></span>').join('')+'</div>'+
  '</div><div><div class="packPrice"><i class="gemDot"></i>'+p.cost+'</div><button class="btn primary" style="width:100%;margin-top:12px" data-open-pack="'+p.id+'">✧ OPEN '+p.count+' CARDS</button></div></div>'
  ).join('');
- $('[data-open-pack]').forEach(b=>b.onclick=()=>openPack(b.dataset.openPack));
+ document.querySelectorAll('[data-open-pack]').forEach(b=>b.onclick=()=>openPack(b.dataset.openPack));
  const recent=state.recent.map(x=>cardById(x)).filter(Boolean).slice(0,10);
  $('#recentPulls').innerHTML=recent.length?recent.map(c=>cardHtml(c)).join(''):'<div class="panel" style="padding:20px;color:#b8c7e2;font-size:15px">Your rarest discoveries will appear here after opening a pack.</div>';
 }
@@ -741,14 +741,14 @@ function renderBattle(){
  const u=battle.player.active[selectedPlayer];$('#ultimateBtn').disabled=!battle.running||!u||u.dead||u.energy<100;
  $('#ultimateBtn').classList.toggle('ready',Boolean(battle.running&&u&&!u.dead&&u.energy>=100));
  $('#ultimateBtn').textContent=u?'✦ '+u.card.ultName:'✦ ULTIMATE';
- $('[data-formation]').forEach(b=>b.classList.toggle('active',b.dataset.formation===battle.formation));
+ document.querySelectorAll('[data-formation]').forEach(b=>b.classList.toggle('active',b.dataset.formation===battle.formation));
 }
 function swapBench(uid){
  if(!battle?.running)return;if(battle.swapCd>0)return toast('Swap cooling down.');
  const bi=battle.player.bench.findIndex(x=>x.uid===uid),current=battle.player.active[selectedPlayer];if(bi<0||!current||current.dead)return;
  const next=battle.player.bench[bi];battle.player.bench.splice(bi,1,current);battle.player.active[selectedPlayer]=next;battle.swapCd=6;battle.log='Swapped '+current.card.name+' → '+next.card.name;renderBattle();
 }
-$('#battleStart').onclick=startBattle;$('#ultimateBtn').onclick=useUltimate;$('#clearFocus').onclick=()=>{focusEnemy=null;if(battle)battle.log='Focus cleared.';renderBattle()};$$('[data-formation]').forEach(b=>b.onclick=()=>{if(!battle)return;battle.formation=b.dataset.formation;battle.log='Formation: '+b.dataset.formation.toUpperCase();renderBattle()});
+$('#battleStart').onclick=startBattle;$('#ultimateBtn').onclick=useUltimate;$('#clearFocus').onclick=()=>{focusEnemy=null;if(battle)battle.log='Focus cleared.';renderBattle()};$document.querySelectorAll('[data-formation]').forEach(b=>b.onclick=()=>{if(!battle)return;battle.formation=b.dataset.formation;battle.log='Formation: '+b.dataset.formation.toUpperCase();renderBattle()});
 
 renderTop();renderMissions();renderPacks();renderCollection();renderSquad();renderRanked();renderMarket();renderStore();renderBattle();
 renderHeroStage();initCinematicControls();
