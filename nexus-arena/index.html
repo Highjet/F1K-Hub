@@ -814,6 +814,13 @@ main{padding:22px clamp(12px,2vw,34px)}
  .inspectCardHost .nx-card{width:250px!important}
 }
 
+
+.inspectScene{border-top:1px solid #63799b;padding-top:12px;margin-top:10px}
+.inspectScene strong{font:900 12px 'Rajdhani',system-ui,sans-serif;letter-spacing:.18em;color:#eccf93}
+.inspectScene p{font:600 13px 'Rajdhani',system-ui,sans-serif;margin:5px 0;color:#afbed4}
+.nx-card .squadPosition{position:absolute;z-index:12;bottom:2px;left:5px;right:5px;width:auto;margin:0;opacity:.95}
+.nx-card:has(.squadPosition) .nx-frame{bottom:25px}
+.nx-card:has(.squadPosition){padding-bottom:25px!important}
 </style>
 </head>
 <body>
@@ -1385,7 +1392,7 @@ function renderBattle(){
   {
    const strip=$('#benchStrip');strip.dataset.roster='idle-'+state.squad.join('|');
    strip.innerHTML=state.squad.slice(3,6).map(id=>cardById(id)).filter(Boolean).map(c=>
-    '<div class="benchChip benchPreview"><span class="benchGlyph"><img src="'+artUrls(c).optimized+'" loading="lazy" alt="" onerror="this.style.display=\'none\'"></span><span class="benchInfo"><b>'+c.name+'</b><span>'+c.role+' · RESERVE</span></span></div>'
+    '<div class="benchChip benchPreview"><span class="benchGlyph">'+imageArt(c,'bench')+'</span><span class="benchInfo"><b>'+c.name+'</b><span>'+c.role+' · RESERVE</span></span></div>'
    ).join('');
   }
   $('#battleLog').textContent='Choose START BATTLE to enter the arena.';return;
@@ -1396,7 +1403,7 @@ function renderBattle(){
  const strip=$('#benchStrip');
  if(strip.dataset.roster!==sig){
   strip.dataset.roster=sig;
-  strip.innerHTML=battle.player.bench.filter(u=>!u.dead).map(u=>'<button class="benchChip" data-bench="'+u.uid+'" aria-label="Swap '+u.card.name+' into your team"><span class="benchGlyph"><img loading="lazy" src="'+artUrls(u.card).optimized+'" alt="" onerror="this.style.display=\'none\'"></span><span class="benchInfo"><b>'+u.card.name+'</b><span>'+u.card.role+' · '+Math.ceil(u.hp)+' HP</span></span></button>').join('')||'<span style="color:#c9b8b8;font-size:13px">No reserves remaining.</span>';
+  strip.innerHTML=battle.player.bench.filter(u=>!u.dead).map(u=>'<button class="benchChip" data-bench="'+u.uid+'" aria-label="Swap '+u.card.name+' into your team"><span class="benchGlyph">'+imageArt(u.card,'bench')+'</span><span class="benchInfo"><b>'+u.card.name+'</b><span>'+u.card.role+' · '+Math.ceil(u.hp)+' HP</span></span></button>').join('')||'<span style="color:#c9b8b8;font-size:13px">No reserves remaining.</span>';
   strip.querySelectorAll('[data-bench]').forEach(el=>el.onclick=()=>swapBench(el.dataset.bench));
  }
  const u=battle.player.active[selectedPlayer];$('#ultimateBtn').disabled=!battle.running||!u||u.dead||u.energy<100;
@@ -1446,15 +1453,17 @@ function initCinematicControls(){
 }
 
 
+
 function inspectCard(id){
  const c=cardById(id);if(!c)return;
- const a=artUrls(c);
+ const a=artUrls(c),m=c.art||{};
  document.getElementById('inspectCardHost').innerHTML=cardHtml(c,{mode:'hero'});
  document.getElementById('inspectData').innerHTML='<span class="eyebrow">THE FIRST FRACTURE · COLLECTIBLE '+c.id.toUpperCase()+'</span>'+
  '<h2>'+c.name+'</h2><p>'+c.faction+' · '+c.role+' · '+c.rarity+'</p>'+
  '<div class="inspectAbility"><strong>'+c.ultName+'</strong><p>'+c.ultText+'</p></div>'+
  '<div class="inspectNumber"><span>HP <b>'+c.hp+'</b></span><span>ATK <b>'+c.atk+'</b></span><span>SPEED <b>'+c.speed+'</b></span></div>'+
- '<div class="inspectAttribution">Illustration: <a href="https://github.com/wtactics/art/tree/master/WT/'+encodeURIComponent(a.art)+'" target="_blank" rel="noopener">'+a.art+' · WTactics / Arcmage</a><br>CC BY-SA 4.0 · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">License and terms</a></div>';
+ '<div class="inspectScene"><strong>ART DIRECTION</strong><p>'+m.species+' · '+m.direction+'</p><p>World: '+m.scene.replaceAll('-',' ')+'</p></div>'+
+ '<div class="inspectAttribution">Illustration reference: <a href="https://github.com/wtactics/art/tree/master/WT/'+encodeURIComponent(a.art)+'" target="_blank" rel="noopener">'+a.art+' · WTactics / Arcmage</a><br>CC BY-SA 4.0 · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">License and terms</a>. Scene frame and effects are custom NEXUS artwork.</div>';
  document.getElementById('cardInspect').classList.add('show');
 }
 function closeInspect(){document.getElementById('cardInspect').classList.remove('show')}
