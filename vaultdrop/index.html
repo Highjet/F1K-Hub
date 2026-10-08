@@ -940,37 +940,102 @@ function renderActivity(){
   $('#activityList').innerHTML=state.activity.slice().reverse().map(x=>'<div class="aItem"><div class="aIcon">'+(icons[x.type]||'•')+'</div><div><strong class="stroke">'+esc(x.title)+'</strong><p>'+esc(x.detail)+'</p></div><time>'+new Date(x.at).toLocaleString()+'</time></div>').join('')||'<div class="empty">No activity yet.</div>';
 }
 function closeReveal(){if(revealTimer){clearTimeout(revealTimer);revealTimer=null}$('#revealCountdown').textContent='';$('#overlay').classList.remove('open','resultMode','waiting','fx-filler','fx-base','fx-hit','fx-grail','theme-bronze','theme-silver','theme-gold','theme-platinum','theme-diamond','theme-elite','theme-astral','theme-mythic','theme-celestial');pending=null}
-$('#prev').onclick=()=>{sfx('swipe');idx=(idx-1+PACKS.length)%PACKS.length;renderSeq++;$('#cards').dataset.ready='0';renderPack()};$('#next').onclick=()=>{sfx('swipe');idx=(idx+1)%PACKS.length;renderSeq++;$('#cards').dataset.ready='0';renderPack()};
-let swipeX=0,swipeY=0;
-const swipeStage=$('.stageCore');
-swipeStage.addEventListener('touchstart',e=>{const t=e.changedTouches[0];swipeX=t.clientX;swipeY=t.clientY},{passive:true});
-swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-swipeX,dy=t.clientY-swipeY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.15){if(dx<0)$('#next').click();else $('#prev').click()}},{passive:true});$('#openPack').onclick=()=>openPack(idx);$('#revealPack').onclick=startRevealWait;$('#close').onclick=closeReveal;$('#keep').onclick=()=>settle('keep');$('#sell').onclick=()=>settle('sell');$('#vaultGrid').onclick=e=>{const ship=e.target.closest('[data-ship-index]');if(ship){requestShip(Number(ship.dataset.shipIndex));return}const sell=e.target.closest('[data-sell-index]');if(sell)sellFromVault(Number(sell.dataset.sellIndex))};$('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};$('#overlay').onclick=e=>{if(e.target===$('#overlay'))closeReveal()};
-function selectGame(game,{silent=false,force=false}={}){
-  currentGame=game==='onepiece'?'onepiece':'pokemon';document.body.dataset.game=currentGame;renderSeq++;$('#cards').dataset.ready='0';
-  $document.querySelectorAll('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));if(!silent)sfx('nav');renderPack(force);
-}
-$$('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();selectGame(b.dataset.game)});
-$$('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
-$('#language').onchange=()=>{sfx('nav');language=$('#language').value;applyLanguage();if(currentUser)saveDeliveryProfile()};
-$('#soundBtn').onclick=()=>setSound(!soundEnabled);
-document.addEventListener('pointerdown',e=>{if(e.target.closest('button')&&e.target.id!=='soundBtn')sfx('ui')},{passive:true});
-$('#shippingBackBtn').onclick=()=>goPage('vault');$('#shippingPayBtn').onclick=confirmShippingPayment;
-$('#loginTab').onclick=()=>setAuthMode('login');$('#registerTab').onclick=()=>setAuthMode('register');$('#authSubmit').onclick=submitAuth;$('#logoutBtn').onclick=logout;$('#saveProfile').onclick=saveDeliveryProfile;
-$$('[data-fund]').forEach(b=>b.onclick=()=>{$$('[data-fund]').forEach(x=>x.classList.toggle('active',x===b));$('#fundAmount').value=b.dataset.fund;renderWallet()});
-$('#fundAmount').addEventListener('input',()=>{$$('[data-fund]').forEach(x=>x.classList.toggle('active',Number(x.dataset.fund)===Number($('#fundAmount').value)));renderWallet()});
-$('#fundWalletBtn').onclick=requestWalletTopup;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installBtn').style.display='inline-flex';$('#installStatus').textContent='Installable app ready'});
-$('#installBtn').onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('#installBtn').style.display='none'};
-$('#notifyBtn').onclick=async()=>{if(!('Notification'in window)){toast('Notifications are not supported on this device.');return}const p=await Notification.requestPermission();$('#notifyBtn').textContent=p==='granted'?'NOTIFICATIONS ON':'ENABLE NOTIFICATIONS';toast(p==='granted'?'Fulfillment notifications enabled.':'Notification permission not enabled.')};
-if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
-setInterval(pollFulfillments,15000);
-document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
-window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
-document.querySelectorAll('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');try{localStorage.removeItem('vd_pool_cache_v1')}catch{}
-try{selectGame('pokemon',{silent:true,force:false})}catch(e){console.error('Pack Shop startup failed',e)}
-for(const fn of [renderAccount,applyLanguage,renderStats,renderVault,renderWallet,renderTransit,renderActivity]){try{fn()}catch(e){console.error('Startup section failed',e)}}
-try{loadAccount()}catch(e){console.error('Account startup failed',e)}
-setTimeout(()=>{if(!$('#tierName').textContent||!$('#cards .card')){try{selectGame('pokemon',{silent:true,force:true})}catch(e){console.error('Pack Shop recovery failed',e)}}},700);
 
+let swipeX=0,swipeY=0;
+
+function selectGame(game,{silent=false,force=false}={}){
+  currentGame=game==='onepiece'?'onepiece':'pokemon';
+  document.body.dataset.game=currentGame;
+  document.querySelectorAll('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));
+  if(!silent)sfx('nav');
+  renderPack(force);
+}
+
+function bindVaultDropUI(){
+  const byId=id=>document.getElementById(id);
+  const all=sel=>Array.from(document.querySelectorAll(sel));
+
+  const prev=byId('prev'),next=byId('next');
+  if(prev)prev.onclick=()=>{sfx('swipe');idx=(idx-1+PACKS.length)%PACKS.length;renderSeq++;renderPack()};
+  if(next)next.onclick=()=>{sfx('swipe');idx=(idx+1)%PACKS.length;renderSeq++;renderPack()};
+
+  const swipeStage=document.querySelector('.stageCore');
+  if(swipeStage){
+    swipeStage.addEventListener('touchstart',e=>{const t=e.changedTouches?.[0];if(t){swipeX=t.clientX;swipeY=t.clientY}},{passive:true});
+    swipeStage.addEventListener('touchend',e=>{const t=e.changedTouches?.[0];if(!t)return;const dx=t.clientX-swipeX,dy=t.clientY-swipeY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.15){if(dx<0)next?.click();else prev?.click()}},{passive:true});
+  }
+
+  const openPackBtn=byId('openPack');if(openPackBtn)openPackBtn.onclick=()=>openPack(idx);
+  const revealPack=byId('revealPack');if(revealPack)revealPack.onclick=startRevealWait;
+  const close=byId('close');if(close)close.onclick=closeReveal;
+  const keep=byId('keep');if(keep)keep.onclick=()=>settle('keep');
+  const sell=byId('sell');if(sell)sell.onclick=()=>settle('sell');
+
+  const vaultGrid=byId('vaultGrid');
+  if(vaultGrid)vaultGrid.onclick=e=>{const ship=e.target.closest('[data-ship-index]');if(ship){requestShip(Number(ship.dataset.shipIndex));return}const sellBtn=e.target.closest('[data-sell-index]');if(sellBtn)sellFromVault(Number(sellBtn.dataset.sellIndex))};
+
+  const modal=byId('modal');if(modal)modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show')};
+  const overlay=byId('overlay');if(overlay)overlay.onclick=e=>{if(e.target===overlay)closeReveal()};
+
+  all('.gameBtn[data-game]').forEach(b=>b.onclick=e=>{e.stopPropagation();selectGame(b.dataset.game)});
+  all('[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));
+
+  const languageEl=byId('language');if(languageEl)languageEl.onchange=()=>{sfx('nav');language=languageEl.value;applyLanguage();if(currentUser)saveDeliveryProfile()};
+  const soundBtn=byId('soundBtn');if(soundBtn)soundBtn.onclick=()=>setSound(!soundEnabled);
+
+  document.addEventListener('pointerdown',e=>{if(e.target.closest('button')&&e.target.id!=='soundBtn')sfx('ui')},{passive:true});
+
+  const shippingBackBtn=byId('shippingBackBtn');if(shippingBackBtn)shippingBackBtn.onclick=()=>goPage('vault');
+  const shippingPayBtn=byId('shippingPayBtn');if(shippingPayBtn)shippingPayBtn.onclick=confirmShippingPayment;
+
+  const loginTab=byId('loginTab');if(loginTab)loginTab.onclick=()=>setAuthMode('login');
+  const registerTab=byId('registerTab');if(registerTab)registerTab.onclick=()=>setAuthMode('register');
+  const authSubmit=byId('authSubmit');if(authSubmit)authSubmit.onclick=submitAuth;
+  const logoutBtn=byId('logoutBtn');if(logoutBtn)logoutBtn.onclick=logout;
+  const saveProfile=byId('saveProfile');if(saveProfile)saveProfile.onclick=saveDeliveryProfile;
+
+  all('[data-fund]').forEach(b=>b.onclick=()=>{all('[data-fund]').forEach(x=>x.classList.toggle('active',x===b));const input=byId('fundAmount');if(input)input.value=b.dataset.fund;renderWallet()});
+  const fundAmount=byId('fundAmount');if(fundAmount)fundAmount.addEventListener('input',()=>{all('[data-fund]').forEach(x=>x.classList.toggle('active',Number(x.dataset.fund)===Number(fundAmount.value)));renderWallet()});
+  const fundWalletBtn=byId('fundWalletBtn');if(fundWalletBtn)fundWalletBtn.onclick=requestWalletTopup;
+
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;const b=byId('installBtn'),st=byId('installStatus');if(b)b.style.display='inline-flex';if(st)st.textContent='Installable app ready'});
+  const installBtn=byId('installBtn');if(installBtn)installBtn.onclick=async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.style.display='none'};
+  const notifyBtn=byId('notifyBtn');if(notifyBtn)notifyBtn.onclick=async()=>{if(!('Notification'in window)){toast('Notifications are not supported on this device.');return}const p=await Notification.requestPermission();notifyBtn.textContent=p==='granted'?'NOTIFICATIONS ON':'ENABLE NOTIFICATIONS';toast(p==='granted'?'Fulfillment notifications enabled.':'Notification permission not enabled.')};
+
+  document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')prev?.click();if(e.key==='ArrowRight')next?.click();if(e.key==='Escape'){closeReveal();modal?.classList.remove('show')}});
+  window.addEventListener('error',e=>{console.error('VaultDrop runtime error',e.error||e.message);setFeed(false,'APP ERROR')});
+}
+
+function bootVaultDrop(){
+  document.body.dataset.game='pokemon';
+  currentGame='pokemon';
+  idx=0;
+
+  bindVaultDropUI();
+
+  document.querySelectorAll('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game==='pokemon'));
+  const soundBtn=document.getElementById('soundBtn');if(soundBtn)soundBtn.textContent=soundEnabled?'SOUND ON':'SOUND OFF';
+
+  try{setAuthMode('login')}catch(e){console.error(e)}
+  try{renderAccount()}catch(e){console.error(e)}
+  try{applyLanguage()}catch(e){console.error(e)}
+  try{renderStats()}catch(e){console.error(e)}
+  try{renderVault()}catch(e){console.error(e)}
+  try{renderWallet()}catch(e){console.error(e)}
+  try{renderTransit()}catch(e){console.error(e)}
+  try{renderActivity()}catch(e){console.error(e)}
+
+  // Pack Shop is initialized synchronously so Bronze/tier text is visible immediately.
+  try{renderPack(false)}catch(e){console.error('Pack Shop initial render failed',e);setFeed(false,'APP ERROR')}
+
+  loadAccount().catch(e=>console.error('Account startup failed',e));
+  setInterval(pollFulfillments,15000);
+
+  if('serviceWorker'in navigator){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}),{once:true});
+  }
+}
+
+bootVaultDrop();
 </script>
 </body></html>
