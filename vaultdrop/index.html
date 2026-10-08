@@ -902,12 +902,12 @@ function renderWallet(){
     const credit=Number(x.amountCents||0)>=0;
     return '<div class="walletRow"><div class="walletRowIcon">'+(credit?'＋':'−')+'</div><div><strong class="stroke">'+esc(x.title||'Wallet activity')+'</strong><p>'+esc((x.preview?'PREVIEW · ':'')+(x.detail||x.status||''))+' · '+new Date(x.createdAt||Date.now()).toLocaleString()+'</p></div><div class="walletAmount '+(credit?'credit':'')+'">'+(credit?'+':'−')+walletMoney(Math.abs(Number(x.amountCents||0)))+'</div></div>';
   }).join(''):'<div class="walletEmpty">'+(authToken?'No VaultDrop Credit activity yet.':'Sign in to view your VaultDrop Credit.')+'</div>';
-  $('#fundWalletBtn').disabled=!authToken;
+  $('#fundWalletBtn').disabled=false;
   const amount=Math.max(0,Number($('#fundAmount').value||0));
   $('#fundWalletBtn').textContent='ADD '+money(amount)+' CREDIT';
 }
 async function requestWalletTopup(){
-  if(!(await ensureSignedInUser())){goPage('profile');toast('Sign in before adding funds.');return}
+  if(!(await ensureSignedInUser())){const st=$('#walletFundingState');if(st){st.textContent='You must log in first to add funds.';st.className='walletFundingState warn'}toast('You must log in first to add funds.');goPage('profile');return}
   const amount=Number($('#fundAmount').value||0);
   if(!Number.isFinite(amount)||amount<5||amount>1000){toast('Choose an amount from $5 to $1,000.');return}
   $('#fundWalletBtn').disabled=true;$('#walletFundingState').className='walletFundingState';$('#walletFundingState').textContent='Preparing secure Stripe Checkout…';
@@ -923,7 +923,7 @@ async function requestWalletTopup(){
     if(d.topup?.status==='credited'){await loadWallet();$('#walletFundingState').textContent='Funds added successfully.';$('#walletFundingState').className='walletFundingState good';return}
     throw new Error('Stripe Checkout did not return a payment link.');
   }catch(e){$('#walletFundingState').textContent=String(e?.message||e);$('#walletFundingState').className='walletFundingState warn';sfx('error')}
-  finally{$('#fundWalletBtn').disabled=!authToken;renderWallet()}
+  finally{$('#fundWalletBtn').disabled=false;renderWallet()}
 }
 async function resumeWalletTopupFromUrl(){
   if(!authToken||!currentUser)return;
