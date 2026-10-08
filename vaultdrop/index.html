@@ -967,6 +967,6 @@ setInterval(pollFulfillments,15000);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click();if(e.key==='Escape'){closeReveal();$('#modal').classList.remove('show')}});
 window.addEventListener('error',()=>setFeed(false,'APP ERROR'));
 $$('.gameBtn[data-game]').forEach(x=>x.classList.toggle('active',x.dataset.game===currentGame));$('#soundBtn').textContent=soundEnabled?'SOUND ON':'SOUND OFF';setAuthMode('login');try{localStorage.removeItem('vd_pool_cache_v1')}catch{}renderAccount();applyLanguage();renderStats();renderVault();renderWallet();renderTransit();renderActivity();selectGame('pokemon',{silent:true,force:true});loadAccount();
-window.addEventListener('load',()=>{let tries=0;const ensurePackCards=()=>{if($('#cards .card'))return;if(++tries>8)return;selectGame(currentGame,{silent:true,force:true});setTimeout(ensurePackCards,900)};setTimeout(ensurePackCards,250)});
+
 </script>
 </body></html>
