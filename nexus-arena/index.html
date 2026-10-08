@@ -615,6 +615,7 @@ main{padding:22px clamp(12px,2vw,34px)}
 }
 @media(prefers-reduced-motion:reduce){.tcg.collectible,.faceArtwork .creaturePainting{transition:none}}
 
+.benchPreview{opacity:.7;cursor:default;box-shadow:none}.benchChip:focus-visible,.arenaCommandBar button:focus-visible,.fighter:focus-visible{outline:2px solid #f2d9a2;outline-offset:2px}.benchChip .benchGlyph{background:#22324e}.benchChip .benchGlyph:has(img[style*="none"]){background:linear-gradient(135deg,#364b74,#172541)}
 </style>
 </head>
 <body>
@@ -1118,7 +1119,12 @@ function renderBattle(){
   const starters=state.squad.slice(0,3).map(cardById).filter(Boolean).map(c=>makeUnit(c,'p'));
   const enemies=CARD_DEFS.slice(20,23).map(c=>makeUnit(c,'e'));
   patchField('playerField',starters,false);patchField('enemyField',enemies,true);
-  $('#benchStrip').innerHTML='<span style="color:#aebddd;font-size:13px">Your three reserve champions are ready to join the fight.</span>';
+  {
+   const strip=$('#benchStrip');strip.dataset.roster='idle-'+state.squad.join('|');
+   strip.innerHTML=state.squad.slice(3,6).map(id=>cardById(id)).filter(Boolean).map(c=>
+    '<div class="benchChip benchPreview"><span class="benchGlyph"><img src="'+artUrls(c).optimized+'" loading="lazy" alt="" onerror="this.style.display=\'none\'"></span><span class="benchInfo"><b>'+c.name+'</b><span>'+c.role+' · RESERVE</span></span></div>'
+   ).join('');
+  }
   $('#battleLog').textContent='Choose START BATTLE to enter the arena.';return;
  }
  patchField('playerField',battle.player.active,false);patchField('enemyField',battle.enemy.active,true);
@@ -1127,7 +1133,7 @@ function renderBattle(){
  const strip=$('#benchStrip');
  if(strip.dataset.roster!==sig){
   strip.dataset.roster=sig;
-  strip.innerHTML=battle.player.bench.filter(u=>!u.dead).map(u=>'<button class="benchChip" data-bench="'+u.uid+'"><span class="benchGlyph">'+u.card.symbol+'</span><span class="benchInfo"><b>'+u.card.name+'</b><span>'+u.card.role+' · '+Math.ceil(u.hp)+' HP</span></span></button>').join('')||'<span style="color:#c9b8b8;font-size:13px">No reserves remaining.</span>';
+  strip.innerHTML=battle.player.bench.filter(u=>!u.dead).map(u=>'<button class="benchChip" data-bench="'+u.uid+'" aria-label="Swap '+u.card.name+' into your team"><span class="benchGlyph"><img loading="lazy" src="'+artUrls(u.card).optimized+'" alt="" onerror="this.style.display=\'none\'"></span><span class="benchInfo"><b>'+u.card.name+'</b><span>'+u.card.role+' · '+Math.ceil(u.hp)+' HP</span></span></button>').join('')||'<span style="color:#c9b8b8;font-size:13px">No reserves remaining.</span>';
   strip.querySelectorAll('[data-bench]').forEach(el=>el.onclick=()=>swapBench(el.dataset.bench));
  }
  const u=battle.player.active[selectedPlayer];$('#ultimateBtn').disabled=!battle.running||!u||u.dead||u.energy<100;
