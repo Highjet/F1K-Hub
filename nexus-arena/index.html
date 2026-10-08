@@ -109,6 +109,21 @@ header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rg
 @media(max-width:720px){.cardGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.tcg{min-height:310px}.tcgArt{height:145px}.tcgHead{padding:7px;font-size:8px}.tcgName{font-size:14px}.tcgBody{min-height:132px}.battlefield{min-height:522px;padding:13px 6px}.battlefield .side{gap:5px;overflow:visible}.fighter{min-width:0;min-height:169px;padding:3px;border-width:2px}.fighterArt{height:91px}.fighterTitle{font-size:8px;padding:3px 2px 5px}.fighterTitle b{font-size:7px}.fighterFooter{font-size:6px;padding:4px 2px 2px}.fighterStats{font-size:6px}.battleMid{padding:8px;margin:8px 0}.battleLog{font-size:9px;max-width:100%}.arenaTop{padding:8px}.avatar{width:38px;height:38px;font-size:10px}.combatant b{font-size:10px}.floatingCastle{height:115px}.spire.s2{height:100px}.waterfall{top:15%}.arenaControls{gap:6px}.benchChip{min-width:105px;min-height:72px}.formationBtns button{padding:6px}.hero h1{font-size:clamp(36px,10vw,75px)}}
 @media(prefers-reduced-motion:reduce){.creatureFigure,.sparkCloud,.skyRays,.waterfall,.tcg::before,.fighter::before{animation:none}}
 
+
+/* Responsive combat feedback, premium animations, victory state */
+.battleVfx{position:absolute;inset:0;pointer-events:none;z-index:10;overflow:hidden}
+.damagePopup{position:absolute;font-size:23px;font-weight:1000;color:#fff1aa;text-shadow:0 1px #9b3d34,0 0 9px #ff695a,0 0 20px #fa4141;transform:translate(-50%,-50%);animation:damageRise .72s ease-out forwards}
+.fighter.hitFlash{filter:brightness(1.7) saturate(1.55);transform:scale(.965)}
+.battlefield.ultimateBurst::before{content:"";position:absolute;inset:0;z-index:8;pointer-events:none;background:radial-gradient(circle at 50% 50%,#ffeeb8bb,#769dff99 33%,transparent 70%);animation:burstFlash .85s ease-out forwards}
+.battleResult{display:none;position:fixed;z-index:80;inset:0;align-items:center;justify-content:center;background:rgba(2,5,18,.7);backdrop-filter:blur(9px)}
+.battleResult.show{display:flex}
+.resultInner{width:min(440px,90vw);padding:32px;border-radius:24px;border:2px solid #f3d795;background:radial-gradient(circle at 50% 0,#5d5898 0%,#16234c 37%,#080e23 82%);box-shadow:0 0 75px #9e9eff77,0 35px 80px #000b;text-align:center;animation:resultPop .4s cubic-bezier(.25,1.5,.5,1)}
+.resultEy{font-size:10px;letter-spacing:.25em;color:#d4deff}.resultInner h2{font-size:clamp(42px,10vw,70px);margin:17px 0 7px;background:linear-gradient(150deg,#fff,#f4d889 65%,#90d7ff);background-clip:text;color:transparent;letter-spacing:-.05em;text-shadow:0 12px 34px #0009}.resultInner p{color:#cdd7ee;font-size:14px;margin-bottom:24px}
+.resultInner .btn{margin:5px}
+#arena:has(.battleResult.show) .arenaShell{filter:brightness(.75)}
+@keyframes damageRise{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}18%{opacity:1;transform:translate(-50%,-75%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-220%) scale(.95)}}
+@keyframes burstFlash{0%{opacity:0}22%{opacity:.85}100%{opacity:0}}
+@keyframes resultPop{from{opacity:0;transform:scale(.79)}to{opacity:1;transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -148,7 +163,7 @@ header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rg
       <div class="combatant enemy"><div><b id="enemyName">RIVAL-07</b><div class="battleScore"><span id="enemyAlive">6</span> remaining</div></div><div class="avatar">CPU</div></div>
     </div>
     <div class="battlefield">
-      <div class="arenaHorizon" aria-hidden="true">
+      <div id="battleVfx" class="battleVfx" aria-hidden="true"></div><div class="arenaHorizon" aria-hidden="true">
        <div class="skySun"></div><div class="skyRays"></div>
        <div class="floatingCastle"><div class="spire s1"></div><div class="spire s2"></div><div class="spire s3"></div><div class="castleDeck"></div></div>
        <div class="waterfall w1"></div><div class="waterfall w2"></div><div class="waterfall w3"></div>
@@ -161,7 +176,7 @@ header{background:linear-gradient(100deg,rgba(8,13,36,.95),rgba(11,22,46,.84),rg
       </div>
       <div class="side" id="playerField"></div>
     </div>
-    <div class="arenaControls">
+    <div id="battleResult" class="battleResult" aria-live="polite"></div><div class="arenaControls">
       <div><div class="eyebrow">BENCH // TAP TO SWAP WITH SELECTED FIGHTER</div><div class="benchStrip" id="benchStrip"></div></div>
       <div class="actionStack"><button class="btn" id="battleStart">PLAY BATTLE</button><button class="btn" id="clearFocus">CLEAR FOCUS</button><button class="ultimate" id="ultimateBtn" disabled>ULTIMATE</button></div>
     </div>
@@ -405,6 +420,42 @@ function renderMarket(){
  $$('[data-market-buy]').forEach(b=>b.onclick=()=>{const p=Number(b.dataset.price),id=b.dataset.marketBuy;if(state.coins<p)return toast('Not enough Coins.');state.coins-=p;if(!state.owned[id])state.owned[id]={count:1,variants:['Base']};else state.owned[id].count++;state.marketSeed++;save();renderMarket();toast('Added to collection.')});
 }
 
+
+let gameSoundOn=true,gameAudioCtx=null,lastImpactSound=0;
+function gameSound(freq=320,duration=.07,kind='sine',vol=.015){
+ if(!gameSoundOn)return;
+ try{const ac=gameAudioCtx||(gameAudioCtx=new (window.AudioContext||window.webkitAudioContext)());if(ac.state==='suspended')ac.resume();
+  const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime;
+  o.type=kind;o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(Math.max(90,freq*.55),t+duration);
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+duration);
+  o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+duration);
+ }catch{}
+}
+function combatHitFx(unit,amount){
+ const layer=document.getElementById('battleVfx');if(!layer||!battle?.running)return;
+ const target=document.querySelector('[data-uid="'+unit.uid+'"]');
+ if(!target)return;
+ const r=target.getBoundingClientRect(),b=layer.getBoundingClientRect();
+ const hit=document.createElement('div');hit.className='damagePopup';hit.textContent='-'+Math.ceil(amount);
+ hit.style.left=(r.left+r.width/2-b.left)+'px';hit.style.top=(r.top+r.height*.42-b.top)+'px';
+ layer.appendChild(hit);setTimeout(()=>hit.remove(),750);
+ target.classList.add('hitFlash');setTimeout(()=>target.classList.remove('hitFlash'),270);
+ const now=performance.now();if(now-lastImpactSound>160){lastImpactSound=now;gameSound(160+Math.random()*110,.055,'triangle',.009)}
+}
+function ultimateBurst(){
+ const field=document.querySelector('.battlefield');if(!field)return;
+ field.classList.remove('ultimateBurst');void field.offsetWidth;field.classList.add('ultimateBurst');
+ setTimeout(()=>field.classList.remove('ultimateBurst'),900);gameSound(620,.25,'sawtooth',.03);
+}
+function showBattleResult(win){
+ const r=document.getElementById('battleResult');if(!r)return;
+ r.innerHTML='<div class="resultInner"><div class="resultEy">NEXUS // ARENA</div><h2>'+ (win?'VICTORY':'DEFEAT')+'</h2><p>'+(win?'+450 Coins · +28 Rating · Squad survived':' +100 Coins · -18 Rating · Your squad fought bravely')+'</p><button class="btn primary" id="resultRematch">PLAY AGAIN</button><button class="btn" id="resultCollection">COLLECTION</button></div>';
+ r.classList.add('show');
+ document.getElementById('resultRematch').onclick=()=>{r.classList.remove('show');startBattle()};
+ document.getElementById('resultCollection').onclick=()=>{r.classList.remove('show');goPage('collection')};
+ gameSound(win?720:240,.35,'triangle',.05);
+}
+
 // Battle engine
 let battle=null,battleTimerInt=null,battleTickInt=null,selectedPlayer=0,focusEnemy=null;
 function makeUnit(c,side){return {uid:side+'-'+c.id+'-'+Math.random().toString(36).slice(2,6),card:c,hp:c.hp,maxHp:c.hp,energy:0,shield:0,dead:false,atkClock:0,buffUntil:0,debuffUntil:0}}
@@ -419,6 +470,7 @@ function enemyRoster(){
  return shuffled.length===6?shuffled:owned;
 }
 function startBattle(){
+ const resultBox=document.getElementById('battleResult');if(resultBox)resultBox.classList.remove('show');
  if(state.squad.length!==6){toast('Choose exactly 6 fighters first.');goPage('squad');return}
  clearBattleIntervals();selectedPlayer=0;focusEnemy=null;
  battle={running:true,time:180,player:buildSide(state.squad,'p'),enemy:buildSide(enemyRoster(),'e',Math.max(.92,Math.min(1.22,1+(state.rating-1000)/6000))),formation:'balanced',enemyFormation:'balanced',log:'Battle started.',swapCd:0};
@@ -453,7 +505,7 @@ function actSide(side,other,who,dt){
   damage(target,dmg/formMods(who==='player'?'enemy':'player').def);u.energy=Math.min(100,u.energy+15);u.atkClock=Math.max(.55,2.5/(u.card.speed/8*mods.speed));
  });
 }
-function damage(u,d){let n=Math.round(d);if(u.shield>0){const x=Math.min(u.shield,n);u.shield-=x;n-=x}u.hp=Math.max(0,u.hp-n);u.energy=Math.min(100,u.energy+8);if(u.hp<=0&&!u.dead){u.dead=true}}
+function damage(u,d){let n=Math.round(d);if(u.shield>0){const x=Math.min(u.shield,n);u.shield-=x;n-=x}u.hp=Math.max(0,u.hp-n);u.energy=Math.min(100,u.energy+8);combatHitFx(u,n);if(u.hp<=0&&!u.dead){u.dead=true}}
 function replaceDead(side,who){
  for(let i=0;i<side.active.length;i++){const u=side.active[i];if(u&&!u.dead)continue;if(u&&u.dead&&!side.grave.includes(u))side.grave.push(u);const next=side.bench.find(x=>!x.dead);if(next){side.bench=side.bench.filter(x=>x!==next);side.active[i]=next;battle.log=(who==='player'?'You deploy ':'Rival deploys ')+next.card.name}else side.active[i]=u}
 }
@@ -464,14 +516,14 @@ function useUltimate(){
  if(role==='Support'){living(battle.player.active).forEach(x=>x.hp=Math.min(x.maxHp,x.hp+28));battle.log=u.card.name+' restores the squad.'}
  if(role==='Disruptor'){living(battle.enemy.active).forEach(x=>x.debuffUntil=Date.now()+5000);battle.log=u.card.name+' blacks out the enemy.'}
  if(role==='Specialist'){u.buffUntil=Date.now()+6000;battle.log=u.card.name+' enters overclock.'}
- renderBattle();
+ ultimateBurst();renderBattle();
 }
 function enemyAI(){
  const ready=living(battle.enemy.active).filter(u=>u.energy>=100);if(ready.length){const u=ready[Math.floor(Math.random()*ready.length)];u.energy=0;if(u.card.role==='Tank')u.shield+=45;else if(u.card.role==='Striker'){const t=living(battle.player.active)[0];if(t)damage(t,50)}else if(u.card.role==='Support')living(battle.enemy.active).forEach(x=>x.hp=Math.min(x.maxHp,x.hp+25));else if(u.card.role==='Disruptor')living(battle.player.active).forEach(x=>x.debuffUntil=Date.now()+4500);else u.buffUntil=Date.now()+5000}
  if(Math.random()<.12)battle.enemyFormation=['assault','balanced','bulwark'][Math.floor(Math.random()*3)];
 }
 function endBattle(win){
- if(!battle?.running)return;battle.running=false;clearBattleIntervals();if(win){state.wins++;state.rating+=28;state.coins+=450;state.missions.win++;battle.log='VICTORY · +28 rating · +450 Coins';toast('VICTORY +450 Coins')}else{state.losses++;state.rating=Math.max(0,state.rating-18);state.coins+=100;battle.log='DEFEAT · -18 rating · +100 Coins';toast('Defeat. +100 Coins')}save();renderMissions();renderRanked();renderBattle();
+ if(!battle?.running)return;battle.running=false;clearBattleIntervals();if(win){state.wins++;state.rating+=28;state.coins+=450;state.missions.win++;battle.log='VICTORY · +28 rating · +450 Coins';toast('VICTORY +450 Coins')}else{state.losses++;state.rating=Math.max(0,state.rating-18);state.coins+=100;battle.log='DEFEAT · -18 rating · +100 Coins';toast('Defeat. +100 Coins')}save();renderMissions();renderRanked();renderBattle();showBattleResult(win);
 }
 function renderBattleIdle(){if(!battle)renderBattle()}
 function renderBattleTop(){
@@ -481,7 +533,7 @@ function renderBattleTop(){
 function fighterHtml(u,i,enemy=false){
  if(!u)return '<div class="fighter dead"></div>';
  const hp=Math.max(0,u.hp/u.maxHp*100),en=u.energy,role=u.card.role,rarity='rarity-'+u.card.rarity.toLowerCase();
- return '<div class="fighter '+rarity+' '+(u.dead?'dead ':'')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'">'+
+ return '<div class="fighter '+rarity+' '+(u.dead?'dead ':'')+(enemy&&focusEnemy===i?'focused ':'')+(!enemy&&selectedPlayer===i?'selected ':'')+'" data-uid="'+u.uid+'" data-fighter="'+i+'" data-enemy="'+(enemy?1:0)+'" style="'+fighterVars(u.card)+'">'+
  '<div class="fighterTitle"><span>'+u.card.name+'</span><b>'+Math.ceil(u.hp)+' HP</b></div>'+
  '<div class="fighterArt">'+creatureArt(u.card)+'</div>'+
  '<div class="fighterFooter"><span>'+role.toUpperCase()+'</span><span>'+u.card.ultName+'</span></div>'+
