@@ -310,12 +310,12 @@ animation:bootDrift 8s linear infinite}
 <header><div class="brand stroke"><img src="./icon.svg" alt="">VAULTDROP</div><div class="nav"><button id="navPack" class="active" data-page="home">Pack Shop</button><button id="navVault" data-page="vault">Vault</button><button id="navTransit" data-page="transit">Transit</button><button id="navWallet" data-page="wallet">Credit</button><button id="navActivity" data-page="activity">Activity</button><button id="navProfile" data-page="profile">Profile</button></div><div style="display:flex;align-items:center;gap:8px"><button id="soundBtn" class="soundBtn" type="button">SOUND ON</button><select id="language" class="langSelect" aria-label="Language"><option value="en">EN</option><option value="es">ES</option><option value="pt">PT</option><option value="ja">日本語</option><option value="fr">FR</option><option value="de">DE</option><option value="ko">한국어</option><option value="zh-TW">繁中</option><option value="it">IT</option></select><div id="feedStatus" class="status">CARD FEED CONNECTING</div></div></header>
 <main>
 <section id="home" class="page active">
-  <div class="hero"><div><div class="ey">POWER PACK COLLECTION</div><h1 id="homeTitle" class="stroke">Pick a pack.<br>Chase a grail.</h1><p>Every pack uses live raw-market pricing. Browse the verified grails for that tier, then rip a card.</p></div><div class="stats"><div class="stat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div><div class="stat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div><div class="stat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div></div></div>
+  <div class="hero"><div><div class="ey">POWER PACK COLLECTION</div><h1 id="homeTitle" class="stroke">Pick a pack.<br>Chase a grail.</h1><p>Explore Pokémon and One Piece pack tiers, pricing and odds. eBay listings are potential suppliers, not reserved cards.</p></div><div class="stats"><div class="stat"><span>VAULT VALUE</span><strong id="vaultStat">$0.00</strong></div><div class="stat"><span>CARDS OWNED</span><strong id="cardsStat">0</strong></div><div class="stat"><span>PACKS OPENED</span><strong id="openedStat">0</strong></div></div></div>
   <section class="frame shop">
     <div class="shopHead"><div><div class="ey">PACK SHOP</div><h2 id="shopTitle" class="stroke">Open a pack</h2><p>Choose a game, then a tier. Odds are shown before every purchase.</p></div><div class="shopTools"><div class="gameSwitch"><button class="gameBtn active" data-game="pokemon">Pokémon</button><button class="gameBtn" data-game="onepiece">One Piece</button></div><div class="counter stroke" id="counter">01 / 09</div></div></div>
     <div class="stage"><button class="arrow" id="prev">‹</button><div class="stageCore"><div class="neighbor stroke" id="prevLabel"></div><div id="pack" class="pack bronze"></div><div class="neighbor stroke" id="nextLabel"></div></div><button class="arrow" id="next">›</button></div>
     <div class="summary"><div class="sLeft"><div class="ey">CURRENT TIER</div><h3 class="stroke" id="tierName"></h3><p id="tierCopy"></p></div><div class="sRight"><div class="fact"><span>PACK PRICE</span><strong id="tierPrice"></strong></div><div class="fact"><span>MIN CARD VALUE</span><strong id="minValue"></strong></div><div class="fact"><span>GRAIL TARGET</span><strong id="tierRange"></strong></div><div class="fact"><span>CREDIT / CASH DUE</span><strong id="checkoutQuote">—</strong></div><div class="fact"><span>BACKING</span><strong id="reserveStatus">CHECKING</strong></div><button id="openPack" class="rip stroke" disabled>LOADING CARDS…</button></div></div>
-    <div class="previewBanner" id="previewBanner">LIVE MODE · Packs are sold only when VaultDrop can fully back the maximum published card liability for that tier. Odds remain fixed; a tier locks instead of silently reducing winning odds.</div><div class="oddsWrap"><div class="ey">PACK ODDS</div><div class="oddsGrid"><div class="oddsBox filler"><span>FILLER</span><strong>72%</strong><small id="fillerRange">—</small></div><div class="oddsBox base"><span>BASE</span><strong>20%</strong><small id="baseRange">—</small></div><div class="oddsBox hit"><span>HIT</span><strong>7%</strong><small id="hitRange">—</small></div><div class="oddsBox grail"><span>GRAIL</span><strong>1%</strong><small id="grailRange">—</small></div></div></div><div class="poolHead"><div><div class="ey">GRAIL SHOWCASE</div><h3 class="stroke">Grails in this pack</h3></div><div class="poolNote" id="poolNote">Connecting…</div></div>
+    <div class="previewBanner" id="previewBanner">EBAY SOURCING PILOT · Grail values are references, not stocked items. New purchases are paused while the sourcing and payment requirements are verified.</div><div class="oddsWrap"><div class="ey">PACK ODDS</div><div class="oddsGrid"><div class="oddsBox filler"><span>FILLER</span><strong>72%</strong><small id="fillerRange">—</small></div><div class="oddsBox base"><span>BASE</span><strong>20%</strong><small id="baseRange">—</small></div><div class="oddsBox hit"><span>HIT</span><strong>7%</strong><small id="hitRange">—</small></div><div class="oddsBox grail"><span>GRAIL</span><strong>1%</strong><small id="grailRange">—</small></div></div></div><div class="poolHead"><div><div class="ey">GRAIL SHOWCASE</div><h3 class="stroke">Grails in this pack</h3></div><div class="poolNote" id="poolNote">Connecting…</div></div>
     <div id="cards" class="cards"></div>
   </section>
 </section>
@@ -349,12 +349,12 @@ animation:bootDrift 8s linear infinite}
     </div>
     <div class="walletFunding">
       <div class="ey">ADD FUNDS</div><h3 class="stroke">Load your VaultDrop Credit.</h3>
-      <p>Add store credit securely through Stripe, then use that balance toward future pack purchases. Paid-pack card sellbacks also continue to add credit here.</p>
+      <p>New cash top-ups are paused while physical-card purchases are being verified. Existing VaultDrop Credit remains on your account.</p>
       <div class="fundPresets"><button data-fund="10">$10</button><button data-fund="25" class="active">$25</button><button data-fund="50">$50</button><button data-fund="100">$100</button></div>
       <div class="fundCustom"><span>$</span><input id="fundAmount" type="number" min="5" max="1000" step="1" value="25" inputmode="decimal" aria-label="Amount to add"></div>
-      <button id="fundWalletBtn" class="accountBtn" style="margin-top:12px">ADD $25 CREDIT</button>
+      <button id="fundWalletBtn" class="accountBtn" style="margin-top:12px" disabled>NEW TOP-UPS PAUSED</button>
       <div class="accountState good" style="margin-top:12px">NON-WITHDRAWABLE · NON-TRANSFERABLE · NOT REDEEMABLE FOR CASH</div>
-      <div id="walletFundingState" class="walletFundingState">Payments are processed by Stripe. Credit is added only after VaultDrop verifies the payment.</div>
+      <div id="walletFundingState" class="walletFundingState">New cash top-ups are paused. Your existing balance and previous transactions are preserved.</div>
     </div>
   </div>
   <div class="walletHistoryHead"><div><div class="ey">CREDIT ACTIVITY</div><h3 class="stroke">Credit history</h3></div></div>
@@ -559,11 +559,29 @@ function renderStats(){
   $('#vaultStat').textContent=money(v);$('#cardsStat').textContent=state.vault.length;$('#openedStat').textContent=state.opened;
   $('#vaultValue').textContent=money(v);$('#vaultCount').textContent=state.vault.length+' card'+(state.vault.length===1?'':'s');
 }
+let launchReadiness={salesEnabled:false,topupsEnabled:false};
+function applyPurchaseGate(button){
+ if(!button)return;
+ if(!launchReadiness.salesEnabled){button.disabled=true;button.textContent='CHECKOUT PAUSED · EBAY PILOT';return}
+ button.disabled=false;button.textContent='BUY & RIP THIS PACK';
+}
+async function refreshLaunchReadiness(){
+ try{const r=await fetch(API+'/api/sourcing/readiness',{cache:'no-store'});if(!r.ok)throw Error('readiness');launchReadiness=await r.json()}
+ catch{launchReadiness={salesEnabled:false,topupsEnabled:false}}
+ const banner=document.getElementById('previewBanner');
+ if(banner)banner.textContent=launchReadiness.salesEnabled?
+ 'EBAY-SOURCED PACKS · Cards must be physically secured before fulfillment.':
+ 'EBAY SOURCING PILOT · Values and grails are market references, not owned inventory. New paid packs are paused until sourcing, payments and compliance are approved.';
+ const btn=document.getElementById('openPack');if(!launchReadiness.salesEnabled)applyPurchaseGate(btn);
+ const f=document.getElementById('fundWalletBtn');if(f&&!launchReadiness.topupsEnabled){f.disabled=true;f.textContent='NEW TOP-UPS PAUSED'}
+ const state=document.getElementById('walletFundingState');if(state&&!launchReadiness.topupsEnabled)state.textContent='New top-ups paused. Existing balance preserved.';
+ const label=document.getElementById('reserveStatus');if(label&&!launchReadiness.salesEnabled){label.textContent='APPROVAL HOLD';label.title='eBay fulfillment and payment approval pending'}
+}
 function renderPack(force=false){
   const p=PACKS[idx],b=band(p),prev=PACKS[(idx-1+PACKS.length)%PACKS.length],next=PACKS[(idx+1)%PACKS.length];
   $('#counter').textContent=String(idx+1).padStart(2,'0')+' / '+PACKS.length;$('#prevLabel').textContent='← '+prev.name;$('#nextLabel').textContent=next.name+' →';
   $('#tierName').textContent=p.name;$('#tierPrice').textContent=money(p.price);$('#minValue').textContent=money(p.price*.25);$('#tierRange').textContent=money(b.min)+' – '+money(b.max);
-  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' live pack. Hard minimum card value: '+money(p.price*.25)+'. Verified grails must fall between 10× and 20×, targeting about 19.5×.';
+  $('#tierCopy').textContent=(currentGame==='onepiece'?'One Piece':'Pokémon')+' preview tier · minimum value target '+money(p.price*.25)+'. Grail target 10×–20×. eBay sourcing must be verified before checkout.';
   $('#pack').className='pack '+p.skin;$('#pack').innerHTML='<div class="crimp"></div><div class="packInner"><div><div class="packBrand stroke">VAULTDROP</div><div class="packSeries">POWER PACKS · '+String(idx+1).padStart(2,'0')+'</div></div><div><div class="packSeal stroke">VD</div><div class="packName stroke">'+esc(p.name)+'</div><div class="packTag stroke">ONE GUARANTEED CARD</div></div><div><div class="packRule"></div><div class="packBottom"><div><span>PACK PRICE</span><strong class="stroke">'+money(p.price)+'</strong></div><div class="right"><span>GRAIL TARGET</span><strong class="stroke">'+money(b.min)+' – '+money(b.max)+'</strong></div></div></div></div><div class="crimp"></div>';
   loadAndRender(idx,force);refreshPackQuote(p.price);
 }
@@ -571,14 +589,14 @@ async function refreshPackQuote(price){
   const el=$('#checkoutQuote'),reserve=$('#reserveStatus');if(!el)return;
   if(!authToken){
     el.textContent='SIGN IN';
-    try{const r=await fetch(API+'/api/risk/status?price='+encodeURIComponent(price)),d=await r.json();reserve.textContent=d?.risk?.backed?'BACKED':'RESERVE LOCK'}catch{reserve.textContent='—'}
+    try{const r=await fetch(API+'/api/risk/status?price='+encodeURIComponent(price)),d=await r.json();reserve.textContent=!launchReadiness.salesEnabled?'APPROVAL HOLD':(d?.risk?.backed?'BACKED':'RESERVE LOCK')}catch{reserve.textContent='—'}
     return
   }
   try{
     const r=await apiFetch('/api/purchases/quote',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({price})}),d=await r.json();
     if(!r.ok)throw new Error();
     el.textContent=walletMoney(d.creditAppliedCents)+' / '+walletMoney(d.cashDueCents);
-    reserve.textContent=d?.risk?.backed?'BACKED':'RESERVE LOCK';if(d?.status==='payment_setup_required')reserve.textContent='PAYMENT SETUP';
+    reserve.textContent=d?.status==='approval_hold'?'APPROVAL HOLD':(d?.risk?.backed?'BACKED':'RESERVE LOCK');if(d?.status==='payment_setup_required')reserve.textContent='PAYMENT SETUP';
     reserve.title=d?.risk?('Available backing '+walletMoney(d.risk.postPaymentCapacityCents)+' · required '+walletMoney(d.risk.requiredReserveCents)):'';
   }catch{el.textContent='—';reserve.textContent='—'}
 }
@@ -596,20 +614,20 @@ async function loadAndRender(i,force=false){
     $('#grailRange').textContent=money(b.grail?.range?.min)+' – '+money(b.grail?.range?.max);
     const grails=uniqueGrails(b.grail?.cards||[]);
     if(data.available===false||!grails.length){
-      if(prior){note.textContent='Live refresh found no new grails · keeping last successful set';open.disabled=false;open.textContent='BUY & RIP THIS PACK';return}
+      if(prior){note.textContent='Live refresh found no new grails · keeping last successful set';applyPurchaseGate(open);return}
       note.textContent=data.unavailableReason||'No verified raw grail is currently available in the 10×–20× band.';
       cards.innerHTML='<div class="empty"><strong>No verified grail available right now.</strong></div>';open.disabled=true;open.textContent='TIER TEMPORARILY LOCKED';return;
     }
     lastGoodPools.set(key,{data,grails});preloadCurrentGame();
     note.textContent=grails.length+' unique verified raw grail'+(grails.length===1?'':'s')+' · 10×–20× band';
-    open.disabled=false;open.textContent='BUY & RIP THIS PACK';
+    applyPurchaseGate(open);
     cards.innerHTML='<section class="bucketSection"><div class="bucketTitle"><h4 class="stroke">Grail · '+Math.round((b.grail?.odds||0)*100)+'%</h4><span>'+grails.length+' unique grail'+(grails.length===1?'':'s')+'</span></div><div class="bucketCards">'+grails.map((c,k)=>'<article class="card" data-k="'+k+'"><div class="art"><div class="bucketTag">GRAIL</div><div class="price stroke">'+money(c.market)+'</div><img loading="'+(k<4?'eager':'lazy')+'" fetchpriority="'+(k<2?'high':'auto')+'" src="'+img(c)+'" data-fallback="'+esc(fallbackImg(c))+'" alt="'+esc(c.name)+'"></div><div class="cardInfo"><span class="cardTitle stroke">'+esc(c.name)+'</span><span class="cardSub">'+esc(c.setName)+' · #'+esc(c.localId||'—')+' · '+Number(c.packMultiple||0).toFixed(2)+'× pack</span></div></article>').join('')+'</div></section>';
     $$('.card[data-k]').forEach(el=>el.onclick=()=>{sfx('ui');showDetail(grails[Number(el.dataset.k)])});
     $$('.card img[data-fallback]').forEach(el=>el.onerror=()=>{const fb=el.dataset.fallback;if(fb&&el.src!==fb){el.onerror=null;el.src=fb}});
     preloadNeighbors();
   }catch(e){
     if(token!==renderSeq||i!==idx)return;
-    if(prior){note.textContent='Live refresh failed · showing last successful grails';open.disabled=false;open.textContent='BUY & RIP THIS PACK';setFeed(false,'LIVE REFRESH RETRYING');return}
+    if(prior){note.textContent='Live refresh failed · showing last successful grails';applyPurchaseGate(open);setFeed(false,'LIVE REFRESH RETRYING');return}
     setFeed(false,'CARD FEED RETRY NEEDED');note.textContent='Card feed error';
     cards.innerHTML='<div class="empty">The card server did not return this pool.<br><button id="retry" class="retry">RETRY CARD FEED</button></div>';
     open.disabled=true;open.textContent='CARDS UNAVAILABLE';setTimeout(()=>{const r=$('#retry');if(r)r.onclick=()=>loadAndRender(i,true)},0);
@@ -660,6 +678,7 @@ async function resumePurchaseFromUrl(){
 async function openPack(i){
   if(purchaseBusy)return;
   if(!authToken||!currentUser){goPage('profile');toast('Sign in before purchasing a pack.');return}
+  if(!launchReadiness.salesEnabled){toast('Paid packs are paused until eBay fulfillment and payment approval are verified.');return}
   purchaseBusy=true;const btn=$('#openPack'),p=PACKS[i],requestId=crypto.randomUUID();
   btn.disabled=true;btn.textContent='SECURING PURCHASE…';sfx('open');
   try{
@@ -1086,6 +1105,7 @@ function bootVaultDrop(){
   // Pack Shop is initialized synchronously so Bronze/tier text is visible immediately.
   setBootStatus('Loading live card pools');
   try{renderPack(false)}catch(e){console.error('Pack Shop initial render failed',e);setFeed(false,'APP ERROR')}
+  refreshLaunchReadiness().catch(console.error);
 
   setBootStatus(authToken?'Restoring your vault':'Preparing Pack Shop');
   loadAccount().catch(e=>console.error('Account startup failed',e)).finally(hideBootLoader);
