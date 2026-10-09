@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://vaultdrop-fulfillment-api-production-0267.up.railway.app; form-action https://vaultdrop-fulfillment-api-production-0267.up.railway.app; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Connect eBay · VaultDrop</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#080b12;color:#edf3ff}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 62% 0%,#1d2a45 0%,#0c121f 43%,#080b12 85%);padding:30px 16px 70px}
+main{max-width:630px;margin:0 auto}
+nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px}
+.brand{text-decoration:none;font-size:17px;font-weight:900;letter-spacing:.18em;color:#e9effa}.brand b{color:#bcf0ee}
+.return{color:#bdc7d8;text-decoration:none;font-size:12px;font-weight:700}
+.eyebrow{letter-spacing:.18em;text-transform:uppercase;color:#a7dccb;font-size:11px;font-weight:850;margin-bottom:10px}
+h1{font-size:clamp(28px,5.5vw,39px);line-height:1.12;letter-spacing:-.04em;margin:0 0 12px}
+.lead{font-size:15px;line-height:1.65;color:#a8b6cd;margin:0 0 20px}
+.surface{background:linear-gradient(150deg,#172236,#101725 70%);border:1px solid #394960;border-radius:20px;padding:23px;box-shadow:0 24px 70px #0008}
+.status{display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:21px;background:#101c29;border:1px solid #3e5767;border-radius:11px;color:#bccedd;font-size:12px;line-height:1.55}
+.dot{width:9px;height:9px;border-radius:50%;background:#c7ac77;box-shadow:0 0 0 5px #c7ac771b;flex-shrink:0}.dot.online{background:#81d4a1;box-shadow:0 0 0 5px #81d4a11b}
+.status strong{display:block;font-weight:900;color:#f1f5fc;font-size:13px}
+.step{margin:23px 0 13px;display:flex;gap:9px;align-items:center;font-size:15px;font-weight:850}.number{width:25px;height:25px;display:grid;place-items:center;border-radius:7px;background:#b8dcd5;color:#091d20;font-size:12px}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links a,.copy{border:1px solid #536781;color:#e6edf9;text-decoration:none;background:#1b2b42;border-radius:9px;padding:10px 12px;font-size:12px;font-weight:850;cursor:pointer}
+.links a:hover,.copy:hover{background:#263851}
+.note{font-size:12px;line-height:1.6;color:#9bacbf;margin:10px 0}
+.callback{display:flex;align-items:center;gap:8px;margin:10px 0 17px}
+.callback code{font-size:11px;overflow-wrap:anywhere;min-width:0;flex:1;color:#bee7eb;padding:11px;background:#0a101d;border:1px solid #2e4057;border-radius:8px}
+.copy{flex-shrink:0}
+.field{margin:13px 0}
+label{font-size:12px;font-weight:800;color:#e1e9f4;display:block;margin-bottom:7px}
+input{width:100%;background:#0a1020;color:#fff;padding:12px 13px;border:1px solid #3c4e69;border-radius:9px;font-size:15px;outline:0}
+input:focus{border-color:#a5d9d3;box-shadow:0 0 0 3px #a5d9d328}
+input::placeholder{color:#66768c}
+.sub{display:block;color:#879bb2;font-size:11px;margin-top:5px;line-height:1.45}
+.submit{margin-top:16px;width:100%;border:1px solid #d0efe9;border-radius:11px;color:#08151e;background:linear-gradient(140deg,#e3f5ed,#a8d9cf);font-weight:900;font-size:15px;padding:16px 14px;cursor:pointer}
+.submit:hover{filter:brightness(1.07)}
+.foot{margin-top:15px;font-size:11px;line-height:1.7;color:#8c9cb1}
+.foot strong{color:#b9cadd}
+details{margin-top:18px;border-top:1px solid #33445b;padding-top:16px;color:#94a9c0;font-size:12px;line-height:1.6}
+summary{cursor:pointer;color:#c9d5e7;font-weight:800}
+.warning{font-size:12px;color:#ecd1aa;margin-top:17px;line-height:1.6}
+@media(max-width:470px){.surface{padding:17px}body{padding:22px 12px 52px}.callback{align-items:stretch;flex-direction:column}}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="./" class="brand">VAULT<b>DROP</b></a><a class="return" href="./">← Return to app</a></nav>
+<div class="eyebrow">Private owner setup</div>
+<h1>Connect eBay to VaultDrop.</h1>
+<p class="lead">One secure setup form. We'll save your approved production eBay credentials directly to VaultDrop, then send you to eBay to authorize your buyer account.</p>
+<div class="surface">
+<div id="status" class="status"><i id="dot" class="dot"></i><div><strong id="statusTitle">Checking eBay connection…</strong><span id="statusText">No purchases will be made during setup.</span></div></div>
+<div class="step"><span class="number">1</span> Get your production details</div>
+<div class="links">
+<a href="https://developer.ebay.com/my/keys" target="_blank" rel="noopener noreferrer">Open eBay Developer Keys ↗</a>
+<a href="https://railway.com/dashboard" target="_blank" rel="noopener noreferrer">Open Railway ↗</a>
+</div>
+<p class="note">From eBay, copy your <b>Production App ID</b>, <b>Cert ID</b>, and <b>Production RuName</b> (under User Tokens). From Railway → vaultdrop-fulfillment-api → Variables, copy your existing <b>VAULTDROP_SETUP_KEY</b>.</p>
+<div class="step"><span class="number">2</span> Set your eBay redirect URL</div>
+<p class="note">Under eBay User Tokens → Production RuName, set the <b>Auth Accepted URL</b> to this exact address:</p>
+<div class="callback"><code id="callback">https://vaultdrop-fulfillment-api-production-0267.up.railway.app/api/ebay/oauth/callback</code><button type="button" class="copy" id="copy">Copy URL</button></div>
+<div class="step"><span class="number">3</span> Connect the account</div>
+<form id="form" method="post" action="https://vaultdrop-fulfillment-api-production-0267.up.railway.app/api/ebay/setup" autocomplete="off">
+<div class="field"><label for="setupKey">VaultDrop setup key</label><input type="password" name="setupKey" id="setupKey" required spellcheck="false" autocomplete="off" placeholder="From Railway: VAULTDROP_SETUP_KEY"><span class="sub">Owner authorization only. Never share this in chat.</span></div>
+<div class="field"><label for="appId">eBay Production App ID</label><input name="appId" id="appId" required spellcheck="false" autocomplete="off" placeholder="Your Production client ID"></div>
+<div class="field"><label for="certId">eBay Production Cert ID</label><input type="password" name="certId" id="certId" required spellcheck="false" autocomplete="off" placeholder="Your Production client secret"></div>
+<div class="field"><label for="ruName">Production RuName</label><input name="ruName" id="ruName" required spellcheck="false" autocomplete="off" placeholder="Your OAuth redirect identifier"></div>
+<button type="submit" class="submit">Save & connect eBay securely →</button>
+</form>
+<p class="foot"><strong>What happens next:</strong> VaultDrop checks your eBay credentials, then redirects to eBay's own sign-in page. Approve access there; the browser returns to VaultDrop with the connection result. We never request your eBay password.</p>
+<details><summary>Does this automatically activate paid packs?</summary><p>No. eBay connection is separate from purchase eligibility. Paid pack checkout and automatic eBay ordering remain disabled until the rest of the fulfillment, reserve, and payment compliance checks pass.</p></details>
+<p class="warning">Important: only submit production credentials you control. The eBay Order API requires separate member-checkout authorization; a standard eBay developer approval may not include it.</p>
+</div>
+</main>
+<script>
+const URL_BASE='https://vaultdrop-fulfillment-api-production-0267.up.railway.app';
+const title=document.getElementById('statusTitle'),desc=document.getElementById('statusText'),dot=document.getElementById('dot');
+fetch(URL_BASE+'/api/ebay/status',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(d=>{
+ if(d.environment!=='production'){title.textContent='VaultDrop is using '+String(d.environment||'unknown')+' mode';desc.textContent='Production connection must be selected in Railway before continuing.';return}
+ if(d.browseConnected&&d.memberCheckoutConnected){title.textContent='eBay accounts connected';desc.textContent='Production browse and member token detected. Paid packs remain approval-gated.';dot.classList.add('online');return}
+ title.textContent=d.browseConnected?'App connected · buyer sign-in needed':'Production account not connected';
+ desc.textContent='Fill in the form below once. This setup does not buy anything.';
+}).catch(()=>{title.textContent='Connection status unavailable';desc.textContent='You may still complete the secure form.'});
+document.getElementById('copy').addEventListener('click',async()=>{
+ const val=document.getElementById('callback').textContent;
+ try{await navigator.clipboard.writeText(val);document.getElementById('copy').textContent='Copied ✓'}catch{document.getElementById('copy').textContent='Select the URL'}
+});
+</script>
+</body>
+</html>
